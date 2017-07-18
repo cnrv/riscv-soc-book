@@ -4,19 +4,13 @@
 
 UCB为了方便用户学习，同时也为了便于重复使用已设计好的硬件模块，在GitHub上建立了Rocket-Chip Generator的项目，其中包括了Chisel、GCC、Rocket处理器，以及围绕Rocket的一系列总线单元、外设、缓存等，并且采用了参数化的配置方法，从而可以方便的创建不同性能要求的基于Rocket处理器的SoC。采用Chisel编写，主要的子模块如下。
 
-lChisel：UCB设计的开源硬件编程语言。
-
-lHardfloat：参数可配置的、兼容IEEE 754-2008标准的浮点单元。
-
-lRiscv-tools：开发工具，包括GCC、Newlib，以及移植的Linux。
-
-lRocket：Rocket处理器，包括L1 Cache。
-
-lUncore：实现了需要与Rocket紧密连接的功能单元，比如L2 Cache、L1 Coherence Hub等。
-
-lJuntions：实现了不同协议的接口之间的转换。
-
-lRocketchip：顶层模块，同时也实现了内部总线TileLink向外部总线AXI或者AHB的转换。
+* Chisel：UCB设计的开源硬件编程语言。
+* Hardfloat：参数可配置的、兼容IEEE 754-2008标准的浮点单元。
+* Riscv-tools：开发工具，包括GCC、Newlib，以及移植的Linux。
+* Rocket：Rocket处理器，包括L1 Cache。
+* Uncore：实现了需要与Rocket紧密连接的功能单元，比如L2 Cache、L1 Coherence Hub等。
+* Juntions：实现了不同协议的接口之间的转换。
+* Rocketchip：顶层模块，同时也实现了内部总线TileLink向外部总线AXI或者AHB的转换。
 
 前文介绍的BOOM、Z-scale都可以通过配置Rocket-Chip的不同参数得到。
 
