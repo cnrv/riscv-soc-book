@@ -62,11 +62,11 @@
 
 第五部分介绍HiFive的基本情况，实验环境搭建，实验步骤，试验例程分析，ucosII的移植。
 
-第九章 LowRISC
+# 第九章 LowRISC
 
 包括LowRISC的产生原因、发展历史、相比Rocket的主要改进点，仿真步骤，实验环境搭建，实验步骤（包括下载到开发板的步骤）；
 
-第十章 RISCV-mini源代码分析
+# 第十章 RISCV-mini源代码分析
 
 分析RISCV-mini或者sodo、zscala的源代码，以小见大，而且因为简单便于大家理解（lsl之前积累过sodor源代码的相关的资料）
 
