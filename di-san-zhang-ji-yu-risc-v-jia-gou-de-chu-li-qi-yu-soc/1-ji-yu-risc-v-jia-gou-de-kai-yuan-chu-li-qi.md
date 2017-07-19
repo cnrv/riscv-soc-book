@@ -2,19 +2,18 @@
 
 ### **3.1.1 标量处理器——Rocket**
 
-Rocket是UCB设计的一款64位、5级流水线、单发射顺序执行处理器，主要特点有：
+Rocket是由美国加州伯克利大学设计的一款64位（32位可配）、5级流水线、顺序执行的RISC-V处理器。其主要特点有：
 
-* 支持MMU，支持分页虚拟内存，所以可以移植Linux操作系统
-* 具有兼容IEEE 754-2008标准的FPU
-* 具有分支预测功能，具有BTB（Branch Prediction Buff）、BHT（Branch History Table）、RAS（Return Address Stack）
+* 支持MMU，支持分页虚拟内存，所以可以移植Linux操作系统。
+* 具有分支预测功能，具有BTB（Branch Prediction Buff）、BHT（Branch History Table）、RAS（Return Address Stack）。
+* 可配置非阻断的一级数据缓存。
+* 可配置兼容IEEE 754-2008标准的浮点运算单元（FPU, Floating-Point Unit）。
 
-Rocket是采用Chisel（Constructing Hardware in an Scala Embedded Language）编写的，这也是UCB设计的一种开源的硬件编程语言，是Scala语言的领域特定应用，可以充分利用Scala的优势，将面向对象（object orientation）、函数式编程（functional programming）、类型参数化（parameterized types）、类型推断（type inference）等概念引入硬件编程语言，从而提供更加强大的硬件开发能力。Chisel除了开源之外，还有一个优势就是使用Chisel编写的硬件电路，可以通过编译得到对应的Verilog设计，还可以得到对应的C++模拟器。Rocket使用Chisel编写，就可以很容易得到对应的软件模拟器。同时，因为Chisel是面向对象的，所以Rocket的很多类可以被其他开源处理器、开源SoC直接使用。
+Rocket采用Chisel（Constructing Hardware in an Scala Embedded Language）编写，这也是加州伯克利基于Scala语言设计的一种开源的硬件描述语言。Chisel充分利用了Scala的优势，将面向对象（object orientation）、函数式编程（functional programming）、类型参数化（parameterized types）、类型推断（type inference）等概念引入了硬件描述语言，提升了硬件描述的抽象级别，从而提供了硬件设计人员更加强大的硬件开发能力。使用Chisel编写的硬件电路，可以通过编译得到对应的Verilog设计，还可以得到对应的C++模拟器。Rocket使用Chisel编写，就可以很容易得到对应的软件模拟器。同时，因为Chisel是面向对象的，所以Rocket的很多类可以被其他开源处理器、开源SoC直接使用。
 
 Rocket已经被流片11次之多，其中采用台积电40nm工艺时的性能与采用同样工艺的，都是标量处理器的ARM Cortex-A5的性能对比如表3-1所示。可见Rocket占用更小的面积，使用更小的功耗，但是性能却更优。有关Rocket的详细信息将在第四章详细介绍。
 
-
-
-表3-1 ARM Cortex-A5与采用RISC-V指令集架构的Rocket比较\[1\]
+表3-1 ARM Cortex-A5与采用RISC-V指令集架构的Rocket比较\[1\]
 
 |  | ARM Cortex-A5 | RISC-V Rocket | Ratio |
 | :--- | :--- | :--- | :--- |
@@ -25,8 +24,6 @@ Rocket已经被流片11次之多，其中采用台积电40nm工艺时的性能�
 | 面积（包含16KBCache） | 0.53mm2 | 0.39mm2 | 0.7 |
 | 动态功耗 | &lt;0.08 mW/MHz | 0.034 mW/MHz | &gt;0.4 |
 
-
-
 ### **3.1.2 超标量乱序执行处理器——BOOM**
 
 BOOM（Berkeley Out-of-Order Machine）是UCB设计的一款64位超标量、乱序执行处理器，支持RV64G，也是采用Chisel编写，利用Chisel的优势，只使用了9000行代码，并且服用了Rocket的大量代码。其流水线可以划分为6级，分别是取指、译码/重命名/指令分配、发射/读寄存器、执行、访存、回写。如图3-1所示。
@@ -34,8 +31,6 @@ BOOM（Berkeley Out-of-Order Machine）是UCB设计的一款64位超标量、乱
 ![](file:///C:\Users\ADMINI~1\AppData\Local\Temp\ksohtml\wpsD817.tmp.jpg)
 
 图3-1 BOOM处理器的流水线\[3\]
-
-
 
 借助于Chisel，BOOM是可参数化配置的超标量处理器，可配置的参数包括：
 
@@ -49,9 +44,7 @@ BOOM（Berkeley Out-of-Order Machine）是UCB设计的一款64位超标量、乱
 
 UCB已经在40nm工艺上对BOOM进行了流片，测试结果如表3-2所示。可见BOOM与商业产品ARM Cortex-A9的性能要略优，体现在面积小、功耗低。
 
-
-
-表3-2 BOOM与ARM Cortex-A9的性能对比\[2\]
+表3-2 BOOM与ARM Cortex-A9的性能对比\[2\]
 
 |  | ARM Cortex-A9 | RISC-V BOOM-2W |
 | :--- | :--- | :--- |
@@ -80,8 +73,6 @@ SHAKTI\[4\]是印度理工学院的一个计划，目标是设计一系列适合
 截至2017年7月，已经开源的是E-Class、C-Class、I-Class的测试版本，遵循的是RISC-V用户级规范2.0、特权级规范1.7，使用Bluespec System Verilog编写。以I-Class为例，其是一款64位、双发射乱序执行处理器，流水线分为8级，分别是取指、译码、重命名、唤醒（Wakeup）、选择（Select）、驱动（Drive）、执行、提交。
 
 SHAKTI虽然计划宏伟，但是相关的文档很少，学习难度较大。
-
-
 
 ### **3.1.4 嵌入式应用处理器——ORCA**
 
