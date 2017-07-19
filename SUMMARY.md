@@ -1,6 +1,6 @@
 # Summary
 
-* [Introduction](README.md)
+* [内容简介](README.md)
 * [第一章 指令集](chapter1.md)
   * [1 什么是指令集](chapter1/1-shi-yao-shi-zhi-ling-ji.md)
   * 2 常用的指令集
