@@ -1,6 +1,6 @@
 # Summary
 
-* [内容简介](ch0-preface.md)
+* [内容简介](README.md)
 * [第一章 RISC-V产生的时代背景](ch1-background.md)
 * [第二章 RISC-V的基本情况](ch2-riscv-basic.md)
 * [第三章 RISC-V在产业界与学术界的现状](ch3-current-status.md)
