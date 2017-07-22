@@ -4,7 +4,7 @@
 
 Rocket是由美国加州伯克利大学设计的一款64位（32位可配）、5级流水线、顺序执行的RISC-V处理器。其主要特点有：
 
-* 支持MMU，支持分页虚拟内存，所以可以移植Linux操作系统。
+* 支持分页虚拟内存，所以可以移植Linux操作系统。
 * 具有分支预测功能，具有BTB（Branch Prediction Buff）、BHT（Branch History Table）、RAS（Return Address Stack）。
 * 可配置非阻断的一级数据缓存。
 * 可配置兼容IEEE 754-2008标准的浮点运算单元（FPU, Floating-Point Unit）。
