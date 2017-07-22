@@ -28,7 +28,7 @@ Rocket已经被流片11次之多，其中采用台积电40nm工艺时的性能�
 
 BOOM（Berkeley Out-of-Order Machine）是UCB设计的一款64位超标量、乱序执行处理器，支持RV64G，也是采用Chisel编写，利用Chisel的优势，只使用了9000行代码，并且服用了Rocket的大量代码。其流水线可以划分为6级，分别是取指、译码/重命名/指令分配、发射/读寄存器、执行、访存、回写。如图3-1所示。
 
-![](file:///C:\Users\ADMINI~1\AppData\Local\Temp\ksohtml\wpsD817.tmp.jpg)
+![](file:///C:\Users\ADMINI~1\AppData\Local\Temp\ksohtml\wpsD817.tmp.jpg)![](/assets/BOOM_pipeline.png)
 
 图3-1 BOOM处理器的流水线\[3\]
 
