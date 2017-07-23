@@ -68,20 +68,12 @@ AMO和LR/SC的设计意图（原子操作和关键区支持）。M/D/F/E等等�
 > wsong83:<br>
 > - 关于UCB的历史，可以看看[RISC-V Geneology](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2016/EECS-2016-6.pdf)
 
+## 7 RISC-V的软件生态
+介绍围绕RISC-V开发的编译器、移植的操作系统等软件的情况。
 
-# 第三章 RISC-V在产业界与学术界的现状
+## 8 RISC-V在产业界与学术界的现状
+概述基于RISC-V指令集的处理器、SoC，并进行简单地汇总统计。
 
-大概有这么几个方面：概述基于RISC-V指令集的开源处理器、开源SoC、商业处理器、商业SoC，最后进行一个简单地统计分析汇总。（lsl之前整理过这方面的资料）
-
-> 我觉得章内结构分的细了，不一定分的清楚。
-> 开源和商业有时并不对立，同样开源不一定免费，商业不一定收费。
-> 处理器设计和SoC的区分有时也不明显。
-
-> leishangwen:<br>
-> 这一章的结构我写的时候也发现这个问题，尤其是处理器与SoC不好区分，建议就两部分：<br>
-> 基于risc-v架构的开源处理器与SoC<br>
-> 基于risc-v架构的其他处理器与SoC<br>
-> 大家有没有更好的建议？<br>
 
 # 第四章 Chisel简介
 
@@ -98,7 +90,7 @@ AMO和LR/SC的设计意图（原子操作和关键区支持）。M/D/F/E等等�
 
 # 第五章 Rocket-Chip概述
 
-包括Rocket-Chip概述，包括产生的目的、各个文件夹的作用、Rocket-Chip的作用、结构图、使用方法等；此外，介绍广泛使用的Tilelink的协议内容。
+包括Rocket-Chip概述，包括产生的目的、各个文件夹的作用、Rocket-Chip的作用、结构图、使用方法等；此外，介绍广泛使用的Tilelink的协议内容，以及简单介绍Chisel3.0的原理、优势、相关知识点，（这里的原理指的是简单原理，在chisel到fir到verilog的大概过程）
 
 > TileLink 并没有被广泛运用吧，基本就是UCB和SiFive的内部总线协议和实现。可以稍微介绍一下。
 > 仍然觉得先讲Rocket-chip再说Rocket-core行不通吧。这两个基本是息息相关啊。
