@@ -29,7 +29,7 @@
 > - 关于UCB的历史，可以看看[RISC-V Geneology](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2016/EECS-2016-6.pdf)
 
 > leishangwen:<br>
-> 我同意第一章与第二章合并
+> 我同意第一章与第二章合并<br>
 > UCB前四版只是简单提一下，并不着墨过多
 
 
