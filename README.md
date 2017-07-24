@@ -52,23 +52,13 @@
 > 和RISC-V设计直接相关的内容留到第二章具体讲，但是这一节自成系统的把相关内存大致的介绍一遍。
 > 目的在于简历概念之间的联系，第二章的时候就不觉得一个概念冒出来很突兀了。
 
-## 2 现有指令集
+## 2 现有指令集 (leishangwen)
 - CISC指令集的代表：x86和x86-64。
 - RISC指令集的代表：ARM(ARMv7,AArch32,AArch64,thumb, thumb2)
 - 其他的指令集：MIPS, PowerPC, SPARC
 
-> leishangwen:<br>
-> 我觉得这一块没有必要讲太多，只要讲清ISA的产生背景及其意义就可以了，<br>
-> 另外可以介绍一下历史上有名的、目前正在应用的一些指令集架构<br>
-> 所以，我觉得这一节标题可以改为指令集的发展
->
-> wsong83:<br>
-> 这一部分我暂且这么放着，看看有什么意见。
-> 我对这些指令集都不是太熟（硬件工程师毕竟才研究了RISC-V几年），雷同学应该对MIPS和ARM都很熟吧。
-> 这一节基本靠你执笔了。（没问题，这一节由lsl负责）
-
-## 3 硬件开发的变迁
-介绍从最开始的晶体管，到CMOS，到基于标准单元的版定制流程，自动综合和布局布线，物理综合，仿真，前仿和后仿，LVS和formal verification，最终到SystemVerilog的verification特性和HSL的出现。这张的目的是给不理解硬件设计的读者入个门。后面讲到Rocket的某些硬件优化的时候会有好处。
+## 3 硬件开发的变迁 (wsong83)
+介绍从最开始的晶体管，到CMOS，到基于标准单元的版定制流程，自动综合和布局布线，物理综合，仿真，前仿和后仿，LVS和formal verification，最终到SystemVerilog的verification特性和HLS的出现。这张的目的是给不理解硬件设计的读者入个门。后面讲到Rocket的某些硬件优化的时候会有好处。
 
 ## 4 开源运动
 这有三个方面：开源软件，发生的原因和意义，现在的广泛使用，现在的问题：License的斗争，开发缓慢的问题，分支严重的问题，patent的问题，难以商业化不挣钱的问题。
@@ -91,6 +81,9 @@
 ## 1 RISC-V的历史
 介绍UCB, MIPS, RISC-V的出现，开源，基金会的建立，它的目的和意义。
 
+> wsong83:<br>
+> - 关于UCB的历史，可以看看[RISC-V Geneology](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2016/EECS-2016-6.pdf)
+
 ## 2 RISC-V的基本设计原理
 介绍RV64I和RV32I的基本设计原理，可扩展的方式，面向硬件设计的编码方式，面向简单流水线设计的指令选择（不用条件执行，不用多周期指令）。
 
@@ -107,28 +100,45 @@
 
 AMO和LR/SC的设计意图（原子操作和关键区支持）。M/D/F/E等等已经可以用的扩展，和计划中的扩展。
 
-> wsong83:<br>
-> - 关于UCB的历史，可以看看[RISC-V Geneology](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2016/EECS-2016-6.pdf)
+## 7 Spike
 
-## 7 RISC-V的软件生态
+Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标准参照。
+应该讲一讲Spike的使用和其背后的原理。
+
+## 8 RISC-V的软件生态
 介绍围绕RISC-V开发的编译器、移植的操作系统等软件的情况。
 
-## 8 RISC-V在产业界与学术界的现状
+## 9 RISC-V在产业界与学术界的现状
 概述基于RISC-V指令集的处理器、SoC，并进行简单地汇总统计。
 
 
 # 第三章 Rocket-Chip概述
 
-包括Rocket-Chip概述，包括产生的目的、各个文件夹的作用、Rocket-Chip的作用、结构图、使用方法等；此外，介绍广泛使用的Tilelink的协议内容，以及简单介绍Chisel3.0的原理、优势、相关知识点，（这里的原理指的是简单原理，在chisel到fir到verilog的大概过程）
+简单介绍Rocket-chip最初设计的由来，几次流片经历，作为RV64G的主要硬件实现，最终作为freechipsproject脱离UCB。
 
-> TileLink 并没有被广泛运用吧，基本就是UCB和SiFive的内部总线协议和实现。可以稍微介绍一下。
-> 仍然觉得先讲Rocket-chip再说Rocket-core行不通吧。这两个基本是息息相关啊。
->
-> leishangwen：<br>
-> TileLink在Rocket-chip内部大量使用，如果想了解Rocket-Chip代码，TileLink是绕不过去的，但是资料比较<br>
-> 少，也只能简单介绍一下，说清楚基本的消息就行了<br>
-> 本章的目的是介绍Rocket-Chip，是概述，在下面的章节中详细介绍Rocket-Chip的几个成果，包括Rocket、boom、lowrisc等，所以我将Rocket-Chip放在Rocket-core之前讲<br>
+## 1 Chisel和FIRRTL
 
+简单说明Chisel和FIRRTL的功能。简单介绍Chisel相对SystemVerilog等HDL的优势，同时区分Chisel和HLS。
+举简单例子来说明：
+
+- Chisel可以被用来实现简单点路。
+- Chisel在泛型上的优势。
+- Chisel在面向对象上的优势。
+- Chisel用LazyModule来实现编译时代码生成机制。
+
+## 2 Rocket-Chip的基本结构
+
+画几个结构图来形式化的表示Rocket-chip的内部链接。同时叙述Rocket-chip的可配置功能。
+同时在这里介绍devicetree的自动生成。
+
+## 3. TileLink片上总线
+
+TileLink总线的channel名称和功能，支持的报文类型和传输协议等等。
+
+## 4. Rocket-chip的仿真和测试
+
+这里主要是讲仿真的基本方法和Rocket-chip/Chisel提供的几种测试方法：require check, assertion, bus-monitor, unitest, groundtest, isa regression.
+这一章并不具体讲测试和仿真的基本步骤。
 
 # 第四章 Rocket处理器
 
@@ -182,7 +192,7 @@ AMO和LR/SC的设计意图（原子操作和关键区支持）。M/D/F/E等等�
 
 第五部分介绍HiFive的基本情况，实验环境搭建，实验步骤，试验例程分析，ucosII的移植。
 
-# 第七章 LowRISC
+# 第七章 LowRISC (wsong83)
 
 包括LowRISC的产生原因、发展历史、相比Rocket的主要改进点，仿真步骤，实验环境搭建，实验步骤（包括下载到开发板的步骤）；
 > leishangwen：<br>
