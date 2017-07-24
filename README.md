@@ -16,6 +16,9 @@
 
 - 区分计算机体系结构和微结构
   - 体系结构(computer architecture)定义的是硬件和软件的接口，并没有指定实现。RISC-V即定义的体系结构。
+> leishangwen:<br>
+> 建议从ISA的产生背景开始讲，再讲RISC的产生，这样就讲解了ISA的作用，以及RISC的优势
+
   - 微结构(processor microarchitecture)则描述的是如何设计一个处理器来符合一个体系结构。体系结构并不定义微结构。
 
 - 指令级架构(instruction set architecture, ISA)
