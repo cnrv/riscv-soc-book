@@ -85,7 +85,7 @@
 > - 关于UCB的历史，可以看看[RISC-V Geneology](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2016/EECS-2016-6.pdf)
 
 ## 2 RISC-V的基本设计原理
-介绍RV64I和RV32I的基本设计原理，可扩展的方式，面向硬件设计的编码方式，面向简单流水线设计的指令选择（不用条件执行，不用多周期指令）。
+介绍RV64I和RV32I的基本情况，重点介绍设计原理，可扩展的方式，面向硬件设计的编码方式，面向简单流水线设计的指令选择（不用条件执行，不用多周期指令）。
 
 ## 3 RISC-V特权指令设计
 为何选择使用CSR，CSR的设计细节，不同特权级的定义，特权级之间的跳转，delegation的使用。（这里可以说的惊人细节太多了）
@@ -115,6 +115,8 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 # 第三章 Rocket-Chip概述
 
 简单介绍Rocket-chip最初设计的由来，几次流片经历，作为RV64G的主要硬件实现，最终作为freechipsproject脱离UCB。
+> leishangwen:<br>
+> 建议加上Rocket-Chip与Rocket、Boom、Freedom、sodor的关系介绍，主要是共享的一些类
 
 ## 1 Chisel和FIRRTL
 
@@ -125,11 +127,15 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 - Chisel在泛型上的优势。
 - Chisel在面向对象上的优势。
 - Chisel用LazyModule来实现编译时代码生成机制。
+> leishangwen:<br>
+> 建议加上Chisel的基本语法、基本概念的讲解，以及基本的试验步骤、实验环境，这样便于读者理解所举的例子
 
 ## 2 Rocket-Chip的基本结构
 
 画几个结构图来形式化的表示Rocket-chip的内部链接。同时叙述Rocket-chip的可配置功能。
 同时在这里介绍devicetree的自动生成。
+> leishangwen:<br>
+> 建议加上对Rocket-Chip的src/main/scala目录下每个文件夹的功能介绍
 
 ## 3. TileLink片上总线
 
@@ -142,9 +148,20 @@ TileLink总线的channel名称和功能，支持的报文类型和传输协议�
 
 # 第四章 Rocket处理器
 
+## 1. Rocket处理器的基本结构
+包括特点（比如：无阻塞存储等）、性能参数、结构框图、接口图等。
+
+## 1. Rocket处理器的源代码简析
+
+包括：介绍src/main/scala/rocket目录下各个文件的作用。
+
+实验环境搭建，仿真步骤，实验步骤（包括下载到开发板的步骤）；
+
+
+
 大概分三个部分：
 
-第一部分包括性能参数、结构框图、接口图、各个文件的作用，实验环境搭建，仿真步骤，实验步骤（包括下载到开发板的步骤）；
+第一部分
 
 > 使用Rocket-core的开发板并没有统一吧，除非你是专指SiFive的板子。作为lowRISC，我们支持Nexys4-DDR。UCB也曾经支持过多款Zynq的板子。
 > 我的主要意见是，讲这些对读者有多少帮助。我觉得我们应该避免把自己知道的东西去堆成一本书，而应该想想些什么东西是对以后有用的，可以作为知识去指导实践的。
