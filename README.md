@@ -117,18 +117,31 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 简单介绍Rocket-chip最初设计的由来，几次流片经历，作为RV64G的主要硬件实现，最终作为freechipsproject脱离UCB。
 > leishangwen:<br>
 > 建议加上Rocket-Chip与Rocket、Boom、Freedom、sodor的关系介绍，主要是共享的一些类
+>
+> wsong83:
+> Rocket-chip的基本结构会在3.2节介绍。那里会说明Rocket和Boom是Rocket-chip可选的两种处理器。现在Rocket-chip好像已经支持同时有Rocket和Boom的核。
+> 这里可以提及Rocket和Boom是Rocket-chip支持的两种处理器实现，Freedom和lowRISC是基于Rocket-chip的两个SoC扩展。
+> Rocket-chip好像和sodor没有关系，除它们都是Chisel写的？
 
 ## 1 Chisel和FIRRTL
 
 简单说明Chisel和FIRRTL的功能。简单介绍Chisel相对SystemVerilog等HDL的优势，同时区分Chisel和HLS。
 举简单例子来说明：
 
-- Chisel可以被用来实现简单点路。
+- Chisel可以被用来实现简单电路。
 - Chisel在泛型上的优势。
 - Chisel在面向对象上的优势。
 - Chisel用LazyModule来实现编译时代码生成机制。
 > leishangwen:<br>
 > 建议加上Chisel的基本语法、基本概念的讲解，以及基本的试验步骤、实验环境，这样便于读者理解所举的例子
+>
+> wsong83:
+> 我的想法是弱化Chisel。引用一个美国初创公司老板的话：Chisel就是UCB的一帮顶级中的顶级alpha male互相之间炫耀谁能用更抽象更难懂的代码写硬件的产物。虽然这说的有点极端，说的其实也不是Chisel本身，而是使用于Rocket设计的diplomacy和cake pattern。但是有一点他说的很中肯，想学会Chisel去改Rocket-chip这个目标对于大多数人来说是不可实现的。如果我们在这里介绍Chisel的目的是讲如何去改Rocket，这个目标基本是达不到的。我们能做到的，最多也就是点一点思路，然后指条路（列出参考文档和代码的地址）。
+> 为了这种目标，上面的例子其实就是循序渐进的介绍用Chisel的不同抽象级别。到了最终的LazyModule实际上已经很接近cake pattern了。
+> 我在思考是否加上一些介绍diplomacy和cake pattern的内容，但应该不会用Chisel源码去讲，那个基本不能被理解。
+> 回到你的建议，实现简单电路的部分就是在介绍最基础的Chisel语法。我们可以给出UCB Chisel Tutorial的地址，那个是最官方，也是会被持续更新的。
+> 实验步骤和实验环境，就涉及到大量的scala/sbt编译环境，包配置内容。作为我自己，如果不去实现一些小例子，自己都不会去了解。我并不十分赞同将这些。如果代码的例子选的好，读者并不需要自己去跑就能建立感性认识。我们能达到的目标估计也只是感性认识。
+
 
 ## 2 Rocket-Chip的基本结构
 
