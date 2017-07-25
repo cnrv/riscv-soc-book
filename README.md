@@ -118,10 +118,10 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 > leishangwen:<br>
 > 建议加上Rocket-Chip与Rocket、Boom、Freedom、sodor的关系介绍，主要是共享的一些类
 >
-> wsong83:
+> wsong83:<br>
 > Rocket-chip的基本结构会在3.2节介绍。那里会说明Rocket和Boom是Rocket-chip可选的两种处理器。现在Rocket-chip好像已经支持同时有Rocket和Boom的核。
 > 这里可以提及Rocket和Boom是Rocket-chip支持的两种处理器实现，Freedom和lowRISC是基于Rocket-chip的两个SoC扩展。
-> Rocket-chip好像和sodor没有关系，除它们都是Chisel写的？
+> Rocket-chip好像和sodor没有关系，除了它们都是Chisel写的？
 
 ## 1 Chisel和FIRRTL
 
@@ -135,10 +135,12 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 > leishangwen:<br>
 > 建议加上Chisel的基本语法、基本概念的讲解，以及基本的试验步骤、实验环境，这样便于读者理解所举的例子
 >
-> wsong83:
+> wsong83:<br>
 > 我的想法是弱化Chisel。引用一个美国初创公司老板的话：Chisel就是UCB的一帮顶级中的顶级alpha male互相之间炫耀谁能用更抽象更难懂的代码写硬件的产物。虽然这说的有点极端，说的其实也不是Chisel本身，而是使用于Rocket设计的diplomacy和cake pattern。但是有一点他说的很中肯，想学会Chisel去改Rocket-chip这个目标对于大多数人来说是不可实现的。如果我们在这里介绍Chisel的目的是讲如何去改Rocket，这个目标基本是达不到的。我们能做到的，最多也就是点一点思路，然后指条路（列出参考文档和代码的地址）。
+>
 > 为了这种目标，上面的例子其实就是循序渐进的介绍用Chisel的不同抽象级别。到了最终的LazyModule实际上已经很接近cake pattern了。
 > 我在思考是否加上一些介绍diplomacy和cake pattern的内容，但应该不会用Chisel源码去讲，那个基本不能被理解。
+>
 > 回到你的建议，实现简单电路的部分就是在介绍最基础的Chisel语法。我们可以给出UCB Chisel Tutorial的地址，那个是最官方，也是会被持续更新的。
 > 实验步骤和实验环境，就涉及到大量的scala/sbt编译环境，包配置内容。作为我自己，如果不去实现一些小例子，自己都不会去了解。我并不十分赞同将这些。如果代码的例子选的好，读者并不需要自己去跑就能建立感性认识。我们能达到的目标估计也只是感性认识。
 
@@ -149,6 +151,11 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 同时在这里介绍devicetree的自动生成。
 > leishangwen:<br>
 > 建议加上对Rocket-Chip的src/main/scala目录下每个文件夹的功能介绍
+> wsong83:<br>
+> 我是反对用源码结构，特别是具体到文件夹的这种方式来介绍Rocket-chip的。原因有以下几点：
+> - 给出了好像大家可以自己去尝试修改源码并成功的错觉。如我上面说的，这基本是不可能达到的。
+> - 实际上说这些也没什么意义。Rocket的源代码就没有稳定过。就这一个月，Rocket的源码目录结构就已经经历了两次大变动，这里说的是整个文件夹被改名或者拆散的改动。Rocket的源码在这三年就不断地经历着这种改动。我作为lowRISC的维护者，就被这种频繁的改动拖累甚苦。
+> - lowRISC和Rocket-chip自己的文档都已经给出了源码目录的大概功能，而且会随着源码改动自动更新，我们为何还要在书里面自己去讲呢。
 
 ## 3. TileLink片上总线
 
