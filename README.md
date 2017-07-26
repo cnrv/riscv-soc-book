@@ -18,25 +18,6 @@
 
 - 区分计算机体系结构和微结构
   - 体系结构(computer architecture)定义的是硬件和软件的接口，并没有指定实现。RISC-V即定义的体系结构。
-> leishangwen:<br>
-> 建议从ISA的产生背景开始讲，再讲RISC的产生，这样就讲解了ISA的作用，以及RISC的优势
->
-> wsong83:<br>
-> 个人不太明这部分建议。说实话我也不知道ISA产生的背景是什么？RISC为何就产生了呢？现代指令集怎么就长这种样子了呢？
-> 关于RISC的优势，其实RISC和CISC现在都不存粹了。RISC中的instruction-fusion, compressed instruction, multi-cycle instruction等等都是跟CISC学的。CISC的micro-op显然又是学RISC的。
-> 无论从执行速度，面积，代码密度，离开具体应用环境都很难说谁好谁坏。
-> 再说，ISA其实也不是唯一体系结构。比如说stream processor，就不执行普通意义上的指令。
-> 这个问题其实很复杂，只有折中的看才是正确的吧。
->
-> leishangwen:<br>
-> ISA的产生就是为了抽象硬件，这才有了指令集与微结构的区分，同样的指令集有不同微结构的实现，所以我还是认为要介绍一下ISA产生背景。<br>
-> 另外，最开始都是CISC，后来才有RISC，这也说明CISC的不足，最后讲RISC与CISC互相融合。
->
-> wsong83:<br>
-> 同意以上的观点。尽管自己还是不太清楚ISA具体产生的历史。有谁足够了解上个世纪上半叶的计算机发展史吗:-)
->
-> 做了以下改动：最开始"添加ISA的产生"，在ISA部分添加CISC和RISC的介绍，在体系结构与微结构互相影响部分，着重讲CISC和RISC的比较分析。
-
   - 微结构(processor microarchitecture)则描述的是如何设计一个处理器来符合一个体系结构。体系结构并不定义微结构。
 
 - 指令级架构(instruction set architecture, ISA)
@@ -116,7 +97,7 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 ## 8 RISC-V的软件生态
 介绍围绕RISC-V开发的编译器、移植的操作系统等软件的情况。
 
-## 9 RISC-V在产业界与学术界的现状
+## 9 RISC-V在产业界与学术界的现状（leishangwen）
 概述基于RISC-V指令集的处理器、SoC，并进行简单地汇总统计。
 
 
@@ -137,26 +118,6 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 - Chisel在泛型上的优势。
 - Chisel在面向对象上的优势。
 - Chisel用LazyModule来实现编译时代码生成机制。
-> leishangwen:<br>
-> 建议加上Chisel的基本语法、基本概念的讲解，以及基本的试验步骤、实验环境，这样便于读者理解所举的例子
->
-> wsong83:<br>
-> 我的想法是弱化Chisel。引用一个美国初创公司老板的话：Chisel就是UCB的一帮顶级中的顶级alpha male互相之间炫耀谁能用更抽象更难懂的代码写硬件的产物。虽然这说的有点极端，说的其实也不是Chisel本身，而是使用于Rocket设计的diplomacy和cake pattern。但是有一点他说的很中肯，想学会Chisel去改Rocket-chip这个目标对于大多数人来说是不可实现的。如果我们在这里介绍Chisel的目的是讲如何去改Rocket，这个目标基本是达不到的。我们能做到的，最多也就是点一点思路，然后指条路（列出参考文档和代码的地址）。
->
-> 为了这种目标，上面的例子其实就是循序渐进的介绍用Chisel的不同抽象级别。到了最终的LazyModule实际上已经很接近cake pattern了。
-> 我在思考是否加上一些介绍diplomacy和cake pattern的内容，但应该不会用Chisel源码去讲，那个基本不能被理解。
->
-> 回到你的建议，实现简单电路的部分就是在介绍最基础的Chisel语法。我们可以给出UCB Chisel Tutorial的地址，那个是最官方，也是会被持续更新的。
-> 实验步骤和实验环境，就涉及到大量的scala/sbt编译环境，包配置内容。作为我自己，如果不去实现一些小例子，自己都不会去了解。我并不十分赞同将这些。如果代码的例子选的好，读者并不需要自己去跑就能建立感性认识。我们能达到的目标估计也只是感性认识。
-> 
-> leishangwen：<br>
-> 我还是建议提一提Chisel语法，当然篇幅可以短，内容可以精简，原因有两个：<br>
-> 1、书名是关于RISC-V你所需要知道的一切，而Chisel是学习RISC-V绕不过去的一部分
-> 2、说一说Chisel的基本语法、基本概念，这是相对容易理解的部分，然后再介绍泛型、LazyModule等较难理解的部分，读者读起来会轻松一些，否则，一上来就可能看不懂，不容易继续往下读。
->
-> wsong83:<br>
-> 那我们折中一下吧。我反对的是像讲懂一门语言一样去讲Chisel。的确也必须要将Chisel同时讲一些基本语法，以看懂例子。
-> 在最开始加一小部分的Chisel基本语法，覆盖例子所用到的语法。
 
 ## 2 Rocket-Chip的基本结构
 
@@ -187,12 +148,14 @@ TileLink总线的channel名称和功能，支持的报文类型和传输协议�
 > 这里我不太明白。解码过程，你指的的是instruction decoder吗？
 > 其实没有太多可以讲的，说简单了，就是一段组合判断逻辑，相当于SystemVerilog的casez语句。
 > 由于case很多，所以有的时候会变成瓶颈，于是分作多个周期。Rocket现在还是一个周期。
-> 或者我这么问，你想知道些什么？
+> 或者我这么问，你想知道些什么？<br>
+> leishangwen:<br>
+> 在2.2节介绍过RISC-V基本指令集及其优势，这里应该可以分析一个实际的处理器，更加直观、形象的解释RISC-V的优势，在译码方面的优势，不知这样理解正确与否？
 
 ## 3. Rocket处理器DCache设计分析
 重点分析其中的MSHR、DCache的访问过程
 
-## 4. Rocket处理器RoCC设计分析
+## 4. Rocket处理器RoCC设计分析（leishangwen）
 分析RoCC接口，并可以通过仿真实验说明RoCC如何使用
 
 
