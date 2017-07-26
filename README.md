@@ -187,7 +187,7 @@ TileLink总线的channel名称和功能，支持的报文类型和传输协议�
 ## 3. Freedom E310仿真实验
 仿真步骤，实验环境搭建，实验步骤（包括下载到开发板的步骤），测试例程分析（以SiFive提供的Eclipse开发环境中的自带测试历程进行分析，主要是分析启动过程的代码）
 
-## 4. Freedom E310调试过程及原理
+## 4. Freedom E310调试过程及原理分析
 首先是介绍如果调试，给出步骤，做实验，给出实验截图。然后，分析调试的原理，包括debug rom的内容、openocd的设置及基本工作原理、JTAG总线的知识、Freedom E310对于调试指令的处理，并进一步分析step、break、continue等调试指令的实现原理。
 
 ## 5. Freedom E310运行FreeRTOS
