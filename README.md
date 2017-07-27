@@ -239,5 +239,20 @@ TileLink总线的channel名称和功能，支持的报文类型和传输协议�
 
 # 第八章 PULPino
 
-重点介绍RI5CY的特点：硬件loop、vector ALU指令、post increment load/store指令等
+## 1. PULPino介绍
+包括PULPino的结构组成、RI5CY、流片的性能
+
+## 2. 向量算术指令
+介绍什么是向量运算、RI5CY的向量运算指令、优势特点等
+
+## 3. 硬件循环
+介绍硬件循环的原理、优势等
+
+## 4. post increment load/store指令
+不知道准确的翻译是什么
+
+## 5. 低功耗设计
+从设计上分析低功耗的原因
+
+
 
