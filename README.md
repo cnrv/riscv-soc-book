@@ -230,12 +230,16 @@ TileLink总线的channel名称和功能，支持的报文类型和传输协议�
 介绍如何使FreeRTOS在Freedom E310上的运行
 
 # 第七章 LowRISC (wsong83)
+我先大概列一下目录，宋同学修改啊
+## 1. LowRISC介绍
+包括LowRISC的产生原因、发展历史、相比Rocket的主要改进点、结构图。
 
-包括LowRISC的产生原因、发展历史、相比Rocket的主要改进点，仿真步骤，实验环境搭建，实验步骤（包括下载到开发板的步骤）；
-> leishangwen：<br>
-> lowrisc这一部分需要宋同学多费心了，建议多讲特性、结构、内部工作机理、参数化使用等<br>
-> 另外，建议结合试验或者仿真，可以更好地讲解lowrisc的一些特性，比如tagged memory等<br>
-> 所以，这里的试验不是简单地试验，不是按照网站的说明，一步步操作，而是要结合内容自己设计试验<br>
+## 2. tagged memory
+包括主要思路、实现效果、最好能结合试验演示效果等
+
+## 3. trace debugger
+包括主要思路、实现效果、使用测试等
+
 
 # 第八章 PULPino
 
