@@ -93,7 +93,7 @@
 AMO和LR/SC的设计意图（原子操作和关键区支持）。M/D/F/E等等已经可以用的扩展，和计划中的扩展。
 
 
-## 7 Spike
+## 7 Spike模拟器
 
 Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标准参照。
 应该讲一讲Spike的使用和其背后的原理。
