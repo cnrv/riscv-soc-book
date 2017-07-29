@@ -27,7 +27,7 @@
   * [参考文献](ch3/reference.md)
 * [第四章 Rocket处理器](ch4-chisel.md)
   * [1.Rocket介绍](ch4-chisel/1rocketjie-shao.md)
-  * 2. Rocket基本流水线
+  * 2. Rocket的基本流水线
 * [第五章 Rocket-Chip概述](ch5-rocket-chip.md)
 * [第六章 Rocket处理器](ch6-rocket-core.md)
 * [第七章 BOOM处理器](ch7-boom-core.md)
