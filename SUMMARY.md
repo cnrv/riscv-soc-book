@@ -2,6 +2,10 @@
 
 * [内容简介](README.md)
 * [第一章 RISC-V产生的时代背景](ch1-background.md)
+  * [1 计算机体系结构和处理器微结构](ch1-background/1-ji-suan-ji-ti-xi-jie-gou-he-chu-li-qi-wei-jie-gou.md)
+  * [2 现有指令集](ch1-background/2-xian-you-zhi-ling-ji.md)
+  * [3 硬件开发的变迁](ch1-background/3-ying-jian-kai-fa-de-bian-qian.md)
+  * [4 开源运动](ch1-background/4-kai-yuan-yun-dong.md)
 * [第二章 RISC-V的基本情况](ch2-riscv-basic.md)
 * [第三章 RISC-V在产业界与学术界的现状](ch3-current-status.md)
   * [1 基于risc-v架构的开源处理器](ch3/sec1-open-riscv-cpu.md)
