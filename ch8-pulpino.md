@@ -6,7 +6,7 @@ PULP£¨Parallel Ultra-Low Power£©ÏîÄ¿ÓÉÈðÊ¿ËÕÀèÊÀÁª°îÀí¹¤´óÑ§£¨ETH Z¨¹rich£©µÄ×Ûº
 ¸ÃÏîÄ¿µÄÏÖÊµÒâÒåÔÚÓÚÂú×ãIoT£¨Internet of Thing£©Éè±¸¶Ô¼ÆËãÄÜÁ¦µÄÐèÇó£¬µ±Ç°£¬IoTÉè±¸µÄÊýÁ¿ÓëÈÕ¾ãÔö£¬¾ßÓÐµÄ¹¦ÄÜÒ²Ô½À´Ô½¶à£¬¿ÉÒÔ»ñÈ¡ÖÜ±ßµÄÍ¼Ïñ¡¢»·¾³²ÎÊýµÈ´óÁ¿Êý¾Ý£¬½øÐÐÈçÈËÁ³Ê¶±ðµÈÓ¦ÓÃ£¬µ«ÊÇÕâÐèÒª´óÁ¿µÄ¼ÆËãÄÜÁ¦£¬µ±Ç°µÄIoTÉè±¸ÎÞ·¨Âú×ã¸ÃÐèÇó£¬Ö»ÄÜ½«Êý¾ÝÍ¨¹ýÎÞÏßµÄÄ£Ê½·¢ËÍµ½¼ÆËãÆ½Ì¨½øÐÐ¼¯ÖÐ¼ÆËã£¬µ«ÊÇÍ¨ÐÅÓÖÐèÒªÏûºÄ´óÁ¿µÄÄÜÁ¿£¬¶ÔÓÚ¿¿µç³Ø¹©µçµÄIoTÉè±¸¶øÑÔ£¬ÕâÑù×öÎÞÒÉ½µµÍÁËÆäÊ¹ÓÃÊÙÃü¡£ÎªÁË½â¾öÉÏÊöÎÊÌâ£¬³öÏÖÁËÌØ¶¨Ó¦ÓÃ¼ÓËÙÆ÷£¬Ó¦ÓÃÔÚIoTÉè±¸ÉÏ×÷ÎªÀ©Õ¹£¬¼È½µµÍÁË¹¦ºÄ£¬ÓÖÊµÏÖÁË¸ßµÄ¼ÆËãÄÜÁ¦£¬µ«ÊÇÕâÖÖ·½Ê½µÄÈ±µã¾ÍÊÇÈ±·¦Áé»îÐÔ£¬ÌØ¶¨Ó¦ÓÃ¼ÓËÙÆ÷ÊÇÄ³Ò»ÖÖÌØ¶¨ÔËËãµÄASIC£¬¹¦ÄÜÓÐÏÞ£¬PULPÃÖ²¹ÁËÕâÌõºè¹µ£¬ÆäÍ¨¹ý¼Ü¹¹µÄÓÅ»¯Éè¼Æ£¬ÊµÏÖÁË¼ÈÓµÓÐÇ¿´óµÄ¼ÆËãÄÜÁ¦£¬ÓÖÂú×ãIoTÉè±¸µÍ¹¦ºÄÐèÇó£¬Í¬Ê±»¹¾ßÓÐÍ¨ÓÃ´¦ÀíÆ÷µÄÁé»îÐÔ¡£Æä¼Ü¹¹Éè¼ÆÈçÍ¼8-1ËùÊ¾¡£</br>
 </br>
 ![](assets/PULP_Arch.png)</br>
-Í¼8-1 PULP¼Ü¹¹Éè¼Æ[2]</br>
+Í¼8-1 PULP¼Ü¹¹Éè¼Æ[2]</br></br>
 ´ÓÍ¼8-1µÄÓÒ°ë±ß¿ÉÒÔ·¢ÏÖPULPÊÇÒ»¸ö¶àºËSoC£¬Æä´¦ÀíÆ÷ºËÄ¿Ç°ÓÐÁ½ÖÖ£¬Ò»ÖÖÊÇ²ÉÓÃOpenRISCÖ¸Áî¼¯µÄOR10N£¬ÁíÒ»ÖÖÊÇ²ÉÓÃRISC-VÖ¸Áî¼¯µÄRI5CY¡£³ýÁË¶àºËÉè¼Æ£¬ÎªÁËÊµÏÖµÍ¹¦ºÄ¡¢¸ßÐÔÄÜµÄÄ¿µÄ£¬PULP»¹²ÉÓÃÁËÈçÏÂÒ»Ð©ÓÅ»¯Éè¼Æ£º</br>
 (1)Ö¸Áî¼¯À©Õ¹£ºPULPÀ©Õ¹ÁËÔ­ÓÐµÄÖ¸Áî¼¯£¬Ê¹µÃÆäÖ§³ÖÒÔÏÂÌØÐÔ£¨ÏêÏ¸ÄÚÈÝ»áÔÚ±¾ÕÂºóÐø²¿·ÖÒÀ´Î½éÉÜ£©¡£</br>
 * ËãÊõÖ¸ÁîÀ©Õ¹£¨ALU Extension£©
@@ -24,7 +24,7 @@ PULP£¨Parallel Ultra-Low Power£©ÏîÄ¿ÓÉÈðÊ¿ËÕÀèÊÀÁª°îÀí¹¤´óÑ§£¨ETH Z¨¹rich£©µÄ×Ûº
 PULPÔÚÑÐ·¢¹ý³ÌÖÐ£¬ÒÑ¶à´ÎÁ÷Æ¬£¬Èç±í8-1ËùÊ¾¡£</br></br>
 ±í8-1 PULPÁ÷Æ¬Çé¿ö<br>
 | Ãû³Æ          | ¹¤ÒÕ    | ¹¦ºÄ                 |  Ö÷Æµ  |Ê±¼ä    | ±¸×¢                               |
-| -------------:|--------:|---------------------:|-------:|-------:|-----------------------------------:|
+| -------------|:--------:|:---------------------:|:-------:|:-------:|-----------------------------------:|
 | Manny     | 180nm | 3 W @0.6V 1.5MHz | 1.25 MHz | 2015Äê |ËÄºË, 64 kB¶þ¼¶»º´æ16KB½ôñîºÏÊý¾Ý»º´æ£¬4KBÖ¸Áî»º´æ|
 | Diego     | 180nm | 3 W @0.8V 15 MHz | 15 MHz | 2015Äê |Í¬ÉÏ|
 | Sid     | 180nm | 3 W @1.0V 15 MHz | 15 MHz | 2015Äê |Í¬ÉÏ|
