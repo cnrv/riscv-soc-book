@@ -23,24 +23,24 @@ PULP£¨Parallel Ultra-Low Power£©ÏîÄ¿ÓÉÈðÊ¿ËÕÀèÊÀÁª°îÀí¹¤´óÑ§£¨ETH Z¨¹rich£©µÄ×Ûº
 ¾­¹ýÉÏÊöÓÅ»¯£¬¿ÉÒÔ´ó·ùÌá¸ßÄÜÐ§£¬ÔÚ28nm¹¤ÒÕÏÂ£¬¹¤×÷µçÑ¹¿ÉÒÔµÍÖÁ0.46V£¬¹¦ºÄ1mW£¬´ËÊ±ÈÔÈ»ÓÐ±È½ÏºÃµÄÐÔÄÜ±íÏÖ£¬Ö÷Æµ40MHz£¬0.2GOPS[3]¡£</br></br>
 PULPÔÚÑÐ·¢¹ý³ÌÖÐ£¬ÒÑ¶à´ÎÁ÷Æ¬£¬Èç±í8-1ËùÊ¾¡£</br></br>
 ±í8-1 PULPÁ÷Æ¬Çé¿ö<br>
-| Ãû³Æ          | ¹¤ÒÕ    | ¹¦ºÄ                 |  Ö÷Æµ  |Ê±¼ä    | ±¸×¢                               |
-| -------------|:--------:|:---------------------:|:-------:|:-------:|-----------------------------------:|
-| Manny     | 180nm | 3 W @0.6V 1.5MHz | 1.25 MHz | 2015Äê |ËÄºË, 64 kB¶þ¼¶»º´æ16KB½ôñîºÏÊý¾Ý»º´æ£¬4KBÖ¸Áî»º´æ|
-| Diego     | 180nm | 3 W @0.8V 15 MHz | 15 MHz | 2015Äê |Í¬ÉÏ|
-| Sid     | 180nm | 3 W @1.0V 15 MHz | 15 MHz | 2015Äê |Í¬ÉÏ|
-| Vivosoc     | 130nm | 45 mW @1.2V 40MHz | 140 MHz | 2015Äê |ÓÃÓÚÉúÎïÒ½Ñ§ÐÅºÅ²É¼¯£¬¿É´©´÷Éè±¸ÉÏ£¬Ë«ºË|
-| Vivosoc2     | 130nm | 20 mW @1.2V 50MHz | 64 MHz | 2016Äê |Í¬ÉÏ£¬µ«ÊÇÊÇËÄºË|
-| Vivosoc2.001     | 130nm | 20 mW @1.2V 50MHz | 64 MHz | 2016Äê |Í¬ÉÏ|
-| Mia_Wallace     | 65nm | 1 mW @1.2V 1MHz | 400 MHz | 2015Äê |ËÄºË£¬ÆäÖÐÓÐÒ»¸ö¾í»ýÂë¼ÓËÙÆ÷|
-| Fulmine     | 65nm | 13 mW @ 0.8 V, 104 MHz | 400 MHz | 2015Äê |Mia_WallaceµÄ¸Ä½øÐÍ£¬Ôö¼ÓÁËÒ»¸öÃÜÂë¼ÓËÙÆ÷|
-| Artemis     | 65nm | 1 mW @1.2V 1MHz | 500 MHz | 2014Äê |ËÄºË£¬Ã¿¸ö´¦ÀíÆ÷ºËÔö¼ÓÁËÒ»¸öFPU|
-| Hecate     | 65nm | 1 mW @1.2V 1MHz | 500 MHz | 2014Äê |ËÄºË£¬¹²ÏíÁ½¸öFPU|
-| Diana     | 65nm | 1 mW @1.2V 1MHz | 500 MHz | 2014Äê |ËÄºË£¬1¸ö±ê×¼FPU£¬3¸ö²Ã¼ôµÄFPU|
-| Phoebe     | 65nm | 22 mW @1.2V 100MHz | 500 MHz | 2015Äê |SeleneµÄ¸Ä½ø°æ|
-| Pulp     | 28nm | 8 mW @0.7V 10MHz | 475 MHz | 2013Äê |ËÄºË|
-| Pulpv2     | 28nm |  | 1000 MHz | 2014Äê |ËÄºË|
-| Pulpv3     | 28nm | 1.2 mW @ 0.6V, 50MHz | 66 MHz | 2015Äê |Í¬ÉÏ£¬¼¯³ÉÁËÒ»¸ö¾í»ýÔËËã¼ÓËÙÆ÷|
-| Honey_Bunny     | 28nm | 1 mW @1.2V 1MHz | 60 MHz | 2015Äê |µÚÒ»¸öÊ¹ÓÃRI5CY×÷Îª´¦ÀíÆ÷ºËµÄPULP|
+| Ãû³Æ          | ¹¤ÒÕ  | ¹¦ºÄ                  |  Ö÷Æµ   |Ê±¼ä    | ±¸×¢                                             |
+| ------------- |:-----:|:---------------------:|:-------:|:------:|------------------------------------------------- |
+| Manny         | 180nm | 3 W @0.6V 1.5MHz      | 1.25 MHz| 2015Äê |ËÄºË, 64 kB¶þ¼¶»º´æ16KB½ôñîºÏÊý¾Ý»º´æ£¬4KBÖ¸Áî»º´æ|
+| Diego         | 180nm | 3 W @0.8V 15 MHz      | 15 MHz  | 2015Äê |Í¬ÉÏ                                              |
+| Sid           | 180nm | 3 W @1.0V 15 MHz      | 15 MHz  | 2015Äê |Í¬ÉÏ                                              |
+| Vivosoc       | 130nm | 45 mW @1.2V 40MHz     | 140 MHz | 2015Äê |ÓÃÓÚÉúÎïÒ½Ñ§ÐÅºÅ²É¼¯£¬¿É´©´÷Éè±¸ÉÏ£¬Ë«ºË          |
+| Vivosoc2      | 130nm | 20 mW @1.2V 50MHz     | 64 MHz  | 2016Äê |Í¬ÉÏ£¬µ«ÊÇÊÇËÄºË                                  |
+| Vivosoc2.001  | 130nm | 20 mW @1.2V 50MHz     | 64 MHz  | 2016Äê |Í¬ÉÏ                                              |
+| Mia_Wallace   | 65nm  | 1 mW @1.2V 1MHz       | 400 MHz | 2015Äê |ËÄºË£¬ÆäÖÐÓÐÒ»¸ö¾í»ýÂë¼ÓËÙÆ÷                      |
+| Fulmine       | 65nm  | 13 mW @ 0.8 V, 104 MHz| 400 MHz | 2015Äê |Mia_WallaceµÄ¸Ä½øÐÍ£¬Ôö¼ÓÁËÒ»¸öÃÜÂë¼ÓËÙÆ÷         |
+| Artemis       | 65nm  | 1 mW @1.2V 1MHz       | 500 MHz | 2014Äê |ËÄºË£¬Ã¿¸ö´¦ÀíÆ÷ºËÔö¼ÓÁËÒ»¸öFPU                   |
+| Hecate        | 65nm  | 1 mW @1.2V 1MHz       | 500 MHz | 2014Äê |ËÄºË£¬¹²ÏíÁ½¸öFPU                                 |
+| Diana         | 65nm  | 1 mW @1.2V 1MHz       | 500 MHz | 2014Äê |ËÄºË£¬1¸ö±ê×¼FPU£¬3¸ö²Ã¼ôµÄFPU                    |
+| Phoebe        | 65nm  | 22 mW @1.2V 100MHz    | 500 MHz | 2015Äê |SeleneµÄ¸Ä½ø°æ                                    |
+| Pulp          | 28nm  | 8 mW @0.7V 10MHz      | 475 MHz | 2013Äê |ËÄºË                                              |
+| Pulpv2        | 28nm  |                       | 1000 MHz| 2014Äê |ËÄºË                                              |
+| Pulpv3        | 28nm  | 1.2 mW @ 0.6V, 50MHz  | 66 MHz  | 2015Äê |Í¬ÉÏ£¬¼¯³ÉÁËÒ»¸ö¾í»ýÔËËã¼ÓËÙÆ÷                    |
+| Honey_Bunny   | 28nm  | 1 mW @1.2V 1MHz       | 60 MHz  | 2015Äê |µÚÒ»¸öÊ¹ÓÃRI5CY×÷Îª´¦ÀíÆ÷ºËµÄPULP                 |
 
 
 
