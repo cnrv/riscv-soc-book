@@ -266,6 +266,7 @@ module core_region
 ![](assets/memory_space.png)</br>
 图8-7 默认的地址空间分配</br></br>
 整体上可以分为四个区域：指令RAM、Boot ROM、数据RAM、外设。这个地址空间分配方案是在rtl目录下的top.sv中定义的，如下，可以通过修改其中的代码，实现地址空间分配方案的重新定义。</br>
+
 ~~~
  axi_node_intf_wrap
   #(
@@ -289,6 +290,7 @@ module core_region
     .end_addr_i   ( { 32'h1A11_FFFF, 32'h001F_FFFF, 32'h000F_FFFF } )
   );
 ~~~ 
+
 上述代码定义了AXI总线上三个设备的地址，如下：
 * 设备1：起始地址是32'h1A10_0000，终止地址是32'h1A11_FFFF
 * 设备2：起始地址是32'h0010_0000，终止地址是32'h001F_FFFF
