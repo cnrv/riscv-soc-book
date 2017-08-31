@@ -249,8 +249,8 @@ PULPino目前支持4种不同配置的、采用RISC-V指令集的处理器核，如下：</br>
 
 ### 8.2.5 地址空间分配
 PULPino默认的指令RAM、数据RAM的大小都是32KB，在rtl目录下的core_region.sv的最开始有如下定义，可以依据需求修改指令RAM、数据RAM的大小。</br>
-`module core_region
-\#\(
+~~~module core_region
+#(
     parameter AXI_ADDR_WIDTH       = 32,
     parameter AXI_DATA_WIDTH       = 64,
     parameter AXI_ID_MASTER_WIDTH  = 10,
@@ -258,7 +258,7 @@ PULPino默认的指令RAM、数据RAM的大小都是32KB，在rtl目录下的core_region.sv的最开始
     parameter AXI_USER_WIDTH       = 0,
     parameter DATA_RAM_SIZE        = 32768, // in bytes
     parameter INSTR_RAM_SIZE       = 32768  // in bytes
-  \)`
+  )~~~
 默认的地址空间分配如图8-7所示。该图与参考文献[4]的图2.1有差别，主要是Boot ROM的起始地址不同，此处是依据实际代码确定Boot ROM起始地址是0x0000_8000，参考文献[4]的图2.1中Boot ROM起始地址是0x0008_0000。</br>
 ![](assets/memory_space.png)</br>
 图8-7 默认的地址空间分配</br></br>
