@@ -6,7 +6,7 @@ PULP（Parallel Ultra-Low Power）项目由瑞士苏黎世联邦理工大学（E
 ### 8.1.2 架构介绍
 其架构设计如图8-1所示。</br>
 </br>
-![](assets/PULP_Arch.png)</br>
+![](../assets/PULP_Arch.png)</br>
 图8-1 PULP架构设计[2]</br></br>
 从图8-1的右半边可以发现PULP是一个多核SoC，其处理器核目前有两种，一种是采用OpenRISC指令集的OR10N，另一种是采用RISC-V指令集的RI5CY。除了多核设计，为了实现低功耗、高性能的目的，PULP还采用了如下一些优化设计：</br></br>
 （1）指令集扩展：PULP扩展了原有的指令集，使得其支持以下特性（详细内容会在本章后续部分依次介绍）。</br>
