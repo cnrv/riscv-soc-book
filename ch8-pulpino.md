@@ -268,14 +268,7 @@ module core_region
 整体上可以分为四个区域：指令RAM、Boot ROM、数据RAM、外设。这个地址空间分配方案是在rtl目录下的top.sv中定义的，如下，可以通过修改其中的代码，实现地址空间分配方案的重新定义。</br>
 ~~~verilog
  axi_node_intf_wrap
-  #(
-    .NB_MASTER      ( 3                    ),
-    .NB_SLAVE       ( 3                    ),
-    .AXI_ADDR_WIDTH ( `AXI_ADDR_WIDTH      ),
-    .AXI_DATA_WIDTH ( `AXI_DATA_WIDTH      ),
-    .AXI_ID_WIDTH   ( `AXI_ID_MASTER_WIDTH ),
-    .AXI_USER_WIDTH ( `AXI_USER_WIDTH      )
-  )
+
   axi_interconnect_i
   (
     .clk       ( clk_int    ),
