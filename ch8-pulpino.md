@@ -266,19 +266,29 @@ module core_region
 ![](assets/memory_space.png)</br>
 图8-7 默认的地址空间分配</br></br>
 整体上可以分为四个区域：指令RAM、Boot ROM、数据RAM、外设。这个地址空间分配方案是在rtl目录下的top.sv中定义的，如下，可以通过修改其中的代码，实现地址空间分配方案的重新定义。</br>
-~~~verilog
-module core_region
-#(
-    parameter AXI_ADDR_WIDTH       = 32,
-    parameter AXI_DATA_WIDTH       = 64,
-    parameter AXI_ID_MASTER_WIDTH  = 10,
-    parameter AXI_ID_SLAVE_WIDTH   = 10,
-    parameter AXI_USER_WIDTH       = 0,
-    parameter DATA_RAM_SIZE        = 32768, // in bytes
-    parameter INSTR_RAM_SIZE       = 32768  // in bytes
+~~~
+ axi_node_intf_wrap
+  #(
+    .NB_MASTER      ( 3                    ),
+    .NB_SLAVE       ( 3                    ),
+    .AXI_ADDR_WIDTH ( `AXI_ADDR_WIDTH      ),
+    .AXI_DATA_WIDTH ( `AXI_DATA_WIDTH      ),
+    .AXI_ID_WIDTH   ( `AXI_ID_MASTER_WIDTH ),
+    .AXI_USER_WIDTH ( `AXI_USER_WIDTH      )
   )
+  axi_interconnect_i
+  (
+    .clk       ( clk_int    ),
+    .rst_n     ( rstn_int   ),
+    .test_en_i ( testmode_i ),
+
+    .master    ( slaves     ),
+    .slave     ( masters    ),
+
+    .start_addr_i ( { 32'h1A10_0000, 32'h0010_0000, 32'h0000_0000 } ),
+    .end_addr_i   ( { 32'h1A11_FFFF, 32'h001F_FFFF, 32'h000F_FFFF } )
+  );
 ~~~ 
-</br> 
 上述代码定义了AXI总线上三个设备的地址，如下：
 * 设备1：起始地址是32'h1A10_0000，终止地址是32'h1A11_FFFF
 * 设备2：起始地址是32'h0010_0000，终止地址是32'h001F_FFFF
@@ -298,8 +308,8 @@ parameter RAM_SIZE   = 32768,                // in bytes
   assign is_boot = (addr_i[ADDR_WIDTH-1] == 1'b1);
 ......
 ~~~
-</br>
-在include\apb_bus.sv中由各中外设的地址空间定义，如下：</br>
+
+在include\apb_bus.sv中由各中外设的地址空间定义，如下：
 ~~~verilog
 // MASTER PORT TO CVP
 `define UART_START_ADDR       32'h1A10_0000
