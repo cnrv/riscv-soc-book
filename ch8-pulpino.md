@@ -258,7 +258,8 @@ PULPino默认的指令RAM、数据RAM的大小都是32KB，在rtl目录下的cor
     parameter AXI_USER_WIDTH       = 0,
     parameter DATA_RAM_SIZE        = 32768, // in bytes
     parameter INSTR_RAM_SIZE       = 32768  // in bytes
-  )~~~
+  )
+~~~
 </br>  
 默认的地址空间分配如图8-7所示。该图与参考文献[4]的图2.1有差别，主要是Boot ROM的起始地址不同，此处是依据实际代码确定Boot ROM起始地址是0x0000_8000，参考文献[4]的图2.1中Boot ROM起始地址是0x0008_0000。</br>
 ![](assets/memory_space.png)</br>
