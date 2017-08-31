@@ -37,8 +37,8 @@
 * [第六章 SiFive公司的Freedom系列](ch6-freedom.md)
 * [第七章 lowRISC](ch7-lowrisc.md)
 * [第八章 PULPino](ch8-pulpino.md)
-  * [8.1 PULP介绍](ch8/sec1-PULP overview.md)
-  * [8.2 PULPino介绍](ch8/sec2-PULPino overview.md)
-  * [8.3 RI5CY介绍](ch8/sec3-RI5CY overview.md)
+  * [8.1 PULP介绍](ch8/sec1-PULP_overview.md)
+  * [8.2 PULPino介绍](ch8/sec2-PULPino_overview.md)
+  * [8.3 RI5CY介绍](ch8/sec3-RI5CY_overview.md)
 * [第九章 浮点运算](ch9-fpu.md)
 
