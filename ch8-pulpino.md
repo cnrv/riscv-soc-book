@@ -251,7 +251,7 @@ PULPino目前支持4种不同配置的、采用RISC-V指令集的处理器核，
 PULPino默认的指令RAM、数据RAM的大小都是32KB，在rtl目录下的core_region.sv的最开始有如下定义，可以依据需求修改指令RAM、数据RAM的大小。</br>
 ~~~verilog
 module core_region
-\#(
+#(
     parameter AXI_ADDR_WIDTH       = 32,
     parameter AXI_DATA_WIDTH       = 64,
     parameter AXI_ID_MASTER_WIDTH  = 10,
@@ -266,6 +266,7 @@ module core_region
 ![](assets/memory_space.png)</br>
 图8-7 默认的地址空间分配</br></br>
 整体上可以分为四个区域：指令RAM、Boot ROM、数据RAM、外设。这个地址空间分配方案是在rtl目录下的top.sv中定义的，如下，可以通过修改其中的代码，实现地址空间分配方案的重新定义。</br>
+~~~verilog
  axi_node_intf_wrap
   #(
     .NB_MASTER      ( 3                    ),
@@ -287,14 +288,15 @@ module core_region
     .start_addr_i ( { 32'h1A10_0000, 32'h0010_0000, 32'h0000_0000 } ),
     .end_addr_i   ( { 32'h1A11_FFFF, 32'h001F_FFFF, 32'h000F_FFFF } )
   );
- 
+~~~ 
 上述代码定义了AXI总线上三个设备的地址，如下：
 * 设备1：起始地址是32'h1A10_0000，终止地址是32'h1A11_FFFF
 * 设备2：起始地址是32'h0010_0000，终止地址是32'h001F_FFFF
 * 设备3：起始地址是32'h0000_0000，终止地址是32'h000F_FFFF
 结合图8-3、图8-7可以非常直观的发现，设备1就是图8-7中的各种外设的地址空间，也就是图8-3中的挂在APB总线下的各种外设；设备2就是图8-7中的数据RAM；设备3就是图8-7中指令RAM+Boot ROM。</br>
 在rtl目录下的instr_ram_wrap.sv中依据指令地址，判断是从Boot ROM还是从指令RAM中取指令，如下：</br>
-`module instr_ram_wrap
+~~~verilog
+module instr_ram_wrap
   #(
 parameter RAM_SIZE   = 32768,                // in bytes
 // one bit more than necessary, for the boot rom
@@ -304,10 +306,12 @@ parameter RAM_SIZE   = 32768,                // in bytes
   ......
 // 为1表示从Boot ROM中取指，反之，从指令RAM中取指
   assign is_boot = (addr_i[ADDR_WIDTH-1] == 1'b1);
-......`
+......
+~~~
 
 在include\apb_bus.sv中由各中外设的地址空间定义，如下：
-`// MASTER PORT TO CVP
+~~~verilog
+// MASTER PORT TO CVP
 `define UART_START_ADDR       32'h1A10_0000
 `define UART_END_ADDR         32'h1A10_0FFF
 
@@ -341,8 +345,8 @@ parameter RAM_SIZE   = 32768,                // in bytes
 
 // MASTER PORT TO DEBUG
 `define DEBUG_START_ADDR      32'h1A11_0000
-`define DEBUG_END_ADDR        32'h1A11_7FFF`
-
+`define DEBUG_END_ADDR        32'h1A11_7FFF
+~~~
 ### 8.2.6 中断处理过程
 PULPino采用中断向量表的方式处理中断，图8-8是默认的中断类型，及其对应的中断处理例程的入口地址，每个中断处理例程占用4个字节，可以防止一条32位的指令，或者两条16位的指令，一般是转移指令，转移到具体的中断处理函数。</br>
 ![](assets/interrupt_vector.png)</br>
