@@ -269,7 +269,7 @@ module core_region
 ~~~verilog
  axi_node_intf_wrap
   #(
-    .NB_MASTER      ( 3                    ),
+    \.NB_MASTER      ( 3                    ),
 
 ~~~ 
 上述代码定义了AXI总线上三个设备的地址，如下：
