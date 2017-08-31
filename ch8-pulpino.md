@@ -267,7 +267,7 @@ module core_region
 图8-7 默认的地址空间分配</br></br>
 整体上可以分为四个区域：指令RAM、Boot ROM、数据RAM、外设。这个地址空间分配方案是在rtl目录下的top.sv中定义的，如下，可以通过修改其中的代码，实现地址空间分配方案的重新定义。</br>
 ~~~verilog
- axi_node_intf_wrap
+axi_node_intf_wrap
 
   axi_interconnect_i
   (
