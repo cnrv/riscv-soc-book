@@ -301,15 +301,15 @@ module core_region
 ~~~verilog
 module instr_ram_wrap
   #(
-parameter RAM_SIZE   = 32768,                // in bytes
-// one bit more than necessary, for the boot rom
-    parameter ADDR_WIDTH = $clog2(RAM_SIZE) + 1, 
-    parameter DATA_WIDTH = 32
+     parameter RAM_SIZE   = 32768,                // in bytes
+     // one bit more than necessary, for the boot rom
+     parameter ADDR_WIDTH = $clog2(RAM_SIZE) + 1, 
+     parameter DATA_WIDTH = 32
   )(
-  ......
-// 为1表示从Boot ROM中取指，反之，从指令RAM中取指
-  assign is_boot = (addr_i[ADDR_WIDTH-1] == 1'b1);
-......
+     ......
+     // 为1表示从Boot ROM中取指，反之，从指令RAM中取指
+     assign is_boot = (addr_i[ADDR_WIDTH-1] == 1'b1);
+     ......
 ~~~
 
 在include\apb_bus.sv中由各中外设的地址空间定义，如下：
