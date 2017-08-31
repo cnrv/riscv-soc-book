@@ -250,7 +250,7 @@ PULPino目前支持4种不同配置的、采用RISC-V指令集的处理器核，
 ### 8.2.5 地址空间分配
 PULPino默认的指令RAM、数据RAM的大小都是32KB，在rtl目录下的core_region.sv的最开始有如下定义，可以依据需求修改指令RAM、数据RAM的大小。</br>
 ~~~module core_region
-#(
+\#(
     parameter AXI_ADDR_WIDTH       = 32,
     parameter AXI_DATA_WIDTH       = 64,
     parameter AXI_ID_MASTER_WIDTH  = 10,
