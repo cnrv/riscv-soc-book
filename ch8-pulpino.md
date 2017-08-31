@@ -17,12 +17,11 @@ PULP£¨Parallel Ultra-Low Power£©ÏîÄ¿ÓÉÈðÊ¿ËÕÀèÊÀÁª°îÀí¹¤´óÑ§£¨ETH Z¨¹rich£©µÄ×Ûº
 * µØÖ·×ÔÔöµÄ·Ã´æÖ¸Áî£¨post-incrementing Load & Strore Instruciton£©
 * ³ËÀÛ¼ÓÖ¸Áî£¨Multiply-Accumulate£©
 * ÏòÁ¿²Ù×÷£¨Vectorial£©
-</br>
 £¨2£©¹²ÏíÖ¸Áî»º´æ£º¶à¸ö´¦ÀíÆ÷ºË¹²ÏíÒ»¸öL1Ö¸Áî»º´æ£¬±ÜÃâÁËÎªÁËÎ¬»¤»º´æÒ»ÖÂÐÔ´øÀ´µÄ¸´ÔÓÐÔ£¬¶øÇÒ²ÉÓÃµÄÊÇSCM£¨Standard Cell based Memories£©£¬¿ÉÒÔÔÚ¸üµÍµÄµçÑ¹ÏÂ¹¤×÷£¬´Ó¶ø½øÒ»²½½µµÍÁË¹¦ºÄ¡£</br>
 </br>
 £¨3£©Ö¸ÁîÔ¤È¡Buffer£º¹²ÏíµÄÖ¸Áî»º´æ¿ÉÄÜ»áÓÉÓÚ¶à¸ö´¦ÀíÆ÷ºËÍ¬Ê±·ÃÎÊ£¬¶øÔö¼ÓÑÓ³Ù£¬Îª´Ë£¬ÎªÃ¿¸ö´¦ÀíÆ÷Éè¼ÆÁËÒ»¸öÖ¸ÁîÔ¤È¡Buffer£¬¸ÃBufferµÄ´óÐ¡Ò»°ãÊÇÖ¸Áî»º´ælineµÄ´óÐ¡£¬±ÈÈç128bit¡£Í¬Ê±£¬¶ÔÓÚRISC-VÖ¸Áî¼¯¶øÑÔ£¬¸ÃÖ¸ÁîÔ¤È¡Buffer»¹ÊµÏÖÁË16bitÑ¹ËõÖ¸ÁîÀ©Õ¹Îª32bit¡£</br></br>
 £¨4£©½ôñîºÏÊý¾Ý»º´æ£ºÊ¹ÓÃµÄÊÇScratchpad Memroy£¬·ÖÎª¶à¸öbank£¬Ò»°ãÎª8KB£¬Ã¿¸öbank»¹¶ÔÓ¦Ò»¸öSCM£¬Ò»°ãÎª1KB¡£</br></br>
-¾­¹ýÉÏÊöÓÅ»¯£¬¿ÉÒÔ´ó·ùÌá¸ßÄÜÐ§£¬ÔÚ28nm¹¤ÒÕÏÂ£¬¹¤×÷µçÑ¹¿ÉÒÔµÍÖÁ0.46V£¬¹¦ºÄ1mW£¬´ËÊ±ÈÔÈ»ÓÐ±È½ÏºÃµÄÐÔÄÜ±íÏÖ£¬Ö÷Æµ40MHz£¬0.2GOPS[3]¡£</br></br>
+¾­¹ýÉÏÊöÓÅ»¯£¬¿ÉÒÔ´ó·ùÌá¸ßÄÜÐ§£¬ÔÚ28nm¹¤ÒÕÏÂ£¬¹¤×÷µçÑ¹¿ÉÒÔµÍÖÁ0.46V£¬¹¦ºÄ1mW£¬´ËÊ±ÈÔÈ»ÓÐ±È½ÏºÃµÄÐÔÄÜ±íÏÖ£¬Ö÷Æµ40MHz£¬0.2GOPS[3]¡£
 ### 8.1.3 Á÷Æ¬Çé¿ö
 PULPÔÚÑÐ·¢¹ý³ÌÖÐ£¬ÒÑ¶à´ÎÁ÷Æ¬£¬Èç±í8-1ËùÊ¾¡£</br></br>
 ±í8-1 PULPÁ÷Æ¬Çé¿ö<br>
@@ -203,12 +202,12 @@ PULPinoÄ¿Ç°Ö§³Ö4ÖÖ²»Í¬ÅäÖÃµÄ¡¢²ÉÓÃRISC-VÖ¸Áî¼¯µÄ´¦ÀíÆ÷ºË£¬ÈçÏÂ£º</br>
 ²»Í¬ÅäÖÃµÄ×ÊÔ´Õ¼ÓÃÇé¿öÈçÍ¼8-4ËùÊ¾¡£Micro-riscyµÄ×ÊÔ´Õ¼ÓÃÊÇRI5CYµÄ½Ó½ü1/4¡£</br></br>
 ![](assets/resources.png)</br>
 Í¼8-4 ²»Í¬ÅäÖÃµÄ×ÊÔ´Õ¼ÓÃÇé¿ö[5]</br></br>
-Í¼8-5ÊÇ²»Í¬ÅäÖÃÔÚ²»Í¬Ó¦ÓÃ»·¾³ÖÐµÄÄÜºÄÇé¿ö¡£´ÓÍ¼ÖÐ¿ÉÒÔ·¢ÏÖ£¬²»Í¬µÄÅäÖÃÊÊºÏÓÚ²»Í¬µÄÓ¦ÓÃ³¡¾°£¬Èç¹ûÓÃÓÚÊý×ÖÐÅºÅ´¦ÀíÁìÓò£¬ÓÐ±È½Ï¶àµÄ¾í»ýÔËËã£¬ÄÇÃ´RI5CYµÄÄÜºÄÊÇ×îµÍµÄ£¬ÒòÎªËü×öÁËÖ¸ÁîÀ©Õ¹£¬ÄÚ²¿ÓÐ×¨ÓÃÓ²¼þÓÃÓÚÊµÏÖ¾í»ýÔËËã¡£Èç¹ûÓÃÓÚ¿ØÖÆÁìÓò£¬ÄÇÃ´Micro-riscyµÄÄÜºÄ×îµÍ¡£ËùÒÔ£¬ÓÃ»§ÐèÒªÒÀ¾Ý²»Í¬µÄÓ¦ÓÃ³¡¾°£¬ÅäÖÃPULPino¡£</br>
+Í¼8-5ÊÇ²»Í¬ÅäÖÃÔÚ²»Í¬Ó¦ÓÃ»·¾³ÖÐµÄÄÜºÄÇé¿ö¡£´ÓÍ¼ÖÐ¿ÉÒÔ·¢ÏÖ£¬²»Í¬µÄÅäÖÃÊÊºÏÓÚ²»Í¬µÄÓ¦ÓÃ³¡¾°£¬Èç¹ûÓÃÓÚÊý×ÖÐÅºÅ´¦ÀíÁìÓò£¬ÓÐ±È½Ï¶àµÄ¾í»ýÔËËã£¬ÄÇÃ´RI5CYµÄÄÜºÄÊÇ×îµÍµÄ£¬ÒòÎªËü×öÁËÖ¸ÁîÀ©Õ¹£¬ÄÚ²¿ÓÐ×¨ÓÃÓ²¼þÓÃÓÚÊµÏÖ¾í»ýÔËËã¡£Èç¹ûÓÃÓÚ¿ØÖÆÁìÓò£¬ÄÇÃ´Micro-riscyµÄÄÜºÄ×îµÍ¡£ËùÒÔ£¬ÓÃ»§ÐèÒªÒÀ¾Ý²»Í¬µÄÓ¦ÓÃ³¡¾°£¬ÅäÖÃPULPino¡£</br></br>
 ![](assets/power.png)</br>
 Í¼8-5 ²»Í¬ÅäÖÃÔÚ²»Í¬Ó¦ÓÃ»·¾³ÖÐµÄÄÜºÄÇé¿ö[5]</br>
 
 ### 8.2.4 ½Ó¿ÚÃèÊö
-¿ª·¢Õß¿ÉÒÔÔÚhttps://github.com/pulp-platform/pulpinoÏÂÔØµÃµ½PULPinoµÄÔ´´úÂë£¬ÆäÖÐrtlÄ¿Â¼ÏÂµÄpulpino_top.svÊÇPULPinoµÄ¶¥²ãÎÄ¼þ£¬Í¨¹ý¸ÃÎÄ¼þ¿ÉÒÔµÃµ½PULPinoµÄ½Ó¿ÚÊ¾ÒâÍ¼ÈçÍ¼8-6ËùÊ¾¡£¶ÔÓÚ´ó¶àÊý½Ó¿Ú¶¼¿ÉÒÔÍ¨¹ý½Ó¿ÚÃû³Æ×îºóµÄ_i»¹ÊÇ_oÇø·Ö³öÊÇÊäÈë½Ó¿Ú»¹ÊÇÊä³ö½Ó¿Ú¡£</br>
+¿ª·¢Õß¿ÉÒÔÔÚhttps://github.com/pulp-platform/pulpino ÏÂÔØµÃµ½PULPinoµÄÔ´´úÂë£¬ÆäÖÐrtlÄ¿Â¼ÏÂµÄpulpino_top.svÊÇPULPinoµÄ¶¥²ãÎÄ¼þ£¬Í¨¹ý¸ÃÎÄ¼þ¿ÉÒÔµÃµ½PULPinoµÄ½Ó¿ÚÊ¾ÒâÍ¼ÈçÍ¼8-6ËùÊ¾¡£¶ÔÓÚ´ó¶àÊý½Ó¿Ú¶¼¿ÉÒÔÍ¨¹ý½Ó¿ÚÃû³Æ×îºóµÄ_i»¹ÊÇ_oÇø·Ö³öÊÇÊäÈë½Ó¿Ú»¹ÊÇÊä³ö½Ó¿Ú¡£</br></br>
 ![](assets/PULPino_Interface.png)</br>
 Í¼8-6 PULPino½Ó¿ÚÊ¾ÒâÍ¼</br></br>
 °´ÕÕ¹¦ÄÜ¿ÉÒÔ·ÖÎª¼¸Àà£ºÈ«¾ÖÐÅºÅ½Ó¿Ú¡¢SPI Slave¡¢SPI Master¡¢I2C¡¢UART¡¢GPIO¡¢JTAG¡¢pad configµÈ£¬ÓëÍ¼8-3»ù±¾Ò»ÖÂ¡£ÆäÖÐÈ«¾Ö½Ó¿ÚµÄÃèÊöÈç±í8-2ËùÊ¾¡£</br></br>
@@ -250,16 +249,16 @@ PULPinoÄ¿Ç°Ö§³Ö4ÖÖ²»Í¬ÅäÖÃµÄ¡¢²ÉÓÃRISC-VÖ¸Áî¼¯µÄ´¦ÀíÆ÷ºË£¬ÈçÏÂ£º</br>
 
 ### 8.2.5 µØÖ·¿Õ¼ä·ÖÅä
 PULPinoÄ¬ÈÏµÄÖ¸ÁîRAM¡¢Êý¾ÝRAMµÄ´óÐ¡¶¼ÊÇ32KB£¬ÔÚrtlÄ¿Â¼ÏÂµÄcore_region.svµÄ×î¿ªÊ¼ÓÐÈçÏÂ¶¨Òå£¬¿ÉÒÔÒÀ¾ÝÐèÇóÐÞ¸ÄÖ¸ÁîRAM¡¢Êý¾ÝRAMµÄ´óÐ¡¡£</br>
-`module core_region
-#(
-    parameter AXI_ADDR_WIDTH       = 32,
-    parameter AXI_DATA_WIDTH       = 64,
-    parameter AXI_ID_MASTER_WIDTH  = 10,
-    parameter AXI_ID_SLAVE_WIDTH   = 10,
-    parameter AXI_USER_WIDTH       = 0,
-    parameter DATA_RAM_SIZE        = 32768, // in bytes
-    parameter INSTR_RAM_SIZE       = 32768  // in bytes
-  )`
+		module core_region
+		#(
+			parameter AXI_ADDR_WIDTH       = 32,
+			parameter AXI_DATA_WIDTH       = 64,
+			parameter AXI_ID_MASTER_WIDTH  = 10,
+			parameter AXI_ID_SLAVE_WIDTH   = 10,
+			parameter AXI_USER_WIDTH       = 0,
+			parameter DATA_RAM_SIZE        = 32768, // in bytes
+			parameter INSTR_RAM_SIZE       = 32768  // in bytes
+		)
 Ä¬ÈÏµÄµØÖ·¿Õ¼ä·ÖÅäÈçÍ¼8-7ËùÊ¾¡£¸ÃÍ¼Óë²Î¿¼ÎÄÏ×[4]µÄÍ¼2.1ÓÐ²î±ð£¬Ö÷ÒªÊÇBoot ROMµÄÆðÊ¼µØÖ·²»Í¬£¬´Ë´¦ÊÇÒÀ¾ÝÊµ¼Ê´úÂëÈ·¶¨Boot ROMÆðÊ¼µØÖ·ÊÇ0x0000_8000£¬²Î¿¼ÎÄÏ×[4]µÄÍ¼2.1ÖÐBoot ROMÆðÊ¼µØÖ·ÊÇ0x0008_0000¡£</br>
 ![](assets/memory_space.png)</br>
 Í¼8-7 Ä¬ÈÏµÄµØÖ·¿Õ¼ä·ÖÅä</br></br>
