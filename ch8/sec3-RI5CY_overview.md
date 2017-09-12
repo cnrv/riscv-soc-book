@@ -9,22 +9,22 @@ PULPino支持多种处理器核，RI5CY是其中一种，也是其中最早开�
 	- 硬件循环（Hardware Loop）
 	- 地址自增的访存指令（post-incrementing Load & Strore Instruciton）
 	- 乘累加指令（Multiply-Accumulate）
-	- 向量操作（Vectorial）
+	- 向量操作（Vectorial）</br></br>
 RI5CY的结构示意图如图8-10所示。典型的四级流水线结构，大部分模块都很好理解，本节重点对其中的指令预取Buffer（Prefetch Buffer）、加载存储单元（LSU）进行介绍，另外，在8.4节会对硬件循环控制器（hwloop control）进行介绍。</br>
 ![](../assets/RI5CY_Arch.png)</br>
 图8-10 RI5CY的结构示意图[3]</br>
 
 ### 8.3.2 指令预取Buffer
-参考图8-1可以更加清楚的理解指令预取Buffer的作用，指令预取Buffer位于处理器核与共享的指令缓存之间，共享的指令缓存可能会由于多个处理器核同时访问，而增加延迟，为此，为每个处理器设计了一个容量很小的指令预取Buffer，可以在不影响面积的前提下提高性能。除此之外，还有一个理由，RI5CY支持RV32C，即指令可能是16位的，此时取指的地址可能不是4字节对齐，这种非对齐访问，至少需要两个时钟周期才能取得指令，通过增加指令预取Buffer，能够实现一个时钟周期取得指令。</br>
+参考图8-1可以更加清楚的理解指令预取Buffer的作用，指令预取Buffer位于处理器核与共享的指令缓存之间，共享的指令缓存可能会由于多个处理器核同时访问，而增加延迟，为此，为每个处理器设计了一个容量很小的指令预取Buffer，可以在不影响面积的前提下提高性能。除此之外，还有一个理由，RI5CY支持RV32C，即指令可能是16位的，此时取指的地址可能不是4字节对齐，这种非对齐访问，至少需要两个时钟周期才能取得指令，通过增加指令预取Buffer，能够实现一个时钟周期取得指令。</br></br>
 指令预取Buffer的大小可以有两种配置：</br>
 配置一：可以存放3条32位指令，按照FIFO原则使用</br>
-配置二：是指令缓存line的大小，比如128位。</br>
-需要注意一点，对于配置二而言，实际大小并不是128位，而是128+32位，这主要是考虑到有些指令会跨两条指令缓存line。如图8-11所示。在指令缓存中，上一条line的最后32bit的低16bit是一个16位的压缩指令，所以在取下一条指令缓存line的时候，需要暂时保存上一条line的最后32位，其中的高16bit与下一条指令缓存line的低16bit组成一条完整的指令。这也解释了为何通过添加指令预取Buffer可以实现即使指令地址不是4字节对齐的，也可以在一个时钟周期取得指令的原因。</br>
+配置二：是指令缓存line的大小，比如128位。</br></br>
+需要注意一点，对于配置二而言，实际大小并不是128位，而是128+32位，这主要是考虑到有些指令会跨两条指令缓存line。如图8-11所示。在指令缓存中，上一条line的最后32bit的低16bit是一个16位的压缩指令，所以在取下一条指令缓存line的时候，需要暂时保存上一条line的最后32位，其中的高16bit与下一条指令缓存line的低16bit组成一条完整的指令。这也解释了为何通过添加指令预取Buffer可以实现即使指令地址不是4字节对齐的，也可以在一个时钟周期取得指令的原因。</br></br>
 ![](../assets/Cross_ICache_line.png)</br>
 图8-11 指令跨两条指令缓存line的情况</br>
 
 ### 8.3.3 加载存储单元
-加载存储单元（LSU：Load-Store-Unit）是RI5CY与数据存储器的桥梁，访问的粒度可以是字、半字、字节。并且支持地址非对齐访问，其原理是访问两个连续的对齐地址对应的字，然后拼接成指定的数据，所以对非对齐访问，需要至少两个时钟周期。LSU与数据存储器的接口信号如表8-3所示。</br>
+加载存储单元（LSU：Load-Store-Unit）是RI5CY与数据存储器的桥梁，访问的粒度可以是字、半字、字节。并且支持地址非对齐访问，其原理是访问两个连续的对齐地址对应的字，然后拼接成指定的数据，所以对非对齐访问，需要至少两个时钟周期。LSU与数据存储器的接口信号如表8-3所示。</br></br>
 表8-2 LSU的接口信号表</br>
 <table>
 <tr>
@@ -74,7 +74,7 @@ RI5CY的结构示意图如图8-10所示。典型的四级流水线结构，大�
 </tr>
 </table>
 
-LSU访问时序十分简单，首先设置data_req_o为1，设置data_addr_o为目标地址，同时设置data_we_o、data_be_o、data_wdata_o等信号，数据存储器收到该访问请求后，如果能够处理，那么设置data_gnt_i为高，表示确认。访问请求处理完毕后，设置data_rvalid_i为1，如果是读请求，此时data_rdata_i就是返回的数据。如图8-12、8-13、8-14所示。其中图8-12是正常的访问过程。图8-13是背对背访问过程，当data_gnt_i为高后，不等到返回结果，立即设置data_addr_o、data_wdata_o、data_be_o、data_we_o为下次访问的值，从而提高访问效率。图8-14是延迟响应的访问过程，数据存储器确认访问请求后（即data_gnt_i为高），等待一段时间，才返回有效数据。</br>
+LSU访问时序十分简单，首先设置data_req_o为1，设置data_addr_o为目标地址，同时设置data_we_o、data_be_o、data_wdata_o等信号，数据存储器收到该访问请求后，如果能够处理，那么设置data_gnt_i为高，表示确认。访问请求处理完毕后，设置data_rvalid_i为1，如果是读请求，此时data_rdata_i就是返回的数据。如图8-12、8-13、8-14所示。其中图8-12是正常的访问过程。图8-13是背对背访问过程，当data_gnt_i为高后，不等到返回结果，立即设置data_addr_o、data_wdata_o、data_be_o、data_we_o为下次访问的值，从而提高访问效率。图8-14是延迟响应的访问过程，数据存储器确认访问请求后（即data_gnt_i为高），等待一段时间，才返回有效数据。</br></br>
 ![](../assets/Base_LSU_Timing.png)</br>
 图8-12 基本的LSU访问时序</br>
 
@@ -90,7 +90,7 @@ RI5CY并没有实现RISC-V privileged specification中定义的所有控制与�
 * 异常相关寄存器：MSTATUS、MEPC、MCAUSE、MESTATUS。
 * 性能计数相关寄存器：PCCRs、PCER、PCMR。
 * 硬件循环相关寄存器：HWLP
-除了HWLP外，其余寄存器在RISC-V privileged specification中均有说明，此处不再赘述，HWLP将在8.4节介绍硬件循环的时候一并介绍。</br>
+除了HWLP外，其余寄存器在RISC-V privileged specification中均有说明，此处不再赘述，HWLP将在8.4节介绍硬件循环的时候一并介绍。</br></br>
 表8-4 RI5CY实现的CSR</br>
 ![](../assets/RI5CY_CSR.png)</br>
 
@@ -121,16 +121,18 @@ RI5CY并没有实现RISC-V privileged specification中定义的所有控制与�
 从代码可知，起始地址实际是将boot_addr_i的最后一个字节替换为复位异常处理例程的入口地址EXC_OFF_RST得到的，比如：默认的boot_addr_i是0x00008000，从图8-9可知复位异常处理例程的入口地址为0x80，所以系统默认的第一条指令地址是0x00008080。
 
 ### 8.3.6 性能分析
-在参考文献[7]中对RI5CY的性能，与ARM Cortex-M4进行了对比分析，主要是从两个方面进行分析，首先是从面积、功耗方面比较，如图8-10所示，从中可以发现RI5CY在面积、功耗方面均优于ARM Cortex-M4.</br>
+在参考文献[7]中对RI5CY的性能，与ARM Cortex-M4进行了对比分析，主要是从两个方面进行分析，首先是从面积、功耗方面比较，如图8-10所示，从中可以发现RI5CY在面积、功耗方面均优于ARM Cortex-M4.</br></br>
 ![](../assets/RI5CY_M4.png)</br>
-8-10 RI5CY与ARM Cortex-M4的面积、功耗对比</br>
-其次是从运算速度上进行了比较，如图8-11所示，对五种处理器的运算速度进行了对比，这五种处理器分别是：ARM Cortex-M4、没有实现扩展指令的OR10N、没有实现扩展指令的RI5CY、实现扩展指令的OR10N、实现扩展指令的RI5CY。此处的扩展指令指的就是在8.3.1节中列出的硬件循环指令、算数扩展指令、向量操作指令等。从图8-11可以发现实现了扩展指令的OR10N、RI5CY明显优于没有实现扩展指令的OR10N、RI5CY，并且优于ARM Cortex_m4。</br>
+8-10 RI5CY与ARM Cortex-M4的面积、功耗对比</br></br>
+其次是从运算速度上进行了比较，如图8-11所示，对五种处理器的运算速度进行了对比，这五种处理器分别是：ARM Cortex-M4、没有实现扩展指令的OR10N、没有实现扩展指令的RI5CY、实现扩展指令的OR10N、实现扩展指令的RI5CY。此处的扩展指令指的就是在8.3.1节中列出的硬件循环指令、算数扩展指令、向量操作指令等。从图8-11可以发现实现了扩展指令的OR10N、RI5CY明显优于没有实现扩展指令的OR10N、RI5CY，并且优于ARM Cortex_m4。</br></br>
 ![](../assets/RI5CY_M4_1.png)</br>
 图8-11 RI5CY的运算速度比较</br>
 
 
 ### 8.3.7 代码介绍
-RI5CY的代码也是采用System Verilog写的，从https://github.com/pulp-platform/riscv下载得到代码，可以发现RI5CY的代码结构很简单，也很模块化，主要文件及其作用如表8-5所示。</br>
+RI5CY的代码也是采用System Verilog写的，从https://github.com/pulp-platform/riscv 下载得到代码，可以发现RI5CY的代码结构很简单，也很模块化，主要文件及其作用如表8-5所示。</br>
+
+表8-5 RI5CY源代码中主要文件及其作用</br>
 <table>
 <tr>
 	<td>文件名</td>
@@ -265,7 +267,8 @@ PULPino提供了一种简单地方法得到boot_code.sv只需输入以下命令�
 `
 make boot_code.install
 `
-实际过程是，编译sw\ref目录下的crt0.boot.S，与sw\apps\boot_code目录下的boot_code.c然后使用sw\ref目录下的link.boot.ld文件进行链接，最后使用sw\utils目录下的s19toboot.py将目标文件转化为boot_code.sv。具体过程如图8-12所示。</br>
+</br>
+实际过程是，编译sw\ref目录下的crt0.boot.S，与sw\apps\boot_code目录下的boot_code.c然后使用sw\ref目录下的link.boot.ld文件进行链接，最后使用sw\utils目录下的s19toboot.py将目标文件转化为boot_code.sv。具体过程如图8-12所示。</br></br>
 ![](../assets/make_boot_file.png)</br>
 图8-12 得到启动文件的过程</br>
 
@@ -355,11 +358,11 @@ main_entry:
 * 初始化寄存器，全部初始化为0
 * 初始化堆栈，全部初始化为0
 * 跳转到main函数执行
-于是就从crt0.boot.S转移到boot_code.c继续执行。后者从SPI flash中加载程序到指令RAM、数据RAM，然后继续执行。存放在SPI flash中的程序格式如图8-13所示。</br>
+于是就从crt0.boot.S转移到boot_code.c继续执行。后者从SPI flash中加载程序到指令RAM、数据RAM，然后继续执行。存放在SPI flash中的程序格式如图8-13所示。</br></br>
 ![](../assets/program_in_flash.png)</br>
 图8-13 存放在SPI flash中的程序格式</br>
 
-其中前32个字节是配置信息，后面数据段、程序段。配置信息的32个字节是8个字，含义如表8-6所示。</br>
+其中前32个字节是配置信息，后面数据段、程序段。配置信息的32个字节是8个字，含义如表8-6所示。</br></br>
 表8-6 SPI Flash中前32字节配置信息的含义</br>
 <table>
 <tr>
