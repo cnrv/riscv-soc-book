@@ -5,11 +5,11 @@ PULPino支持多种处理器核，RI5CY是其中一种，也是其中最早开�
 * RV32C
 * RV32M
 * 扩展指令：
- - 算术指令扩展（ALU Extension）
- - 硬件循环（Hardware Loop）
- - 地址自增的访存指令（post-incrementing Load & Strore Instruciton）
- - 乘累加指令（Multiply-Accumulate）
- - 向量操作（Vectorial）
+	- 算术指令扩展（ALU Extension）
+	- 硬件循环（Hardware Loop）
+	- 地址自增的访存指令（post-incrementing Load & Strore Instruciton）
+	- 乘累加指令（Multiply-Accumulate）
+	- 向量操作（Vectorial）
 RI5CY的结构示意图如图8-10所示。典型的四级流水线结构，大部分模块都很好理解，本节重点对其中的指令预取Buffer（Prefetch Buffer）、加载存储单元（LSU）进行介绍，另外，在8.4节会对硬件循环控制器（hwloop control）进行介绍。</br>
 ![](../assets/RI5CY_Arch.png)</br>
 图8-10 RI5CY的结构示意图[3]</br>
