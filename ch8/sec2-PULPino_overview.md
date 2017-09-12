@@ -9,11 +9,15 @@ PULPino是PULP的简化版本，如图8-2所示。</br>
 （3）去掉了二级缓存；</br>
 （4）去掉了DMA。</br>
 此外还有一个变化：源代码于2016年3月1日开源，采用 Solderpad license，使用的编程语言是System Verilog，PULPino支持处理器核是采用OpenRISC指令集的OR10N，但是在目前的开源版本中只支持RISC-V指令集。</br>
+图8-3是PULPino的发展路线图，从中可知，开源PULPino的最终目标还是为了开源PULP，从易到难，便于用户接受，预计在2018年将开源PULP。</br>
+![](../assets/PULPino_plan.png)</br>
+图8-3 PULPino的发展路线图</br></br>
+
 
 ### 8.2.2 PULPino的结构
-相较图8-2而言，图8-3更加具体、完整的显示了PULPino的结构。</br>
+相较图8-2而言，图8-4更加具体、完整的显示了PULPino的结构。</br>
 ![](../assets/PULPino_Arch2.png)</br>
-图8-3 PULPino的结构[4]</br></br>
+图8-4 PULPino的结构[4]</br></br>
 从图中可以发现PULPino有如下一些特点：</br>
 （1）采用的是指令RAM、数据RAM分开的哈佛结构；</br>
 （2）增加了一个Boot ROM，其中可以存储启动代码，利用该启动代码可以加载连接至SPI接口的Flash中的程序。</br>
@@ -30,18 +34,18 @@ PULPino目前支持4种不同配置的、采用RISC-V指令集的处理器核，
 （2）RI5CY+FPU：包括RI5CY，以及一个符合IEEE-754标准的单精度FPU。</br>
 （3）Zero-riscy：支持RV32-ICM，在占用资源上做了优化。</br>
 （4）Micro-riscy: 这是4种配置中占用资源最少的，支持RV32-EC，具有16个寄存器，且不支持硬件乘法。</br>
-不同配置的资源占用情况如图8-4所示。Micro-riscy的资源占用是RI5CY的接近1/4。</br></br>
+不同配置的资源占用情况如图8-5所示。Micro-riscy的资源占用是RI5CY的接近1/4。</br></br>
 ![](../assets/resources.png)</br>
-图8-4 不同配置的资源占用情况[5]</br></br>
-图8-5是不同配置在不同应用环境中的能耗情况。从图中可以发现，不同的配置适合于不同的应用场景，如果用于数字信号处理领域，有比较多的卷积运算，那么RI5CY的能耗是最低的，因为它做了指令扩展，内部有专用硬件用于实现卷积运算。如果用于控制领域，那么Micro-riscy的能耗最低。所以，用户需要依据不同的应用场景，配置PULPino。</br></br>
+图8-5 不同配置的资源占用情况[5]</br></br>
+图8-6是不同配置在不同应用环境中的能耗情况。从图中可以发现，不同的配置适合于不同的应用场景，如果用于数字信号处理领域，有比较多的卷积运算，那么RI5CY的能耗是最低的，因为它做了指令扩展，内部有专用硬件用于实现卷积运算。如果用于控制领域，那么Micro-riscy的能耗最低。所以，用户需要依据不同的应用场景，配置PULPino。</br></br>
 ![](../assets/power.png)</br>
-图8-5 不同配置在不同应用环境中的能耗情况[5]</br>
+图8-6 不同配置在不同应用环境中的能耗情况[5]</br>
 
 ### 8.2.4 接口描述
-开发者可以在https://github.com/pulp-platform/pulpino 下载得到PULPino的源代码，其中rtl目录下的pulpino_top.sv是PULPino的顶层文件，通过该文件可以得到PULPino的接口示意图如图8-6所示。对于大多数接口都可以通过接口名称最后的_i还是_o区分出是输入接口还是输出接口。</br></br>
+开发者可以在https://github.com/pulp-platform/pulpino 下载得到PULPino的源代码，其中rtl目录下的pulpino_top.sv是PULPino的顶层文件，通过该文件可以得到PULPino的接口示意图如图8-7所示。对于大多数接口都可以通过接口名称最后的_i还是_o区分出是输入接口还是输出接口。</br></br>
 ![](../assets/PULPino_Interface.png)</br>
-图8-6 PULPino接口示意图</br></br>
-按照功能可以分为几类：全局信号接口、SPI Slave、SPI Master、I2C、UART、GPIO、JTAG、pad config等，与图8-3基本一致。其中全局接口的描述如表8-2所示。</br></br>
+图8-7 PULPino接口示意图</br></br>
+按照功能可以分为几类：全局信号接口、SPI Slave、SPI Master、I2C、UART、GPIO、JTAG、pad config等，与图8-4基本一致。其中全局接口的描述如表8-2所示。</br></br>
 表8-2 PULPino的全局接口</br>
 <table>
 <tr>
@@ -93,9 +97,9 @@ module core_region
   )
 ~~~
 </br>  
-默认的地址空间分配如图8-7所示。该图与参考文献[4]的图2.1有差别，主要是Boot ROM的起始地址不同，此处是依据实际代码确定Boot ROM起始地址是0x0000_8000，参考文献[4]的图2.1中Boot ROM起始地址是0x0008_0000。</br>
+默认的地址空间分配如图8-8所示。该图与参考文献[4]的图2.1有差别，主要是Boot ROM的起始地址不同，此处是依据实际代码确定Boot ROM起始地址是0x0000_8000，参考文献[4]的图2.1中Boot ROM起始地址是0x0008_0000。</br>
 ![](../assets/memory_space.png)</br>
-图8-7 默认的地址空间分配</br></br>
+图8-8 默认的地址空间分配</br></br>
 整体上可以分为四个区域：指令RAM、Boot ROM、数据RAM、外设。这个地址空间分配方案是在rtl目录下的top.sv中定义的，如下，可以通过修改其中的代码，实现地址空间分配方案的重新定义。</br>
 
 ~~~verilog
@@ -126,7 +130,7 @@ module core_region
 * 设备1：起始地址是32'h1A10_0000，终止地址是32'h1A11_FFFF
 * 设备2：起始地址是32'h0010_0000，终止地址是32'h001F_FFFF
 * 设备3：起始地址是32'h0000_0000，终止地址是32'h000F_FFFF
-结合图8-3、图8-7可以非常直观的发现，设备1就是图8-7中的各种外设的地址空间，也就是图8-3中的挂在APB总线下的各种外设；设备2就是图8-7中的数据RAM；设备3就是图8-7中指令RAM+Boot ROM。</br>
+结合图8-4、图8-8可以非常直观的发现，设备1就是图8-8中的各种外设的地址空间，也就是图8-4中的挂在APB总线下的各种外设；设备2就是图8-8中的数据RAM；设备3就是图8-8中指令RAM+Boot ROM。</br>
 在rtl目录下的instr_ram_wrap.sv中依据指令地址，判断是从Boot ROM还是从指令RAM中取指令，如下：</br>
 
 ~~~verilog
@@ -184,10 +188,10 @@ module instr_ram_wrap
 ~~~
 
 ### 8.2.6 中断处理过程
-PULPino采用中断向量表的方式处理中断，图8-8是默认的中断类型，及其对应的中断处理例程的入口地址，每个中断处理例程占用4个字节，可以防止一条32位的指令，或者两条16位的指令，一般是转移指令，转移到具体的中断处理函数。</br>
+PULPino采用中断向量表的方式处理中断，图8-9是默认的中断类型，及其对应的中断处理例程的入口地址，每个中断处理例程占用4个字节，可以防止一条32位的指令，或者两条16位的指令，一般是转移指令，转移到具体的中断处理函数。</br>
 ![](../assets/interrupt_vector.png)</br>
-图8-8 中断向量表</br>
-
+图8-9 中断向量表</br>
+当中断发生时，处理器将PC寄存器保存到MEPC，将MSTATUS寄存器保存到MESTATUS，当从中断处理例程返回时，将MEPC的值恢复到PC，将MESTATUS的值恢复到MSTATUS。</br>
 
 ## 参考文献
 [1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8</br>

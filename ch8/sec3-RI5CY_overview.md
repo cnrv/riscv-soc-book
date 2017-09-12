@@ -1,385 +1,413 @@
-﻿# 第八章 PULPino
+﻿## 8.3 RI5CY介绍
+### 8.3.1 RI5CY的结构
+PULPino支持多种处理器核，RI5CY是其中一种，也是其中最早开源的处理器核。RI5CY是一款四级流水线的32位处理器，采用的是risc-v指令集，并进行了扩展，从而实现低能耗执行某些数据处理指令。其支持的指令如下：</br>
+* RV32I
+* RV32C
+* RV32M
+* 扩展指令：
+** 算术指令扩展（ALU Extension）
+** 硬件循环（Hardware Loop）
+** 地址自增的访存指令（post-incrementing Load & Strore Instruciton）
+** 乘累加指令（Multiply-Accumulate）
+** 向量操作（Vectorial）
+RI5CY的结构示意图如图8-10所示。典型的四级流水线结构，大部分模块都很好理解，本节重点对其中的指令预取Buffer（Prefetch Buffer）、加载存储单元（LSU）进行介绍，另外，在8.4节会对硬件循环控制器（hwloop control）进行介绍。</br>
+![](../assets/RI5CY_Arch.png)</br>
+图8-10 RI5CY的结构示意图[3]</br>
 
-## 8.1 PULP介绍
-### 8.1.1 项目背景
-PULP（Parallel Ultra-Low Power）项目由瑞士苏黎世联邦理工大学（ETH Zürich）的综合系统实验室（IIS：Integrated Systems laboratory）和意大利博洛尼亚大学（University of Bologna）的高能效嵌入式研究组（EEES：Energy-efficient Embedded Systems）联合设计研发，目的是实现一个开放、可扩展的SoC，并且总体功耗在mW级，能效达到pJ/op[1]。</br>
-</br>
-该项目的现实意义在于满足IoT（Internet of Thing）设备对计算能力的需求，当前，IoT设备的数量与日俱增，具有的功能也越来越多，可以获取周边的图像、环境参数等大量数据，进行如人脸识别等应用，但是这需要大量的计算能力，当前的IoT设备无法满足该需求，只能将数据通过无线的模式发送到计算平台进行集中计算，但是通信又需要消耗大量的能量，对于靠电池供电的IoT设备而言，这样做无疑降低了其使用寿命。为了解决上述问题，出现了特定应用加速器，应用在IoT设备上作为扩展，既降低了功耗，又实现了高的计算能力，但是这种方式的缺点就是缺乏灵活性，特定应用加速器是某一种特定运算的ASIC，功能有限，PULP弥补了这条鸿沟，其通过架构的优化设计，实现了既拥有强大的计算能力，又满足IoT设备低功耗需求，同时还具有通用处理器的灵活性。
-### 8.1.2 架构介绍
-其架构设计如图8-1所示。</br>
-</br>
-![](assets/PULP_Arch.png)</br>
-图8-1 PULP架构设计[2]</br></br>
-从图8-1的右半边可以发现PULP是一个多核SoC，其处理器核目前有两种，一种是采用OpenRISC指令集的OR10N，另一种是采用RISC-V指令集的RI5CY。除了多核设计，为了实现低功耗、高性能的目的，PULP还采用了如下一些优化设计：</br></br>
-（1）指令集扩展：PULP扩展了原有的指令集，使得其支持以下特性（详细内容会在本章后续部分依次介绍）。</br>
-* 算术指令扩展（ALU Extension）
-* 硬件循环（Hardware Loop）
-* 地址自增的访存指令（post-incrementing Load & Strore Instruciton）
-* 乘累加指令（Multiply-Accumulate）
-* 向量操作（Vectorial）
-（2）共享指令缓存：多个处理器核共享一个L1指令缓存，避免了为了维护缓存一致性带来的复杂性，而且采用的是SCM（Standard Cell based Memories），可以在更低的电压下工作，从而进一步降低了功耗。</br>
-</br>
-（3）指令预取Buffer：共享的指令缓存可能会由于多个处理器核同时访问，而增加延迟，为此，为每个处理器设计了一个指令预取Buffer，该Buffer的大小一般是指令缓存line的大小，比如128bit。同时，对于RISC-V指令集而言，该指令预取Buffer还实现了16bit压缩指令扩展为32bit。</br></br>
-（4）紧耦合数据缓存：使用的是Scratchpad Memroy，分为多个bank，一般为8KB，每个bank还对应一个SCM，一般为1KB。</br></br>
-经过上述优化，可以大幅提高能效，在28nm工艺下，工作电压可以低至0.46V，功耗1mW，此时仍然有比较好的性能表现，主频40MHz，0.2GOPS[3]。
-### 8.1.3 流片情况
-PULP在研发过程中，已多次流片，如表8-1所示。</br></br>
-表8-1 PULP流片情况<br>
+### 8.3.2 指令预取Buffer
+参考图8-1可以更加清楚的理解指令预取Buffer的作用，指令预取Buffer位于处理器核与共享的指令缓存之间，共享的指令缓存可能会由于多个处理器核同时访问，而增加延迟，为此，为每个处理器设计了一个容量很小的指令预取Buffer，可以在不影响面积的前提下提高性能。除此之外，还有一个理由，RI5CY支持RV32C，即指令可能是16位的，此时取指的地址可能不是4字节对齐，这种非对齐访问，至少需要两个时钟周期才能取得指令，通过增加指令预取Buffer，能够实现一个时钟周期取得指令。</br>
+指令预取Buffer的大小可以有两种配置：</br>
+配置一：可以存放3条32位指令，按照FIFO原则使用</br>
+配置二：是指令缓存line的大小，比如128位。</br>
+需要注意一点，对于配置二而言，实际大小并不是128位，而是128+32位，这主要是考虑到有些指令会跨两条指令缓存line。如图8-11所示。在指令缓存中，上一条line的最后32bit的低16bit是一个16位的压缩指令，所以在取下一条指令缓存line的时候，需要暂时保存上一条line的最后32位，其中的高16bit与下一条指令缓存line的低16bit组成一条完整的指令。这也解释了为何通过添加指令预取Buffer可以实现即使指令地址不是4字节对齐的，也可以在一个时钟周期取得指令的原因。</br>
+![](../assets/Cross_ICache_line.png)</br>
+图8-11 指令跨两条指令缓存line的情况</br>
+
+### 8.3.3 加载存储单元
+加载存储单元（LSU：Load-Store-Unit）是RI5CY与数据存储器的桥梁，访问的粒度可以是字、半字、字节。并且支持地址非对齐访问，其原理是访问两个连续的对齐地址对应的字，然后拼接成指定的数据，所以对非对齐访问，需要至少两个时钟周期。LSU与数据存储器的接口信号如表8-3所示。</br>
+表8-2 LSU的接口信号表</br>
 <table>
 <tr>
-	<td>名称</td>
-	<td>工艺</td>
-	<td>工艺</td>
-	<td>主频</td>
-	<td>时间</td>
-	<td>备注</td>	
+	<td>接口名称</td>
+	<td>方向</td>
+	<td>描述</td>
 </tr>
 <tr>
-	<td>Manny</td>
-	<td>180nm</td>
-	<td>3 W @0.6V 1.5MHz</td>
-	<td>1.25 MHz</td>
-	<td>2015年</td>
-	<td>四核, 64 kB二级缓存16KB紧耦合数据缓存，4KB指令缓存</td>	
+	<td>data_req_o</td>
+	<td>输出</td>
+	<td>请求有效信号，在一次访问中，该信号保持为1，直到输入信号data_gnt_i持续一个时钟周期为1，此时表示本次访问结束</td>
 </tr>
 <tr>
-	<td>Diego</td>
-	<td>180nm</td>
-	<td>3 W @0.8V 15 MHz</td>
-	<td>15 MHz</td>
-	<td>2015年</td>
-	<td>同上</td>	
+	<td>data_addr_o[31:0]</td>
+	<td>输出</td>
+	<td>访问地址</td>
 </tr>
 <tr>
-	<td>Sid</td>
-	<td>180nm</td>
-	<td>3 W @1.0V 15 MHz</td>
-	<td>15 MHz</td>
-	<td>2015年</td>
-	<td>同上</td>	
+	<td>data_we_o</td>
+	<td>输出</td>
+	<td>为1，表示是写操作，反之，表示是读操作</td>
 </tr>
 <tr>
-	<td>Vivosoc</td>
-	<td>130nm</td>
-	<td>45 mW @1.2V 40MHz</td>
-	<td>140 MHz</td>
-	<td>2015年</td>
-	<td>用于生物医学信号采集，可穿戴设备上，双核</td>	
+	<td>data_be_o[3:0]</td>
+	<td>输出</td>
+	<td>以字节为粒度的使能标志，每一bit对应一个字节</td>
 </tr>
 <tr>
-	<td>Vivosoc2</td>
-	<td>130nm</td>
-	<td>20 mW @1.2V 50MHz</td>
-	<td>64 MHz</td>
-	<td>2016年</td>
-	<td>同上，但是是四核</td>	
+	<td>data_wdata_o[31:0]</td>
+	<td>输出</td>
+	<td>要写的数据</td>
 </tr>
 <tr>
-	<td>Vivosoc2.001</td>
-	<td>130nm</td>
-	<td>20 mW @1.2V 50MHz</td>
-	<td>64 MHz</td>
-	<td>2016年</td>
-	<td>同上，但是是四核</td>	
+	<td>data_rdata_i[31:0]</td>
+	<td>输入</td>
+	<td>从数据存储器返回的数据</td>
 </tr>
 <tr>
-	<td>Mia_Wallace</td>
-	<td>65nm</td>
-	<td>1 mW @1.2V 1MHz</td>
-	<td>400 MHz</td>
-	<td>2015年</td>
-	<td>四核，其中有一个卷积码加速器</td>	
+	<td>data_rvalid_i</td>
+	<td>输入</td>
+	<td>为1，表示数据访问请求处理完毕</td>
 </tr>
 <tr>
-	<td>Fulmine</td>
-	<td>65nm</td>
-	<td>13 mW @ 0.8 V, 104 MHz</td>
-	<td>400 MHz</td>
-	<td>2015年</td>
-	<td>Mia_Wallace的改进型，增加了一个密码加速器</td>	
-</tr>
-<tr>
-	<td>Artemis</td>
-	<td>65nm</td>
-	<td>1 mW @1.2V 1MHz</td>
-	<td>500 MHz</td>
-	<td>2014年</td>
-	<td>四核，每个处理器核增加了一个FPU</td>	
-</tr>
-<tr>
-	<td>Hecate</td>
-	<td>65nm</td>
-	<td>1 mW @1.2V 1MHz</td>
-	<td>500 MHz</td>
-	<td>2014年</td>
-	<td>四核，共享两个FPU</td>	
-</tr>
-<tr>
-	<td>Diana</td>
-	<td>65nm</td>
-	<td>1 mW @1.2V 1MHz</td>
-	<td>500 MHz</td>
-	<td>2014年</td>
-	<td>四核，1个标准FPU，3个裁剪的FPU</td>	
-</tr>
-<tr>
-	<td>Phoebe</td>
-	<td>65nm</td>
-	<td>22 mW @1.2V 100MHz</td>
-	<td>500 MHz</td>
-	<td>2015年</td>
-	<td>Selene的改进版</td>	
-</tr>
-<tr>
-	<td>Pulp</td>
-	<td>28nm</td>
-	<td>8 mW @0.7V 10MHz</td>
-	<td>475 MHz</td>
-	<td>2013年</td>
-	<td>四核</td>	
-</tr>
-<tr>
-	<td>Pulpv2</td>
-	<td>28nm</td>
-	<td></td>
-	<td>1000 MHz</td>
-	<td>2014年</td>
-	<td>四核</td>	
-</tr>
-<tr>
-	<td>Pulpv3</td>
-	<td>28nm</td>
-	<td>1.2 mW @ 0.6V, 50MHz</td>
-	<td>66 MHz</td>
-	<td>2015年</td>
-	<td>同上，集成了一个卷积运算加速器</td>	
-</tr>
-<tr>
-	<td>Honey_Bunny</td>
-	<td>28nm</td>
-	<td>1 mW @1.2V 1MHz</td>
-	<td>60 MHz</td>
-	<td>2015年</td>
-	<td>第一个使用RI5CY作为处理器核的PULP</td>	
+	<td>data_gnt_i</td>
+	<td>输入</td>
+	<td>为1，表示数据存储器一侧接收了本次访问请求，此时，不一定给出访问结果，但是LSU侧可以继续访问下一个地址</td>
 </tr>
 </table>
 
+LSU访问时序十分简单，首先设置data_req_o为1，设置data_addr_o为目标地址，同时设置data_we_o、data_be_o、data_wdata_o等信号，数据存储器收到该访问请求后，如果能够处理，那么设置data_gnt_i为高，表示确认。访问请求处理完毕后，设置data_rvalid_i为1，如果是读请求，此时data_rdata_i就是返回的数据。如图8-12、8-13、8-14所示。其中图8-12是正常的访问过程。图8-13是背对背访问过程，当data_gnt_i为高后，不等到返回结果，立即设置data_addr_o、data_wdata_o、data_be_o、data_we_o为下次访问的值，从而提高访问效率。图8-14是延迟响应的访问过程，数据存储器确认访问请求后（即data_gnt_i为高），等待一段时间，才返回有效数据。</br>
+![](../assets/Base_LSU_Timing.png)</br>
+图8-12 基本的LSU访问时序</br>
+
+![](../assets/Back_Back_LSU_Timing.png)</br>
+图8-13 背对背的LSU访问时序</br>
+
+![](../assets/Delay_Resp_LSU_Timing.png)</br>
+图8-14 延迟响应的LSU访问时序</br>
+
+### 8.3.4 控制与状态寄存器
+RI5CY并没有实现RISC-V privileged specification中定义的所有控制与状态寄存器（CSR：Control and Status Register），只实现了需要的一些CSR，如表8-4所示。大体可以分为四类：
+* 处理器属性寄存器：MCPUID、MIMPID、MHARTID，这些都是只读寄存器。
+* 异常相关寄存器：MSTATUS、MEPC、MCAUSE、MESTATUS。
+* 性能计数相关寄存器：PCCRs、PCER、PCMR。
+* 硬件循环相关寄存器：HWLP
+除了HWLP外，其余寄存器在RISC-V privileged specification中均有说明，此处不再赘述，HWLP将在8.4节介绍硬件循环的时候一并介绍。</br>
+表8-4 RI5CY实现的CSR</br>
+![](../assets/RI5CY_CSR.png)</br>
+
+### 8.3.5 接口描述
+可以从https://github.com/pulp-platform/riscv 下载RI5CY的源码，其顶层模块位于riscv_core.sv，依据该模块，得到RI5CY的接口示意图如图8-15所示。对于大多数接口都可以通过接口名称最后的_i还是_o区分出是输入接口还是输出接口。</br>
+![](../assets/RI5CY_Interface.png)</br>
+图8-15RI5CY的接口示意图</br>
+
+从图8-15可以发现，RI5CY的接口主要包括：指令存储器接口、数据存储器接口、调试接口、中断输入、控制信号输入，以及一些全局信号输入。此处仅对boot_addr_i接口作进一步解释，该信号来自PULPino中的SoC Controller模块（参考图8-3，源代码位于https://github.com/pulp-platform/apb_pulpino ），后者内部有一个寄存器Boot Address，该寄存器定义了系统运行的起始地址，该寄存器的值通过boot_addr_i接口传入RI5CY，RI5CY的if_stage.sv中的如下代码，给出第一条指令的地址。
+~~~verilog
+  // fetch address selection
+  always_comb
+  begin
+    fetch_addr_n = 'x;
+
+    unique case (pc_mux_i)
+      PC_BOOT:      fetch_addr_n = {boot_addr_i[31:8], EXC_OFF_RST};
+      PC_JUMP:      fetch_addr_n = jump_target_id_i;
+      PC_BRANCH:    fetch_addr_n = jump_target_ex_i;
+      PC_EXCEPTION: fetch_addr_n = exc_pc;             // set PC to exception handler
+      PC_ERET:      fetch_addr_n = exception_pc_reg_i; // PC is restored when returning from IRQ/exception
+      PC_DBG_NPC:   fetch_addr_n = dbg_jump_addr_i;    // PC is taken from debug unit
+
+      default:;
+    endcase
+  End
+~~~
+从代码可知，起始地址实际是将boot_addr_i的最后一个字节替换为复位异常处理例程的入口地址EXC_OFF_RST得到的，比如：默认的boot_addr_i是0x00008000，从图8-9可知复位异常处理例程的入口地址为0x80，所以系统默认的第一条指令地址是0x00008080。
+
+### 8.3.6 性能分析
+在参考文献[7]中对RI5CY的性能，与ARM Cortex-M4进行了对比分析，主要是从两个方面进行分析，首先是从面积、功耗方面比较，如图8-10所示，从中可以发现RI5CY在面积、功耗方面均优于ARM Cortex-M4.</br>
+![](../assets/RI5CY_M4.png)</br>
+8-10 RI5CY与ARM Cortex-M4的面积、功耗对比</br>
+其次是从运算速度上进行了比较，如图8-11所示，对五种处理器的运算速度进行了对比，这五种处理器分别是：ARM Cortex-M4、没有实现扩展指令的OR10N、没有实现扩展指令的RI5CY、实现扩展指令的OR10N、实现扩展指令的RI5CY。此处的扩展指令指的就是在8.3.1节中列出的硬件循环指令、算数扩展指令、向量操作指令等。从图8-11可以发现实现了扩展指令的OR10N、RI5CY明显优于没有实现扩展指令的OR10N、RI5CY，并且优于ARM Cortex_m4。</br>
+![](../assets/RI5CY_M4_1.png)</br>
+图8-11 RI5CY的运算速度比较</br>
 
 
-
-## 8.2 PULPino介绍
-### 8.2.1 PULPino与PULP的关系
-PULPino是PULP的简化版本，如图8-2所示。</br>
-![](assets/PULPino_Arch1.png)</br>
-图8-2 PULPino架构是PULP架构的简化版[2]</br></br>
-对比图8-1PULP架构设计可知PULPino相比PULP在如下几个方面做了简化：</br>
-（1）多核变为单核；</br>
-（2）指令RAM、数据RAM都不再需要支持多核；</br>
-（3）去掉了二级缓存；</br>
-（4）去掉了DMA。</br>
-此外还有一个变化：源代码于2016年3月1日开源，采用 Solderpad license，使用的编程语言是System Verilog，PULPino支持处理器核是采用OpenRISC指令集的OR10N，但是在目前的开源版本中只支持RISC-V指令集。</br>
-
-### 8.2.2 PULPino的结构
-相较图8-2而言，图8-3更加具体、完整的显示了PULPino的结构。</br>
-![](assets/PULPino_Arch2.png)</br>
-图8-3 PULPino的结构[4]</br></br>
-从图中可以发现PULPino有如下一些特点：</br>
-（1）采用的是指令RAM、数据RAM分开的哈佛结构；</br>
-（2）增加了一个Boot ROM，其中可以存储启动代码，利用该启动代码可以加载连接至SPI接口的Flash中的程序。</br>
-（3）采用的AXI4、APB两级总线结构。</br>
-（4）具有外设接口，包括GPIO、UART、I2C、SPI等。</br>
-（5）含有一个SoC Controll模块，其作用是整个SoC平台的控制信息，包括：是否使能时钟门、设置启动地址、架构信息等。</br>
-（6）提供了一个Advanced Debug Unit，提供了标准调试JTAG接口，使得调试器可以访问指令RAM、数据RAM、处理器内部寄存器，以及外设对应的控制寄存器等。</br>
-（7）提供了一个SPI Slave接口，直接连接在AXI互连总线上，可以通过该接口在不影响处理器的情况下，访问指令RAM、数据RAM、处理器内部寄存器，以及外设对应的控制寄存器等。</br>
-图8-2中各模块的详细功能、寄存器作用可以参考文献[4]。</br>
-
-### 8.2.3 处理器核
-PULPino目前支持4种不同配置的、采用RISC-V指令集的处理器核，如下：</br>
-（1）RI5CY：这是最早开源的处理器核，支持RV32-ICM，并且支持算术指令扩展（ALU Extension）、硬件循环（Hardware Loop）、地址自增的访存指令（post-incrementing Load & Strore Instruciton）、乘累加指令（Multiply-Accumulate）、向量操作（Vectorial）等扩展。</br>
-（2）RI5CY+FPU：包括RI5CY，以及一个符合IEEE-754标准的单精度FPU。</br>
-（3）Zero-riscy：支持RV32-ICM，在占用资源上做了优化。</br>
-（4）Micro-riscy: 这是4种配置中占用资源最少的，支持RV32-EC，具有16个寄存器，且不支持硬件乘法。</br>
-不同配置的资源占用情况如图8-4所示。Micro-riscy的资源占用是RI5CY的接近1/4。</br></br>
-![](assets/resources.png)</br>
-图8-4 不同配置的资源占用情况[5]</br></br>
-图8-5是不同配置在不同应用环境中的能耗情况。从图中可以发现，不同的配置适合于不同的应用场景，如果用于数字信号处理领域，有比较多的卷积运算，那么RI5CY的能耗是最低的，因为它做了指令扩展，内部有专用硬件用于实现卷积运算。如果用于控制领域，那么Micro-riscy的能耗最低。所以，用户需要依据不同的应用场景，配置PULPino。</br></br>
-![](assets/power.png)</br>
-图8-5 不同配置在不同应用环境中的能耗情况[5]</br>
-
-### 8.2.4 接口描述
-开发者可以在https://github.com/pulp-platform/pulpino 下载得到PULPino的源代码，其中rtl目录下的pulpino_top.sv是PULPino的顶层文件，通过该文件可以得到PULPino的接口示意图如图8-6所示。对于大多数接口都可以通过接口名称最后的_i还是_o区分出是输入接口还是输出接口。</br></br>
-![](assets/PULPino_Interface.png)</br>
-图8-6 PULPino接口示意图</br></br>
-按照功能可以分为几类：全局信号接口、SPI Slave、SPI Master、I2C、UART、GPIO、JTAG、pad config等，与图8-3基本一致。其中全局接口的描述如表8-2所示。</br></br>
-表8-2 PULPino的全局接口</br>
+### 8.3.7 代码介绍
+RI5CY的代码也是采用System Verilog写的，从https://github.com/pulp-platform/riscv下载得到代码，可以发现RI5CY的代码结构很简单，也很模块化，主要文件及其作用如表8-5所示。</br>
 <table>
 <tr>
-	<td>信号名</td>
+	<td>文件名</td>
 	<td>作用</td>
 </tr>
 <tr>
-	<td>clk</td>
-	<td>时钟信号</td>
+	<td>alu.sv</td>
+	<td>算术逻辑运算单元，实现了大部分算术逻辑运算</td>
 </tr>
 <tr>
-	<td>rst_n</td>
-	<td>复位信号</td>
+	<td>alu_div.sv</td>
+	<td>实现了除法运算</td>
 </tr>
 <tr>
-	<td>clk_sel_i</td>
-	<td>用来选择工作时钟，如果是0，那么时钟就是clk，反之，时钟来自一个锁频环，用于ASIC生产时，clk_sel_i设置为1</td>
+	<td>compressed_decoder.sv</td>
+	<td>将16bit的压缩指令扩展为等价的32bit指令</td>
 </tr>
 <tr>
-	<td>clk_standalone_i</td>
-	<td>与锁频环相关的控制信号</td>
+	<td>controller.sv</td>
+	<td>实现了流水线的控制通路</td>
 </tr>
 <tr>
-	<td>testmode_i</td>
-	<td>如果为1，那么禁止clock gate，反之，使能clock gate</td>
+	<td>cs_registers.sv</td>
+	<td>实现了CSR</td>
 </tr>
 <tr>
-	<td>fetch_enable_i</td>
-	<td>如果为1，表示开始取指译码执行</td>
+	<td>debug_unit.sv</td>
+	<td>调试单元</td>
 </tr>
 <tr>
-	<td>scan_enable_i</td>
-	<td>与锁频环相关的控制信号</td>
+	<td>decoder.sv</td>
+	<td>实现对指令的译码</td>
+</tr>
+<tr>
+	<td>ex_stage.sv</td>
+	<td>对应流水线的执行阶段</td>
+</tr>
+<tr>
+	<td>exc_controller.sv</td>
+	<td>异常控制器</td>
+</tr>
+<tr>
+	<td>hwloop_controller.sv</td>
+	<td>硬件循环控制器</td>
+</tr>
+<tr>
+	<td>hwloop_regs.sv</td>
+	<td>硬件循环对应的寄存器</td>
+</tr>
+<tr>
+	<td>id_stage.sv</td>
+	<td>对应流水线的译码阶段</td>
+</tr>
+<tr>
+	<td>if_stage.sv</td>
+	<td>对应流水线的取指阶段</td>
+</tr>
+<tr>
+	<td>load_store_unit.sv</td>
+	<td>实现了对数据存储器的访问</td>
+</tr>
+<tr>
+	<td>mult.sv</td>
+	<td>实现了整数乘法、点积运算</td>
+</tr>
+<tr>
+	<td>prefetch_buffer.sv</td>
+	<td>实现了指令预取单元，并且是配置一：可以存放3条32位指令，按照FIFO原则使用</td>
+</tr>
+<tr>
+	<td>prefetch_L0_buffer.sv</td>
+	<td>实现了指令预取单元，并且是配置二：大小等于指令缓存line，即128位</td>
+</tr>
+<tr>
+	<td>register_file.sv</td>
+	<td>实现了寄存器文件，32个32位寄存器，具有3个读端口，2个写端口，并且采用的锁存器实现的，目标是针对ASIC应用</td>
+</tr>
+<tr>
+	<td>register_file_ff.sv</td>
+	<td>也实现了寄存器文件，32个32位寄存器，具有3个读端口，2个写端口，但是采用的触发器实现的，目标是针对FPGA应用</td>
+</tr>
+<tr>
+	<td>riscv_core.sv</td>
+	<td>RI5CY的顶层模块</td>
+</tr>
+<tr>
+	<td>riscv_simchecker.sv</td>
+	<td>仿真过程检验</td>
+</tr>
+<tr>
+	<td>riscv_tracer.sv</td>
+	<td>记录执行过的指令</td>
 </tr>
 </table>
 
-### 8.2.5 地址空间分配
-PULPino默认的指令RAM、数据RAM的大小都是32KB，在rtl目录下的core_region.sv的最开始有如下定义，可以依据需求修改指令RAM、数据RAM的大小。</br>
+### 8.3.8 启动过程分析
+在8.3.5节中，分析出系统的默认启动地址是0x00008080，参考图8-8可知，该地址位于Boot ROM中，Boot ROM的源代码位于PULPino源代码的rtl\boot_code.sv中，该文件很好理解，主体就是一个ROM，采用数组实现，数组的每个元素都是32bit，如下：</br>
 ~~~verilog
-module core_region
-#(
-    parameter AXI_ADDR_WIDTH       = 32,
-    parameter AXI_DATA_WIDTH       = 64,
-    parameter AXI_ID_MASTER_WIDTH  = 10,
-    parameter AXI_ID_SLAVE_WIDTH   = 10,
-    parameter AXI_USER_WIDTH       = 0,
-    parameter DATA_RAM_SIZE        = 32768, // in bytes
-    parameter INSTR_RAM_SIZE       = 32768  // in bytes
-  )
-~~~
-</br>  
-默认的地址空间分配如图8-7所示。该图与参考文献[4]的图2.1有差别，主要是Boot ROM的起始地址不同，此处是依据实际代码确定Boot ROM起始地址是0x0000_8000，参考文献[4]的图2.1中Boot ROM起始地址是0x0008_0000。</br>
-![](assets/memory_space.png)</br>
-图8-7 默认的地址空间分配</br></br>
-整体上可以分为四个区域：指令RAM、Boot ROM、数据RAM、外设。这个地址空间分配方案是在rtl目录下的top.sv中定义的，如下，可以通过修改其中的代码，实现地址空间分配方案的重新定义。</br>
+module boot_code
+(
+    input  logic        CLK,
+    input  logic        RSTN,
 
-~~~verilog
- axi_node_intf_wrap
-  #(
-    .NB_MASTER      ( 3                    ),
-    .NB_SLAVE       ( 3                    ),
-    .AXI_ADDR_WIDTH ( `AXI_ADDR_WIDTH      ),
-    .AXI_DATA_WIDTH ( `AXI_DATA_WIDTH      ),
-    .AXI_ID_WIDTH   ( `AXI_ID_MASTER_WIDTH ),
-    .AXI_USER_WIDTH ( `AXI_USER_WIDTH      )
-  )
-  axi_interconnect_i
-  (
-    .clk       ( clk_int    ),
-    .rst_n     ( rstn_int   ),
-    .test_en_i ( testmode_i ),
-
-    .master    ( slaves     ),
-    .slave     ( masters    ),
-
-    .start_addr_i ( { 32'h1A10_0000, 32'h0010_0000, 32'h0000_0000 } ),
-    .end_addr_i   ( { 32'h1A11_FFFF, 32'h001F_FFFF, 32'h000F_FFFF } )
+    input  logic        CSN,
+    input  logic [9:0]  A,
+    output logic [31:0] Q
   );
-~~~ 
 
-上述代码定义了AXI总线上三个设备的地址，如下：
-* 设备1：起始地址是32'h1A10_0000，终止地址是32'h1A11_FFFF
-* 设备2：起始地址是32'h0010_0000，终止地址是32'h001F_FFFF
-* 设备3：起始地址是32'h0000_0000，终止地址是32'h000F_FFFF
-结合图8-3、图8-7可以非常直观的发现，设备1就是图8-7中的各种外设的地址空间，也就是图8-3中的挂在APB总线下的各种外设；设备2就是图8-7中的数据RAM；设备3就是图8-7中指令RAM+Boot ROM。</br>
-在rtl目录下的instr_ram_wrap.sv中依据指令地址，判断是从Boot ROM还是从指令RAM中取指令，如下：</br>
+  const logic [0:547] [31:0] mem = {
+    32'h00000013,
+......
+    32'h00000000,
+    32'h00000000};
 
-~~~verilog
-module instr_ram_wrap
-  #(
-     parameter RAM_SIZE   = 32768,                // in bytes
-     // one bit more than necessary, for the boot rom
-     parameter ADDR_WIDTH = $clog2(RAM_SIZE) + 1, 
-     parameter DATA_WIDTH = 32
-  )(
-     ......
-     // 为1表示从Boot ROM中取指，反之，从指令RAM中取指
-     assign is_boot = (addr_i[ADDR_WIDTH-1] == 1'b1);
-     ......
+  logic [9:0] A_Q;
+
+  always_ff @(posedge CLK)
+  begin
+    if (~RSTN)
+      A_Q <= '0;
+    else
+      if (~CSN)
+        A_Q <= A;
+  end
+
+  assign Q = mem[A_Q];
+
+Endmodule
 ~~~
 
-在include\apb_bus.sv中由各中外设的地址空间定义，如下：
+PULPino提供了一种简单地方法得到boot_code.sv只需输入以下命令即可：</br>
+`
+make boot_code.install
+`
+实际过程是，编译sw\ref目录下的crt0.boot.S，与sw\apps\boot_code目录下的boot_code.c然后使用sw\ref目录下的link.boot.ld文件进行链接，最后使用sw\utils目录下的s19toboot.py将目标文件转化为boot_code.sv。具体过程如图8-12所示。</br>
+![](../assets/make_boot_file.png)</br>
+图8-12 得到启动文件的过程</br>
 
+所以默认的启动过程实际就是由crt0.boot.S、boot_code.c决定的，需要分析这两个文件。首先分析crt0.boot.S，该文件十分简单，从地址0开始定义中断处理例程，如下：</br>
 ~~~verilog
-// MASTER PORT TO CVP
-`define UART_START_ADDR       32'h1A10_0000
-`define UART_END_ADDR         32'h1A10_0FFF
+  .org 0x00
+  .rept 31
+  nop
+  .endr
+  jal x0, default_exc_handler
 
-// MASTER PORT TO GPIO
-`define GPIO_START_ADDR       32'h1A10_1000
-`define GPIO_END_ADDR         32'h1A10_1FFF
+  // reset vector
+  .org 0x80
+  jal x0, reset_handler
 
-// MASTER PORT TO SPI MASTER
-`define SPI_START_ADDR        32'h1A10_2000
-`define SPI_END_ADDR          32'h1A10_2FFF
+  // illegal instruction exception
+  .org 0x84
+  jal x0, default_exc_handler
 
-// MASTER PORT TO TIMER
-`define TIMER_START_ADDR      32'h1A10_3000
-`define TIMER_END_ADDR        32'h1A10_3FFF
+  // ecall handler
+  .org 0x88
+  jal x0, default_exc_handler
+~~~
+其中0x80处的复位异常处理例程是跳转到reset_handler，所以系统复位后会转移到reset_handler执行，后者的定义如下：</br>
+~~~verilog
+reset_handler:
+  /* set all registers to zero */
+  mv  x1, x0
+  mv  x2, x1
+  mv  x3, x1
+  mv  x4, x1
+  mv  x5, x1
+  mv  x6, x1
+  mv  x7, x1
+  mv  x8, x1
+  mv  x9, x1
+  mv x10, x1
+  mv x11, x1
+  mv x12, x1
+  mv x13, x1
+  mv x14, x1
+  mv x15, x1
+  mv x16, x1
+  mv x17, x1
+  mv x18, x1
+  mv x19, x1
+  mv x20, x1
+  mv x21, x1
+  mv x22, x1
+  mv x23, x1
+  mv x24, x1
+  mv x25, x1
+  mv x26, x1
+  mv x27, x1
+  mv x28, x1
+  mv x29, x1
+  mv x30, x1
+  mv x31, x1
 
-// MASTER PORT TO EVENT UNIT
-`define EVENT_UNIT_START_ADDR 32'h1A10_4000
-`define EVENT_UNIT_END_ADDR   32'h1A10_4FFF
+  /* stack initilization */
+  la   x2, _stack_start
 
-// MASTER PORT TO I2C
-`define I2C_START_ADDR        32'h1A10_5000
-`define I2C_END_ADDR          32'h1A10_5FFF
+_start:
+  .global _start
 
-// MASTER PORT TO FLL
-`define FLL_START_ADDR        32'h1A10_6000
-`define FLL_END_ADDR          32'h1A10_6FFF
+  /* clear BSS */
+  la x26, _bss_start
+  la x27, _bss_end
 
-// MASTER PORT TO SOC CTRL
-`define SOC_CTRL_START_ADDR   32'h1A10_7000
-`define SOC_CTRL_END_ADDR     32'h1A10_7FFF
+  bge x26, x27, zero_loop_end
 
-// MASTER PORT TO DEBUG
-`define DEBUG_START_ADDR      32'h1A11_0000
-`define DEBUG_END_ADDR        32'h1A11_7FFF
+zero_loop:
+  sw x0, 0(x26)
+  addi x26, x26, 4
+  ble x26, x27, zero_loop
+zero_loop_end:
+
+
+main_entry:
+  /* jump to main program entry point (argc = argv = 0) */
+  addi x10, x0, 0
+  addi x11, x0, 0
+  jal x1, main
 ~~~
 
-### 8.2.6 中断处理过程
-PULPino采用中断向量表的方式处理中断，图8-8是默认的中断类型，及其对应的中断处理例程的入口地址，每个中断处理例程占用4个字节，可以防止一条32位的指令，或者两条16位的指令，一般是转移指令，转移到具体的中断处理函数。</br>
-![](assets/interrupt_vector.png)</br>
-图8-8 中断向量表</br>
+依次做了这几件事：</br>
+* 初始化寄存器，全部初始化为0
+* 初始化堆栈，全部初始化为0
+* 跳转到main函数执行
+于是就从crt0.boot.S转移到boot_code.c继续执行。后者从SPI flash中加载程序到指令RAM、数据RAM，然后继续执行。存放在SPI flash中的程序格式如图8-13所示。</br>
+![](../assets/program_in_flash.png)</br>
+图8-13 存放在SPI flash中的程序格式</br>
 
+其中前32个字节是配置信息，后面数据段、程序段。配置信息的32个字节是8个字，含义如表8-6所示。</br>
+表8-6 SPI Flash中前32字节配置信息的含义</br>
+<table>
+<tr>
+	<td>序号</td>
+	<td>含义</td>
+</tr>
+<tr>
+	<td>字0</td>
+	<td>代码段在Flash中的偏移地址</td>
+</tr>
+<tr>
+	<td>字1</td>
+	<td>程序运行时，代码段在PULPino的起始地址，参考图8-8，可知是0x0</td>
+</tr>
+<tr>
+	<td>字2</td>
+	<td>代码段字节数</td>
+</tr>
+<tr>
+	<td>字3</td>
+	<td>代码段占用的页面数，每页默认为4KB</td>
+</tr>
+<tr>
+	<td>字4</td>
+	<td>数据段在Flash中的偏移地址，默认是0x20</td>
+</tr>
+<tr>
+	<td>字5</td>
+	<td>程序运行时，数据段在PULPino的起始地址，参考图8-8，可知是0x00010000</td>
+</tr>
+<tr>
+	<td>字6</td>
+	<td>数据段字节数</td>
+</tr>
+<tr>
+	<td>字7</td>
+	<td>数据段占用的页面数，每页默认为4KB</td>
+</tr>
+</table>
 
+Boot_code按照这里的配置信息，将数据、代码分别加载到指定的位置，然后转移到代码段开始执行用户程序。
 
-</br>
-下面的目录要修改
-
-## 8.3 向量算术指令
-介绍什么是向量运算、RI5CY的向量运算指令、优势特点、实现等
-
-## 8.4 硬件循环
-介绍硬件循环的原理、优势、实现等
-
-## 8.5 post increment load/store指令
-不知道准确的翻译是什么
-
-## 8.6 扩展算术指令
-
-
-## 8.7 基于Arty平台的移植试验（leishangwen）
-官网上只是在zedboard上做了测试，而且是需要ARM配合，这里计划使用Arty平台测试，与Freedom E310的测试平台是同一个，移植后，可以独立运行，不需要ARM配合。同时，在移植过程中，就顺便讲解关键脚本、boot code、测试程序等。此外，还介绍调试过程，这个也是官网没有的。
 
 ## 参考文献
-[1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8</br>
+[1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8 </br>
 [2]Florian Zaruba, Updates on PULPino, The 5th RISC-V Workshop, 2016.</br>
 [3]Michael Gautschi,etc,Near-Threshold RISC-V Core With DSP Extensions for Scalable IoT Endpoint Devices, IEEE Transactions on Very Large Scale Integration Systems</br>
 [4]Andreas Traber, Michael Gautschi,PULPino: Datasheet,2016.11</br>
 [5]http://www.pulp-platform.org/</br>
+[6]Andreas Traber,Michael Gautschi,Pasquale Davide Schiavone. RI5CY: User Manual version1.3. </br>
+[7]Andreas Traber, etc. PULPino: A small single-core RISC-V SoC. The 4th RISC-V Workshop, 2016.</br>
