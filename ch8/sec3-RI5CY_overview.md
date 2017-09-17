@@ -121,12 +121,12 @@ RI5CY并没有实现RISC-V privileged specification中定义的所有控制与�
 从代码可知，起始地址实际是将boot_addr_i的最后一个字节替换为复位异常处理例程的入口地址EXC_OFF_RST得到的，比如：默认的boot_addr_i是0x00008000，从图8-9可知复位异常处理例程的入口地址为0x80，所以系统默认的第一条指令地址是0x00008080。
 
 ### 8.3.6 性能分析
-在参考文献[7]中对RI5CY的性能，与ARM Cortex-M4进行了对比分析，主要是从两个方面进行分析，首先是从面积、功耗方面比较，如图8-10所示，从中可以发现RI5CY在面积、功耗方面均优于ARM Cortex-M4.</br></br>
+在参考文献[7]中对RI5CY的性能，与ARM Cortex-M4进行了对比分析，主要是从两个方面进行分析，首先是从面积、功耗方面比较，如图8-16所示，从中可以发现RI5CY在面积、功耗方面均优于ARM Cortex-M4.</br></br>
 ![](../assets/RI5CY_M4.png)</br>
-8-10 RI5CY与ARM Cortex-M4的面积、功耗对比</br></br>
-其次是从运算速度上进行了比较，如图8-11所示，对五种处理器的运算速度进行了对比，这五种处理器分别是：ARM Cortex-M4、没有实现扩展指令的OR10N、没有实现扩展指令的RI5CY、实现扩展指令的OR10N、实现扩展指令的RI5CY。此处的扩展指令指的就是在8.3.1节中列出的硬件循环指令、算数扩展指令、向量操作指令等。从图8-11可以发现实现了扩展指令的OR10N、RI5CY明显优于没有实现扩展指令的OR10N、RI5CY，并且优于ARM Cortex_m4。</br></br>
+图8-16 RI5CY与ARM Cortex-M4的面积、功耗对比</br></br>
+其次是从运算速度上进行了比较，如图8-17所示，对五种处理器的运算速度进行了对比，这五种处理器分别是：ARM Cortex-M4、没有实现扩展指令的OR10N、没有实现扩展指令的RI5CY、实现扩展指令的OR10N、实现扩展指令的RI5CY。此处的扩展指令指的就是在8.3.1节中列出的硬件循环指令、算数扩展指令、向量操作指令等。从图8-17可以发现实现了扩展指令的OR10N、RI5CY明显优于没有实现扩展指令的OR10N、RI5CY，并且优于ARM Cortex_m4。</br></br>
 ![](../assets/RI5CY_M4_1.png)</br>
-图8-11 RI5CY的运算速度比较</br>
+图8-17 RI5CY的运算速度比较</br>
 
 
 ### 8.3.7 代码介绍
@@ -268,9 +268,9 @@ PULPino提供了一种简单地方法得到boot_code.sv只需输入以下命令�
 make boot_code.install
 `
 </br>
-实际过程是，编译sw\ref目录下的crt0.boot.S，与sw\apps\boot_code目录下的boot_code.c然后使用sw\ref目录下的link.boot.ld文件进行链接，最后使用sw\utils目录下的s19toboot.py将目标文件转化为boot_code.sv。具体过程如图8-12所示。</br></br>
+实际过程是，编译sw\ref目录下的crt0.boot.S，与sw\apps\boot_code目录下的boot_code.c然后使用sw\ref目录下的link.boot.ld文件进行链接，最后使用sw\utils目录下的s19toboot.py将目标文件转化为boot_code.sv。具体过程如图8-18所示。</br></br>
 ![](../assets/make_boot_file.png)</br>
-图8-12 得到启动文件的过程</br>
+图8-18 得到启动文件的过程</br>
 
 所以默认的启动过程实际就是由crt0.boot.S、boot_code.c决定的，需要分析这两个文件。首先分析crt0.boot.S，该文件十分简单，从地址0开始定义中断处理例程，如下：</br>
 ~~~verilog
@@ -358,9 +358,9 @@ main_entry:
 * 初始化寄存器，全部初始化为0
 * 初始化堆栈，全部初始化为0
 * 跳转到main函数执行
-于是就从crt0.boot.S转移到boot_code.c继续执行。后者从SPI flash中加载程序到指令RAM、数据RAM，然后继续执行。存放在SPI flash中的程序格式如图8-13所示。</br></br>
+于是就从crt0.boot.S转移到boot_code.c继续执行。后者从SPI flash中加载程序到指令RAM、数据RAM，然后继续执行。存放在SPI flash中的程序格式如图8-19所示。</br></br>
 ![](../assets/program_in_flash.png)</br>
-图8-13 存放在SPI flash中的程序格式</br>
+图8-19 存放在SPI flash中的程序格式</br>
 
 其中前32个字节是配置信息，后面数据段、程序段。配置信息的32个字节是8个字，含义如表8-6所示。</br></br>
 表8-6 SPI Flash中前32字节配置信息的含义</br>

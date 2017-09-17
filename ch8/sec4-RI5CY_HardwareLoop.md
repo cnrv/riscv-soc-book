@@ -84,22 +84,22 @@ Lend: addi x11, x11, 4
 除了8.4.1节中用到的指令lp.setupi外，还有很多指令用来设置硬件循环，这些指令可以分两类，一类是长指令，一类是短指令，其区别如下。</br>
 * 长指令：每条指令只能设置硬件循环属性中的一条，比如只能设置硬件循环起始地址，但是该类指令不需要紧跟着硬件循环代码段。
 * 短指令：每条指令可以设置硬件循环的全部属性，包括硬件循环的起始地址、终止地址、循环次数等，但是该类指令需要紧跟着就是硬件循环代码段。</br>
-硬件循环相关指令如表8-8所示，其编码如图8-14所示。</br></br>
+硬件循环相关指令如表8-8所示，其编码如图8-20所示。</br></br>
 表8-8 硬件循环相关指令[6]</br>
 ![](../assets/HardwareLoopInst.png)</br>
 
 ![](../assets/HardwareLoopInstEncode.png)</br>
-图8-14 硬件循环相关指令的编码[6]</br>
+图8-20 硬件循环相关指令的编码[6]</br>
 
 ### 8.4.4 硬件循环实现过程
-RI5CY中与硬件循环实现有关的模块，如图8-15所示，包括如下：</br>
+RI5CY中与硬件循环实现有关的模块，如图8-21所示，包括如下：</br>
 * 流水线取指阶段模块riscv_if_stage，其中例化了riscv_hwloop_controller、riscv_prefetch_buffer两个与硬件循环实现有关的模块
 * 流水线译码阶段模块riscv_id_stage，其中例化了riscv_decoder、riscv_hwloop_regs两个与硬件循环实现有关的模块
 * 控制与状态寄存器模块rscv_sc_registers
 ![](../assets/HardwareLoopModule.png)</br>
-图8-15 RI5CY中与硬件循环实现有关的模块</br></br>
-图8-15中对部分模块只给出了与硬件循环实现有关的输入输出接口，并简单绘制了其接口连接关系。下面结合图8-15，以及硬件循环指令执行过程，分析硬件循环实现原理。</br></br>
-硬件循环相关指令在进入流水线的译码阶段时，才被识别出来，具体是在riscv_decoder模块中，相关代码如下，其中instr_rdata_i是从取指阶段传递过来的指令，OPCODE_HWLOOP是一个宏定义，其值是7'h7b，参考图8-14可知，正是硬件循环指令的opcode。随后，依据指令第12-14bit的值，进一步判断是哪一条硬件循环指令，并给出输出信号hwloop_we_o，以及一些复用选择信号的值，其中hwloop_we_o共有3bit，第0bit表示是否是设置循环段起始地址，第1bit表示是否是设置循环段结束地址，第2bit表示是否是设置循环次数。</br>
+图8-21 RI5CY中与硬件循环实现有关的模块</br></br>
+图8-21中对部分模块只给出了与硬件循环实现有关的输入输出接口，并简单绘制了其接口连接关系。下面结合图8-21，以及硬件循环指令执行过程，分析硬件循环实现原理。</br></br>
+硬件循环相关指令在进入流水线的译码阶段时，才被识别出来，具体是在riscv_decoder模块中，相关代码如下，其中instr_rdata_i是从取指阶段传递过来的指令，OPCODE_HWLOOP是一个宏定义，其值是7'h7b，参考图8-20可知，正是硬件循环指令的opcode。随后，依据指令第12-14bit的值，进一步判断是哪一条硬件循环指令，并给出输出信号hwloop_we_o，以及一些复用选择信号的值，其中hwloop_we_o共有3bit，第0bit表示是否是设置循环段起始地址，第1bit表示是否是设置循环段结束地址，第2bit表示是否是设置循环次数。</br>
 ~~~verilog
 module riscv_decoder
 (
@@ -217,7 +217,7 @@ module riscv_decoder
   assign hwloop_regid = (|hwloop_we_int) ? hwloop_regid_int : csr_hwlp_regid_i;
   assign hwloop_we    = (|hwloop_we_int) ? hwloop_we_int    : csr_hwlp_we_i;
 ~~~
-参考图8-15可知，上述代码确定的信号，会送入到riscv_hwloop_regs模块对应端口，做进一步处理。riscv_hwloop_regs模块实际实现了两组硬件循环相关寄存器，所以上述信号，会修改这些硬件循环相关寄存器的值，代码如下。</br>
+参考图8-21可知，上述代码确定的信号，会送入到riscv_hwloop_regs模块对应端口，做进一步处理。riscv_hwloop_regs模块实际实现了两组硬件循环相关寄存器，所以上述信号，会修改这些硬件循环相关寄存器的值，代码如下。</br>
 ~~~verilog
 module riscv_hwloop_regs
 #(
@@ -317,8 +317,8 @@ module riscv_hwloop_regs
 
 Endmodule
 ~~~
-至此，硬件循环相关寄存器设置完毕，参考图8-15，这些寄存器的值通过接口hwlp_start_o、hwlp_end_o、hwlp_cnt_o送入流水线取指阶段的模块if_stage。后者例化了riscv_hwloop_controller、riscv_prefetch_buffer两个与硬件循环实现有关的模块。</br></br>
-参考图8-15，hwlp_start_o、hwlp_end_o、hwlp_cnt_o实际是直接送入riscv_hwloop_controller模块，同时送入riscv_hwloop_controller模块的，还有当前正在读取的指令的地址current_pc_i。riscv_hwloop_controller模块判断current_pc_i是否等于hwlp_end_o中的一个值，如果相等，并且对应的hwlp_cnt_o不等于1（<font  color=#660000>实际在代码中跳转的条件比较复杂，笔者也没有看懂为何当hwlp_cnt_o等于2的时候，跳转条件是~hwlp_dec_cnt_id_i[i]</font>），那么就跳转到循环代码的起始地址，主要代码如下：</br>
+至此，硬件循环相关寄存器设置完毕，参考图8-21，这些寄存器的值通过接口hwlp_start_o、hwlp_end_o、hwlp_cnt_o送入流水线取指阶段的模块if_stage。后者例化了riscv_hwloop_controller、riscv_prefetch_buffer两个与硬件循环实现有关的模块。</br></br>
+参考图8-21，hwlp_start_o、hwlp_end_o、hwlp_cnt_o实际是直接送入riscv_hwloop_controller模块，同时送入riscv_hwloop_controller模块的，还有当前正在读取的指令的地址current_pc_i。riscv_hwloop_controller模块判断current_pc_i是否等于hwlp_end_o中的一个值，如果相等，并且对应的hwlp_cnt_o不等于1（<font  color=#660000>实际在代码中跳转的条件比较复杂，笔者也没有看懂为何当hwlp_cnt_o等于2的时候，跳转条件是~hwlp_dec_cnt_id_i[i]</font>），那么就跳转到循环代码的起始地址，主要代码如下：</br>
 ~~~verilog
 module riscv_hwloop_controller
 #(
@@ -395,7 +395,7 @@ module riscv_hwloop_controller
 
 Endmodule
 ~~~
-上述代码中的输出信号hwlp_jump_o、hwlp_targ_addr_o送入图8-15中的riscv_prefetch_buffer模块（参考8.3.2节，如果采用的是配置二，即指令预取Buffer等于指令缓存line的大小，比如128位，那么hwlp_jump_o、hwlp_targ_addr_o实际将送入riscv_prefetch_L0_buffer模块），后者将清除其内部FIFO中的内容，然后从硬件循环段起始地址重新取指填充FIFO。</br>
+上述代码中的输出信号hwlp_jump_o、hwlp_targ_addr_o送入图8-21中的riscv_prefetch_buffer模块（参考8.3.2节，如果采用的是配置二，即指令预取Buffer等于指令缓存line的大小，比如128位，那么hwlp_jump_o、hwlp_targ_addr_o实际将送入riscv_prefetch_L0_buffer模块），后者将清除其内部FIFO中的内容，然后从硬件循环段起始地址重新取指填充FIFO。</br>
 
 ## 参考文献
 [1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8 </br>
