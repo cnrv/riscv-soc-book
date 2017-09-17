@@ -318,7 +318,7 @@ module riscv_hwloop_regs
 Endmodule
 ~~~
 至此，硬件循环相关寄存器设置完毕，参考图8-15，这些寄存器的值通过接口hwlp_start_o、hwlp_end_o、hwlp_cnt_o送入流水线取指阶段的模块if_stage。后者例化了riscv_hwloop_controller、riscv_prefetch_buffer两个与硬件循环实现有关的模块。</br></br>
-参考图8-15，hwlp_start_o、hwlp_end_o、hwlp_cnt_o实际是直接送入riscv_hwloop_controller模块，同时送入riscv_hwloop_controller模块的，还有当前正在读取的指令的地址current_pc_i。riscv_hwloop_controller模块判断current_pc_i是否等于hwlp_end_o中的一个值，如果相等，并且对应的hwlp_cnt_o不等于1（<font  color="#660000">实际在代码中跳转的条件比较复杂，笔者也没有看懂为何当hwlp_cnt_o等于2的时候，跳转条件是~hwlp_dec_cnt_id_i[i]</font>），那么就跳转到循环代码的起始地址，主要代码如下：</br>
+参考图8-15，hwlp_start_o、hwlp_end_o、hwlp_cnt_o实际是直接送入riscv_hwloop_controller模块，同时送入riscv_hwloop_controller模块的，还有当前正在读取的指令的地址current_pc_i。riscv_hwloop_controller模块判断current_pc_i是否等于hwlp_end_o中的一个值，如果相等，并且对应的hwlp_cnt_o不等于1（<font  color=#660000>实际在代码中跳转的条件比较复杂，笔者也没有看懂为何当hwlp_cnt_o等于2的时候，跳转条件是~hwlp_dec_cnt_id_i[i]</font>），那么就跳转到循环代码的起始地址，主要代码如下：</br>
 ~~~verilog
 module riscv_hwloop_controller
 #(
