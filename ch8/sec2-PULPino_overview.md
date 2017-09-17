@@ -98,7 +98,7 @@ module core_region
 ~~~
 </br>  
 默认的地址空间分配如图8-8所示。该图与参考文献[4]的图2.1有差别，主要是Boot ROM的起始地址不同，此处是依据实际代码确定Boot ROM起始地址是0x0000_8000，参考文献[4]的图2.1中Boot ROM起始地址是0x0008_0000。</br></br>
-![](../assets/memory_space.png)</br>
+![](../assets/memoryspace.png)</br>
 图8-8 默认的地址空间分配</br></br>
 整体上可以分为四个区域：指令RAM、Boot ROM、数据RAM、外设。这个地址空间分配方案是在rtl目录下的top.sv中定义的，如下，可以通过修改其中的代码，实现地址空间分配方案的重新定义。</br>
 
