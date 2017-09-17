@@ -44,6 +44,7 @@ PULPino目前支持4种不同配置的、采用RISC-V指令集的处理器核，
 ### 8.2.4 接口描述
 开发者可以在https://github.com/pulp-platform/pulpino 下载得到PULPino的源代码，其中rtl目录下的pulpino_top.sv是PULPino的顶层文件，通过该文件可以得到PULPino的接口示意图如图8-7所示。对于大多数接口都可以通过接口名称最后的_i还是_o区分出是输入接口还是输出接口。</br></br>
 ![](../assets/PULPino_Interface.png)</br>
+![](../assets/memoryspace.png)</br>
 图8-7 PULPino接口示意图</br></br>
 按照功能可以分为几类：全局信号接口、SPI Slave、SPI Master、I2C、UART、GPIO、JTAG、pad config等，与图8-4基本一致。其中全局接口的描述如表8-2所示。</br></br>
 表8-2 PULPino的全局接口</br>
@@ -98,7 +99,7 @@ module core_region
 ~~~
 </br>  
 默认的地址空间分配如图8-8所示。该图与参考文献[4]的图2.1有差别，主要是Boot ROM的起始地址不同，此处是依据实际代码确定Boot ROM起始地址是0x0000_8000，参考文献[4]的图2.1中Boot ROM起始地址是0x0008_0000。</br></br>
-![](../assets/memoryspace.png)</br>
+
 图8-8 默认的地址空间分配</br></br>
 整体上可以分为四个区域：指令RAM、Boot ROM、数据RAM、外设。这个地址空间分配方案是在rtl目录下的top.sv中定义的，如下，可以通过修改其中的代码，实现地址空间分配方案的重新定义。</br>
 
