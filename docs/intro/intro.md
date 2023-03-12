@@ -1,10 +1,10 @@
-## 关于RISC-V你所需要知道的一切
+# 关于RISC-V你所需要知道的一切
 
 当人们在谈论RISC-V的时候，实际在谈些什么？本书尝试告诉您答案。
 
 本书计划采用众包的方式完成，欢迎RISC-V的爱好者贡献自己的力量，以推动RISC-V在中国的普及，同时共同学习进步。
 
-[![](/assets/import.png)](https://creativecommons.org/licenses/by-nc-sa/3.0/cn/)
+![](/assets/import.png)
 
 本作品采用[知识共享署名-非商业性使用-相同方式共享 3.0 中国大陆许可协议](https://creativecommons.org/licenses/by-nc-sa/3.0/cn/)进行许可。
 
@@ -48,14 +48,17 @@
     （更具体的，比如对VM，安全，上下文切换效率，中断和异常的定义等等，都留到第二章）
 
 ### 2 现有指令集 (leishangwen)
+
 - CISC指令集的代表：x86和x86-64。
 - RISC指令集的代表：ARM(ARMv7,AArch32,AArch64,thumb, thumb2)
 - 其他的指令集：MIPS, PowerPC, SPARC
 
 ### 3 硬件开发的变迁 (wsong83)
+
 介绍从最开始的晶体管，到CMOS，到基于标准单元的版定制流程，自动综合和布局布线，物理综合，仿真，前仿和后仿，LVS和formal verification，最终到SystemVerilog的verification特性和HLS的出现。这张的目的是给不理解硬件设计的读者入个门。后面讲到Rocket的某些硬件优化的时候会有好处。
 
 ### 4 开源运动
+
 这有三个方面：开源软件，发生的原因和意义，其优势和现在的广泛使用（Linux，GNU GCC等等）
 现存的问题：License的斗争，开发缓慢的问题，分支严重的问题，patent的问题，难以商业化不挣钱的问题。
 
@@ -68,24 +71,28 @@
 这一章就讲RISC-V指令集
 
 ### 1 RISC-V的历史
+
 介绍UCB, MIPS, RISC-V的出现，开源，基金会的建立，它的目的和意义。
 
-> wsong83:<br>
-> - 关于UCB的历史，可以看看[RISC-V Geneology](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2016/EECS-2016-6.pdf)
+> wsong83:
+> 关于UCB的历史，可以看看[RISC-V Geneology](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2016/EECS-2016-6.pdf)
 
 ### 2 RISC-V的基本设计原理
+
 介绍RV64I和RV32I的基本情况，重点介绍设计原理，可扩展的方式，面向硬件设计的编码方式，面向简单流水线设计的指令选择（不用条件执行，不用多周期指令）。
 
 > 思考，拿RV64I和AArch64的编码来比一比，应该能体现RV64I的编码优势。<br>
 
-
 ### 3 RISC-V特权指令设计
+
 为何选择使用CSR，CSR的设计细节，不同特权级的定义，特权级之间的跳转，delegation的使用，异常处理模型。（这里可以说的惊人细节太多了）
 
 ### 4 内存模型
+
 介绍什么是内存模型，virtual memory的设计，和RISC-V的内存模型（这一部分快定义好了）
 
 ### 5 RISC-V的压缩指令
+
 为什要有压缩指令及，怎么设计的，性能数据。结合压缩指令及讨论instruction fusion。简单说说压缩指令对硬件的影响，比如指令地址unalign，fetch级的动态取指速度，节省I$等等。
 
 ### 6 RISC-V的扩展指令集
@@ -99,9 +106,11 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 应该讲一讲Spike的使用和其背后的原理。
 
 ### 8 RISC-V的软件生态
+
 介绍围绕RISC-V开发的编译器、移植的操作系统等软件的情况。
 
 ### 9 RISC-V在产业界与学术界的现状（leishangwen）
+
 概述基于RISC-V指令集的处理器、SoC，并进行简单地汇总统计。
 
 
@@ -133,6 +142,7 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 TileLink总线的channel名称和功能，支持的报文类型和传输协议等等。
 
 ### 4. 缓存一致性与片上互联总线
+
 介绍Rocket-Chip采用的缓存一致性策略、片上互联总线的结构图、多核结构等。
 
 ### 5. Rocket-chip的仿真和测试
@@ -143,16 +153,20 @@ TileLink总线的channel名称和功能，支持的报文类型和传输协议�
 ## 第四章 Rocket处理器
 
 ### 1. Rocket处理器介绍
+
 整体性的介绍，结构框图，可配置模块（scratch-pad, blocking L1, non-blocking L1, RoCC, FPU）。
 已流片的结果比较。
 
 ### 2. Rocket的基本流水线
+
 5级ALU流水线结构，多周期整数乘法器，I$和D$的连接，CSR的连接，forwarding network。
 
 ### 3. 指令缓存以及分支预测
+
 指令缓存的结构，BHT, BTB, RAS的结构和运行时学习，branch/jump指令的执行，以及由于分支预测错误造成的流水线重置。
 
 ### 4. 数据缓存
+
 介绍非阻塞数据缓存的结构，cache hit的基本流水线，miss时的data fetch，tlb miss造成缺页，地址空间检查(强制PMA)，parity检查与数据修复，支持coherence。
 
 在非阻塞数据缓存的基础上，通过裁剪获得阻塞缓存和scratch pad。
@@ -160,87 +174,110 @@ TileLink总线的channel名称和功能，支持的报文类型和传输协议�
 > 还不确定用cache来做scratch pad（pin cache line）的实现在L1还是L2。如果在L1可以尝试说一说。不过这个点的水比较深。
 
 ### 5. 虚拟内存支持
+
 介绍RISC-V支持的分页式内存、页表结构、TLB设计、硬件页表查询PTW
 
 ### 6. Rocket处理器RoCC设计分析（leishangwen）
+
 分析RoCC接口，并可以通过仿真实验说明RoCC如何使用
 
 ## 第五章 BOOM处理器
 
 ### 1. BOOM处理器介绍
+
 包括特点（比如：乱序、超标量）、性能参数、结构框图、接口图等，src/main/scala目录下的文件的基本作用。
 
 ### 2. 推测发射机制
+
 以图示的方式分析
 
 ### 3. 寄存器重命名
+
 以图示的方式分析
 
 ### 4. 数据存储
+
 以图示的方式分析
 
 ### 5. 指令提交
+
 以图示的方式分析
 
 ## 第六章 SiFive公司的Freedom系列
 
 ### 1. Freedom系列简介（leishangwen）
+
 介绍SiFive公司及其Freedom系列的基本情况
 
 ### 2. Freedom E310介绍
+
 介绍Freedom E310的性能参数、结构框图、接口图、各个模块的作用、地址空间分配、启动顺序等
 
 ### 3. 仿真实验
+
 仿真步骤，实验环境搭建，实验步骤（包括下载到开发板的步骤），测试例程分析（以SiFive提供的Eclipse开发环境中的自带测试例程进行分析，主要是分析启动过程的代码，这样也更好地帮助读者熟悉RISC-V的指令的用法）
 
 ### 4. 调试过程及原理分析（leishangwen）
+
 首先是介绍如果调试，给出步骤，做实验，给出实验截图。然后，分析调试的原理，包括debug rom的内容、openocd的设置及基本工作原理、JTAG总线的知识、Freedom E310对于调试指令的处理，并进一步分析step、break、continue等调试指令的实现原理。
 
 ### 5. 移植运行FreeRTOS
+
 介绍如何使FreeRTOS在Freedom E310上的运行
 
 ## 第七章 LowRISC (wsong83)
+
 我先大概列一下目录，宋同学修改啊
+
 ### 1. LowRISC介绍
+
 包括LowRISC的产生原因、发展历史、相比Rocket的主要改进点、结构图。
 
 ### 2. tagged memory
+
 包括主要思路、实现效果、最好能结合试验演示效果等
 
 ### 3. trace debugger
-包括主要思路、实现效果、使用测试等
 
+包括主要思路、实现效果、使用测试等
 
 ## 第八章 PULPino
 
 ### 1. PULPino介绍
+
 包括PULP与PULPino的关系、PULPino的结构组成、RI5CY、流片的性能
 PULP低功耗的原因，功耗对比（在论文中有对比），以及可以工作在多种电压情况下
 
 ### 2. 向量算术指令
+
 介绍什么是向量运算、RI5CY的向量运算指令、优势特点、实现等
 
 ### 3. 硬件循环
+
 介绍硬件循环的原理、优势、实现等
 
 ### 4. post increment load/store指令
+
 不知道准确的翻译是什么
 
 ### 5. 扩展算术指令
 
-
 ### 6. 基于Arty平台的移植试验（leishangwen）
+
 官网上只是在zedboard上做了测试，而且是需要ARM配合，这里计划使用Arty平台测试，与Freedom E310的测试平台是同一个，移植后，可以独立运行，不需要ARM配合。同时，在移植过程中，就顺便讲解关键脚本、boot code、测试程序等。此外，还介绍调试过程，这个也是官网没有的。
 
 ## 第九章 浮点运算
 
 ### 1. 浮点标准
+
 介绍浮点运算的基本情况，便于理解后文
 
 ### 2. RISC-V的浮点指令扩展
 
 ### 3. Rocket-Chip中的FPU
+
 #### 3.1 基本情况
+
 介绍FPU在Rocket-Chip的可以实现的功能、对外接口、在流水线的位置、对流水线的影响、浮点指令的执行过程等。
 
 #### 3.2 浮点加法模块设计
@@ -252,9 +289,8 @@ PULP低功耗的原因，功耗对比（在论文中有对比），以及可以�
 ### 4. FPU验证
 
 #### 4.1 基于组合随机激励测试的验证
+
 #### 4.2 基于形式化工具的验证
 
 > leishangwen:<br>
 > 这个先放在这里吧，理由有两个：1、还不确定如果单独作为一章，那么讲的内容有哪些，能否独立成完整的一章；2、单独作为一章放在Rocket、BOOM两章的后面，有点破坏整本书的目录结构，有点突兀，如果确实要单独成章，建议放在全书的最后。
-
-

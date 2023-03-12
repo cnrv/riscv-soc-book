@@ -1,5 +1,5 @@
-﻿## 8.3 RI5CY介绍
-### 8.3.1 RI5CY的结构
+﻿### 8.3 RI5CY介绍
+#### 8.3.1 RI5CY的结构
 PULPino支持多种处理器核，RI5CY是其中一种，也是其中最早开源的处理器核。RI5CY是一款四级流水线的32位处理器，采用的是risc-v指令集，并进行了扩展，从而实现低能耗执行某些数据处理指令。其支持的指令如下：</br>
 * RV32I
 * RV32C
@@ -14,7 +14,7 @@ RI5CY的结构示意图如图8-10所示。典型的四级流水线结构，大�
 ![](../assets/RI5CY_Arch.png)</br>
 图8-10 RI5CY的结构示意图[3]</br>
 
-### 8.3.2 指令预取Buffer
+#### 8.3.2 指令预取Buffer
 参考图8-1可以更加清楚的理解指令预取Buffer的作用，指令预取Buffer位于处理器核与共享的指令缓存之间，共享的指令缓存可能会由于多个处理器核同时访问，而增加延迟，为此，为每个处理器设计了一个容量很小的指令预取Buffer，可以在不影响面积的前提下提高性能。除此之外，还有一个理由，RI5CY支持RV32C，即指令可能是16位的，此时取指的地址可能不是4字节对齐，这种非对齐访问，至少需要两个时钟周期才能取得指令，通过增加指令预取Buffer，能够实现一个时钟周期取得指令。</br></br>
 指令预取Buffer的大小可以有两种配置：</br>
 配置一：可以存放3条32位指令，按照FIFO原则使用</br>
@@ -23,7 +23,7 @@ RI5CY的结构示意图如图8-10所示。典型的四级流水线结构，大�
 ![](../assets/Cross_ICache_line.png)</br>
 图8-11 指令跨两条指令缓存line的情况</br>
 
-### 8.3.3 加载存储单元
+#### 8.3.3 加载存储单元
 加载存储单元（LSU：Load-Store-Unit）是RI5CY与数据存储器的桥梁，访问的粒度可以是字、半字、字节。并且支持地址非对齐访问，其原理是访问两个连续的对齐地址对应的字，然后拼接成指定的数据，所以对非对齐访问，需要至少两个时钟周期。LSU与数据存储器的接口信号如表8-3所示。</br></br>
 表8-2 LSU的接口信号表</br>
 <table>
@@ -84,7 +84,7 @@ LSU访问时序十分简单，首先设置data_req_o为1，设置data_addr_o为�
 ![](../assets/Delay_Resp_LSU_Timing.png)</br>
 图8-14 延迟响应的LSU访问时序</br>
 
-### 8.3.4 控制与状态寄存器
+#### 8.3.4 控制与状态寄存器
 RI5CY并没有实现RISC-V privileged specification中定义的所有控制与状态寄存器（CSR：Control and Status Register），只实现了需要的一些CSR，如表8-4所示。大体可以分为四类：
 * 处理器属性寄存器：MCPUID、MIMPID、MHARTID，这些都是只读寄存器。
 * 异常相关寄存器：MSTATUS、MEPC、MCAUSE、MESTATUS。
@@ -94,7 +94,7 @@ RI5CY并没有实现RISC-V privileged specification中定义的所有控制与�
 表8-4 RI5CY实现的CSR</br>
 ![](../assets/RI5CY_CSR.png)</br>
 
-### 8.3.5 接口描述
+#### 8.3.5 接口描述
 可以从https://github.com/pulp-platform/riscv 下载RI5CY的源码，其顶层模块位于riscv_core.sv，依据该模块，得到RI5CY的接口示意图如图8-15所示。对于大多数接口都可以通过接口名称最后的_i还是_o区分出是输入接口还是输出接口。</br>
 ![](../assets/RI5CY_Interface.png)</br>
 图8-15RI5CY的接口示意图</br>
@@ -120,7 +120,7 @@ RI5CY并没有实现RISC-V privileged specification中定义的所有控制与�
 ~~~
 从代码可知，起始地址实际是将boot_addr_i的最后一个字节替换为复位异常处理例程的入口地址EXC_OFF_RST得到的，比如：默认的boot_addr_i是0x00008000，从图8-9可知复位异常处理例程的入口地址为0x80，所以系统默认的第一条指令地址是0x00008080。
 
-### 8.3.6 性能分析
+#### 8.3.6 性能分析
 在参考文献[7]中对RI5CY的性能，与ARM Cortex-M4进行了对比分析，主要是从两个方面进行分析，首先是从面积、功耗方面比较，如图8-16所示，从中可以发现RI5CY在面积、功耗方面均优于ARM Cortex-M4.</br></br>
 ![](../assets/RI5CY_M4.png)</br>
 图8-16 RI5CY与ARM Cortex-M4的面积、功耗对比</br></br>
@@ -129,7 +129,7 @@ RI5CY并没有实现RISC-V privileged specification中定义的所有控制与�
 图8-17 RI5CY的运算速度比较</br>
 
 
-### 8.3.7 代码介绍
+#### 8.3.7 代码介绍
 RI5CY的代码也是采用System Verilog写的，从https://github.com/pulp-platform/riscv 下载得到代码，可以发现RI5CY的代码结构很简单，也很模块化，主要文件及其作用如表8-5所示。</br>
 
 表8-5 RI5CY源代码中主要文件及其作用</br>
@@ -228,7 +228,7 @@ RI5CY的代码也是采用System Verilog写的，从https://github.com/pulp-plat
 </tr>
 </table>
 
-### 8.3.8 启动过程分析
+#### 8.3.8 启动过程分析
 在8.3.5节中，分析出系统的默认启动地址是0x00008080，参考图8-8可知，该地址位于Boot ROM中，Boot ROM的源代码位于PULPino源代码的rtl\boot_code.sv中，该文件很好理解，主体就是一个ROM，采用数组实现，数组的每个元素都是32bit，如下：</br>
 ~~~verilog
 module boot_code
@@ -406,7 +406,7 @@ main_entry:
 Boot_code按照这里的配置信息，将数据、代码分别加载到指定的位置，然后转移到代码段开始执行用户程序。
 
 
-## 参考文献
+### 参考文献
 [1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8 </br>
 [2]Florian Zaruba, Updates on PULPino, The 5th RISC-V Workshop, 2016.</br>
 [3]Michael Gautschi,etc,Near-Threshold RISC-V Core With DSP Extensions for Scalable IoT Endpoint Devices, IEEE Transactions on Very Large Scale Integration Systems</br>

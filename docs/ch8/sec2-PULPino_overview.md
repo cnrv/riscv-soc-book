@@ -1,5 +1,5 @@
-﻿## 8.2 PULPino介绍
-### 8.2.1 PULPino与PULP的关系
+﻿### 8.2 PULPino介绍
+#### 8.2.1 PULPino与PULP的关系
 PULPino是PULP的简化版本，如图8-2所示。</br>
 ![](../assets/PULPino_Arch1.png)</br>
 图8-2 PULPino架构是PULP架构的简化版[2]</br></br>
@@ -14,7 +14,7 @@ PULPino是PULP的简化版本，如图8-2所示。</br>
 图8-3 PULPino的发展路线图</br></br>
 
 
-### 8.2.2 PULPino的结构
+#### 8.2.2 PULPino的结构
 相较图8-2而言，图8-4更加具体、完整的显示了PULPino的结构。</br>
 ![](../assets/PULPino_Arch2.png)</br>
 图8-4 PULPino的结构[4]</br></br>
@@ -28,7 +28,7 @@ PULPino是PULP的简化版本，如图8-2所示。</br>
 （7）提供了一个SPI Slave接口，直接连接在AXI互连总线上，可以通过该接口在不影响处理器的情况下，访问指令RAM、数据RAM、处理器内部寄存器，以及外设对应的控制寄存器等。</br>
 图8-2中各模块的详细功能、寄存器作用可以参考文献[4]。</br>
 
-### 8.2.3 处理器核
+#### 8.2.3 处理器核
 PULPino目前支持4种不同配置的、采用RISC-V指令集的处理器核，如下：</br>
 （1）RI5CY：这是最早开源的处理器核，支持RV32-ICM，并且支持算术指令扩展（ALU Extension）、硬件循环（Hardware Loop）、地址自增的访存指令（post-incrementing Load & Strore Instruciton）、乘累加指令（Multiply-Accumulate）、向量操作（Vectorial）等扩展。</br>
 （2）RI5CY+FPU：包括RI5CY，以及一个符合IEEE-754标准的单精度FPU。</br>
@@ -41,7 +41,7 @@ PULPino目前支持4种不同配置的、采用RISC-V指令集的处理器核，
 ![](../assets/power.png)</br>
 图8-6 不同配置在不同应用环境中的能耗情况[5]</br>
 
-### 8.2.4 接口描述
+#### 8.2.4 接口描述
 开发者可以在https://github.com/pulp-platform/pulpino 下载得到PULPino的源代码，其中rtl目录下的pulpino_top.sv是PULPino的顶层文件，通过该文件可以得到PULPino的接口示意图如图8-7所示。对于大多数接口都可以通过接口名称最后的_i还是_o区分出是输入接口还是输出接口。</br></br>
 ![](../assets/PULPino_Interface.png)</br>
 图8-7 PULPino接口示意图</br></br>
@@ -82,7 +82,7 @@ PULPino目前支持4种不同配置的、采用RISC-V指令集的处理器核，
 </tr>
 </table>
 
-### 8.2.5 地址空间分配
+#### 8.2.5 地址空间分配
 PULPino默认的指令RAM、数据RAM的大小都是32KB，在rtl目录下的core_region.sv的最开始有如下定义，可以依据需求修改指令RAM、数据RAM的大小。</br>
 ~~~verilog
 module core_region
@@ -187,13 +187,13 @@ module instr_ram_wrap
 `define DEBUG_END_ADDR        32'h1A11_7FFF
 ~~~
 
-### 8.2.6 中断处理过程
+#### 8.2.6 中断处理过程
 PULPino采用中断向量表的方式处理中断，图8-9是默认的中断类型，及其对应的中断处理例程的入口地址，每个中断处理例程占用4个字节，可以防止一条32位的指令，或者两条16位的指令，一般是转移指令，转移到具体的中断处理函数。</br>
 ![](../assets/interrupt_vector.png)</br>
 图8-9 中断向量表</br>
 当中断发生时，处理器将PC寄存器保存到MEPC，将MSTATUS寄存器保存到MESTATUS，当从中断处理例程返回时，将MEPC的值恢复到PC，将MESTATUS的值恢复到MSTATUS。</br>
 
-## 参考文献
+### 参考文献
 [1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8</br>
 [2]Florian Zaruba, Updates on PULPino, The 5th RISC-V Workshop, 2016.</br>
 [3]Michael Gautschi,etc,Near-Threshold RISC-V Core With DSP Extensions for Scalable IoT Endpoint Devices, IEEE Transactions on Very Large Scale Integration Systems</br>
