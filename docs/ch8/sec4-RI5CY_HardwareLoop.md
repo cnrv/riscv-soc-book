@@ -1,5 +1,5 @@
-﻿## 8.4 硬件循环机制分析
-### 8.4.1 硬件循环介绍
+﻿### 8.4 硬件循环机制分析
+#### 8.4.1 硬件循环介绍
 硬件循环是RI5CY引入的一项特殊机制，目的是提高包含有循环操作的代码的执行效率，如下是一段包含有循环操作的C代码。</br>
 ~~~c
 for(i=0;i<100;i++){
@@ -32,7 +32,7 @@ Lend: addi x11, x11, 4
 ~~~
 上述代码中涉及到RI5CY定制的硬件循环相关指令，在后续章节中将有介绍，此处，读者只需要理解第一条指令lp.setupi设置了循环次数，设置了循环段的终止地址，随后就是循环段代码，与没有使用硬件循环的汇编代码相比，此处减少了判断是否循环次数达到的代码，同时减少了分支转移指令，效率因此提高。
 
-### 8.4.2 硬件循环相关的CSR
+#### 8.4.2 硬件循环相关的CSR
 为了实现硬件循环，在RI5CY中定义了一些CSR寄存器，用来保存硬件循环代码段的一些属性，上一节中使用的指令lp.setupi就是用来设置这些寄存器的。每一个硬件循环代码段对应三个CSR，分别保存硬件循环代码段的起始地址、终止地址、循环次数，RI5CY支持嵌套硬件循环，相应的CSR分为两组，对应loop0、loop1，如表8-7所示。</br></br>
 表8-7 硬件循环相关的CSR</br>
 <table>
@@ -80,7 +80,7 @@ Lend: addi x11, x11, 4
 </tr>
 </table>
 
-### 8.4.3 硬件循环相关的指令
+#### 8.4.3 硬件循环相关的指令
 除了8.4.1节中用到的指令lp.setupi外，还有很多指令用来设置硬件循环，这些指令可以分两类，一类是长指令，一类是短指令，其区别如下。</br>
 * 长指令：每条指令只能设置硬件循环属性中的一条，比如只能设置硬件循环起始地址，但是该类指令不需要紧跟着硬件循环代码段。
 * 短指令：每条指令可以设置硬件循环的全部属性，包括硬件循环的起始地址、终止地址、循环次数等，但是该类指令需要紧跟着就是硬件循环代码段。</br>
@@ -91,7 +91,7 @@ Lend: addi x11, x11, 4
 ![](../assets/HardwareLoopInstEncode.png)</br>
 图8-20 硬件循环相关指令的编码[6]</br>
 
-### 8.4.4 硬件循环实现过程
+#### 8.4.4 硬件循环实现过程
 RI5CY中与硬件循环实现有关的模块，如图8-21所示，包括如下：</br>
 * 流水线取指阶段模块riscv_if_stage，其中例化了riscv_hwloop_controller、riscv_prefetch_buffer两个与硬件循环实现有关的模块
 * 流水线译码阶段模块riscv_id_stage，其中例化了riscv_decoder、riscv_hwloop_regs两个与硬件循环实现有关的模块
@@ -397,7 +397,7 @@ Endmodule
 ~~~
 上述代码中的输出信号hwlp_jump_o、hwlp_targ_addr_o送入图8-21中的riscv_prefetch_buffer模块（参考8.3.2节，如果采用的是配置二，即指令预取Buffer等于指令缓存line的大小，比如128位，那么hwlp_jump_o、hwlp_targ_addr_o实际将送入riscv_prefetch_L0_buffer模块），后者将清除其内部FIFO中的内容，然后从硬件循环段起始地址重新取指填充FIFO。</br>
 
-## 参考文献
+### 参考文献
 [1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8 </br>
 [2]Florian Zaruba, Updates on PULPino, The 5th RISC-V Workshop, 2016.</br>
 [3]Michael Gautschi,etc,Near-Threshold RISC-V Core With DSP Extensions for Scalable IoT Endpoint Devices, IEEE Transactions on Very Large Scale Integration Systems</br>

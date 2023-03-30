@@ -1,9 +1,9 @@
-﻿## 8.1 PULP介绍
-### 8.1.1 项目背景
+﻿### 8.1 PULP介绍
+#### 8.1.1 项目背景
 PULP（Parallel Ultra-Low Power）项目由瑞士苏黎世联邦理工大学（ETH Zürich）的综合系统实验室（IIS：Integrated Systems laboratory）和意大利博洛尼亚大学（University of Bologna）的高能效嵌入式研究组（EEES：Energy-efficient Embedded Systems）联合设计研发，目的是实现一个开放、可扩展的SoC，并且总体功耗在mW级，能效达到pJ/op[1]。</br>
 </br>
 该项目的现实意义在于满足IoT（Internet of Thing）设备对计算能力的需求，当前，IoT设备的数量与日俱增，具有的功能也越来越多，可以获取周边的图像、环境参数等大量数据，进行如人脸识别等应用，但是这需要大量的计算能力，当前的IoT设备无法满足该需求，只能将数据通过无线的模式发送到计算平台进行集中计算，但是通信又需要消耗大量的能量，对于靠电池供电的IoT设备而言，这样做无疑降低了其使用寿命。为了解决上述问题，出现了特定应用加速器，应用在IoT设备上作为扩展，既降低了功耗，又实现了高的计算能力，但是这种方式的缺点就是缺乏灵活性，特定应用加速器是某一种特定运算的ASIC，功能有限，PULP弥补了这条鸿沟，其通过架构的优化设计，实现了既拥有强大的计算能力，又满足IoT设备低功耗需求，同时还具有通用处理器的灵活性。
-### 8.1.2 架构介绍
+#### 8.1.2 架构介绍
 其架构设计如图8-1所示。</br>
 </br>
 ![](../assets/PULP_Arch.png)</br>
@@ -20,7 +20,7 @@ PULP（Parallel Ultra-Low Power）项目由瑞士苏黎世联邦理工大学（E
 （3）指令预取Buffer：共享的指令缓存可能会由于多个处理器核同时访问，而增加延迟，为此，为每个处理器设计了一个指令预取Buffer，该Buffer的大小一般是指令缓存line的大小，比如128bit。同时，对于RISC-V指令集而言，该指令预取Buffer还实现了16bit压缩指令扩展为32bit。</br></br>
 （4）紧耦合数据缓存：使用的是Scratchpad Memroy，分为多个bank，一般为8KB，每个bank还对应一个SCM，一般为1KB。</br></br>
 经过上述优化，可以大幅提高能效，在28nm工艺下，工作电压可以低至0.46V，功耗1mW，此时仍然有比较好的性能表现，主频40MHz，0.2GOPS[3]。
-### 8.1.3 流片情况
+#### 8.1.3 流片情况
 PULP在研发过程中，已多次流片，如表8-1所示。</br></br>
 表8-1 PULP流片情况<br>
 <table>
@@ -162,7 +162,7 @@ PULP在研发过程中，已多次流片，如表8-1所示。</br></br>
 </tr>
 </table>
 
-## 参考文献
+### 参考文献
 [1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8</br>
 [2]Florian Zaruba, Updates on PULPino, The 5th RISC-V Workshop, 2016.</br>
 [3]Michael Gautschi,etc,Near-Threshold RISC-V Core With DSP Extensions for Scalable IoT Endpoint Devices, IEEE Transactions on Very Large Scale Integration Systems</br>

@@ -4,7 +4,7 @@
 
 本书计划采用众包的方式完成，欢迎RISC-V的爱好者贡献自己的力量，以推动RISC-V在中国的普及，同时共同学习进步。
 
-![(/assets/import.png)](https://creativecommons.org/licenses/by-nc-sa/3.0/cn/)
+![](/assets/import.png)
 
 本作品采用[知识共享署名-非商业性使用-相同方式共享 3.0 中国大陆许可协议](https://creativecommons.org/licenses/by-nc-sa/3.0/cn/)进行许可。
 
@@ -75,7 +75,7 @@
 介绍UCB, MIPS, RISC-V的出现，开源，基金会的建立，它的目的和意义。
 
 > wsong83:
-> - 关于UCB的历史，可以看看[RISC-V Geneology](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2016/EECS-2016-6.pdf)
+> 关于UCB的历史，可以看看[RISC-V Geneology](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2016/EECS-2016-6.pdf)
 
 ### 2 RISC-V的基本设计原理
 
@@ -99,6 +99,7 @@
 
 AMO和LR/SC的设计意图（原子操作和关键区支持）。M/D/F/E等等已经可以用的扩展，和计划中的扩展。
 
+
 ### 7 Spike模拟器
 
 Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标准参照。
@@ -111,6 +112,7 @@ Spike是RISC-V的instruction set simulator (ISS)，也是独立于实现的标�
 ### 9 RISC-V在产业界与学术界的现状（leishangwen）
 
 概述基于RISC-V指令集的处理器、SoC，并进行简单地汇总统计。
+
 
 ## 第三章 Rocket-Chip概述
 
@@ -290,5 +292,5 @@ PULP低功耗的原因，功耗对比（在论文中有对比），以及可以�
 
 #### 4.2 基于形式化工具的验证
 
-> leishangwen:
+> leishangwen:<br>
 > 这个先放在这里吧，理由有两个：1、还不确定如果单独作为一章，那么讲的内容有哪些，能否独立成完整的一章；2、单独作为一章放在Rocket、BOOM两章的后面，有点破坏整本书的目录结构，有点突兀，如果确实要单独成章，建议放在全书的最后。

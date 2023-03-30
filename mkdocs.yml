@@ -1,0 +1,78 @@
+site_name: RISCV-SOC-BOOK
+site_description: 为推广RISC-V尽些薄力
+site_author: CNRV编辑部
+strict: false
+copyright: 'Copyright &copy; 2023 CNRV编辑部'
+repo_name: 'cnrv/riscv-soc-book'
+repo_url: 'https://github.com/cnrv/riscv-soc-book'
+
+
+nav:
+  - 简介:
+    - 关于我们: index.md
+    - 待讨论大纲: intro/intro.md
+  - 第一章 RISC-V产生的时代背景:
+    - 1.1 计算机体系结构和处理器微结构: ch1/sec1-comparch.md
+    - 1.2 现有指令集 (leishangwen): ch1/sec2-isa.md
+    - 1.3 硬件开发的变迁 (wsong83): ch1/sec3-hardware.md
+    - 1.4 开源运动: ch1/sec4-opensource.md
+  - 第二章 RISC-V:
+    - 2.1 RISC-V的历史: ch2/sec1-history.md
+    - 2.2 RISC-V的基本设计原理: ch2/sec2-isa-design.md
+    - 2.3 RISC-V特权指令设计: ch2/sec3-privilege.md
+    - 2.4 内存模型: ch2/sec4-memory-model.md
+    - 2.5 RISC-V的压缩指令: ch2/sec5-rvc.md
+    - 2.6 RISC-V的扩展指令集: ch2/sec6-extension.md
+    - 2.7 Spike模拟器: ch2/sec7-spike.md
+    - 2.8 RISC-V的软件生态: ch2/sec8-ecosystem.md
+    - 2.9 RISC-V在产业界与学术界的现状(leishangwen): ch2/sec9-status.md
+  - 第三章 Rocket-Chip概述:
+    - 3.1 Chisel和FIRRTL: ch3/sec1-chisel.md
+    - 3.2 Rocket-Chip的基本结构: ch3/sec2-overview.md
+    - 3.3 TileLink片上总线: ch3/sec3-tilelink.md
+    - 3.4 缓存一致性与片上互联总线: ch3/sec4-soc.md
+    - 3.5 Rocket-chip的仿真和测试: ch3/sec5-verification.md
+
+
+theme:
+  name: material
+  language: zh
+  font:
+    text: hack    
+    code: hack
+  favicon: https://avatars.githubusercontent.com/u/28012588?s=200&v=4
+  logo: https://avatars.githubusercontent.com/u/28012588?s=200&v=4
+  features:
+    - navigation.top
+    - navigation.tabs
+  palette:
+    ## Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to system preference
+    ## Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    ## Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+
+markdown_extensions:
+  - admonition
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - attr_list
+  # - pymdownx.emoji:
+  #     emoji_index: !!python/name:materialx.emoji.twemoji
+  #     emoji_generator: !!python/name:materialx.emoji.to_svg
