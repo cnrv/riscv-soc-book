@@ -9,8 +9,8 @@ repo_url: 'https://github.com/cnrv/riscv-soc-book'
 
 nav:
   - 简介:
-    - 关于本书: about.md
-    - 待讨论大纲: index.md
+    - 关于本书: index.md
+    - 待讨论大纲: outline.md
   - 第一章 RISC-V产生的时代背景:
     - 1.1 计算机体系结构和处理器微结构: ch1/sec1-comparch.md
     - 1.2 现有指令集 (leishangwen): ch1/sec2-isa.md
