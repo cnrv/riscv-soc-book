@@ -1,5 +1,14 @@
-# 关于我们
+# 关于本书
 
-## 关于本页面的解释
+## 本书介绍
 
-本页面为[LWanTao](https://github.com/LWanTao)为[CNRV组织](https://github.com/cnrv)所搭建，基于[Mkdocs-Material](https://github.com/squidfunk/mkdocs-material)的围绕RISC-V的百科网站测试页面，**网站涉及内容及所有相关版权均为CNRV组织所拥有**。
+当人们在谈论RISC-V的时候，实际在谈些什么？本书尝试告诉您答案。
+
+本书计划采用众包的方式完成，欢迎RISC-V的爱好者贡献自己的力量，以推动RISC-V在中国的普及，同时共同学习进步。
+
+> [![by-nc-sa-3.0-cn](/docs/assets/import.png)](https://creativecommons.org/licenses/by-nc-sa/3.0/cn/)<br>
+> 本作品采用[知识共享署名-非商业性使用-相同方式共享 3.0 中国大陆许可协议](https://creativecommons.org/licenses/by-nc-sa/3.0/cn/)进行许可。
+
+## 如何贡献
+
+...
