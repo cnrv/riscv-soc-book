@@ -1,0 +1,1496 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="为推广RISC-V尽些薄力">
+      
+      
+        <meta name="author" content="CNRV编辑部">
+      
+      
+      
+      
+      <link rel="icon" href="https://avatars.githubusercontent.com/u/28012588?s=200&v=4">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>sec3 RI5CY overview - RISCV-SOC-BOOK</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=hack:300,300i,400,400i,700,700i%7Chack:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"hack";--md-code-font:"hack"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#83-ri5cy" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="RISCV-SOC-BOOK" class="md-header__button md-logo" aria-label="RISCV-SOC-BOOK" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/28012588?s=200&v=4" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RISCV-SOC-BOOK
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              sec3 RI5CY overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_3" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="deep-orange" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_3">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/cnrv/riscv-soc-book" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cnrv/riscv-soc-book
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        简介
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch1/sec1-comparch/" class="md-tabs__link">
+        第一章 RISC-V产生的时代背景
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch2/sec1-history/" class="md-tabs__link">
+        第二章 RISC-V
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch3/sec1-chisel/" class="md-tabs__link">
+        第三章 Rocket-Chip概述
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch4/sec1-overview/" class="md-tabs__link">
+        第四章 Rocket处理器
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch5/sec1-overview/" class="md-tabs__link">
+        第五章 BOOM处理器
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="RISCV-SOC-BOOK" class="md-nav__button md-logo" aria-label="RISCV-SOC-BOOK" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/28012588?s=200&v=4" alt="logo">
+
+    </a>
+    RISCV-SOC-BOOK
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/cnrv/riscv-soc-book" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cnrv/riscv-soc-book
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          简介
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          简介
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        关于本书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outline/" class="md-nav__link">
+        待讨论大纲
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          第一章 RISC-V产生的时代背景
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          第一章 RISC-V产生的时代背景
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch1/sec1-comparch/" class="md-nav__link">
+        1.1 计算机体系结构和处理器微结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch1/sec2-isa/" class="md-nav__link">
+        1.2 现有指令集 (leishangwen)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch1/sec3-hardware/" class="md-nav__link">
+        1.3 硬件开发的变迁 (wsong83)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch1/sec4-opensource/" class="md-nav__link">
+        1.4 开源运动
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          第二章 RISC-V
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          第二章 RISC-V
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec1-history/" class="md-nav__link">
+        2.1 RISC-V的历史
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec2-isa-design/" class="md-nav__link">
+        2.2 RISC-V的基本设计原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec3-privilege/" class="md-nav__link">
+        2.3 RISC-V特权指令设计
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec4-memory-model/" class="md-nav__link">
+        2.4 内存模型
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec5-rvc/" class="md-nav__link">
+        2.5 RISC-V的压缩指令
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec6-extension/" class="md-nav__link">
+        2.6 RISC-V的扩展指令集
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec7-spike/" class="md-nav__link">
+        2.7 Spike模拟器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec8-ecosystem/" class="md-nav__link">
+        2.8 RISC-V的软件生态
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec9-status/" class="md-nav__link">
+        2.9 RISC-V在产业界与学术界的现状(leishangwen)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          第三章 Rocket-Chip概述
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          第三章 Rocket-Chip概述
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec1-chisel/" class="md-nav__link">
+        3.1 Chisel和FIRRTL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec2-overview/" class="md-nav__link">
+        3.2 Rocket-Chip的基本结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec3-tilelink/" class="md-nav__link">
+        3.3 TileLink片上总线
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec4-soc/" class="md-nav__link">
+        3.4 缓存一致性与片上互联总线
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec5-verification/" class="md-nav__link">
+        3.5 Rocket-chip的仿真和测试
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          第四章 Rocket处理器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          第四章 Rocket处理器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec1-overview/" class="md-nav__link">
+        4.1 Rocket处理器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec2-pipeline/" class="md-nav__link">
+        4.2 Rocket的基本流水线
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec3-icache/" class="md-nav__link">
+        4.3 指令缓存以及分支预测
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec4-dcache/" class="md-nav__link">
+        4.4 数据缓存
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec5-vm/" class="md-nav__link">
+        4.5 虚拟内存支持
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec6-rocc/" class="md-nav__link">
+        4.6 Rocket处理器RoCC设计分析
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          第五章 BOOM处理器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          第五章 BOOM处理器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch5/sec1-overview/" class="md-nav__link">
+        5.1 BOOM处理器介绍
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#83-ri5cy" class="md-nav__link">
+    8.3 RI5CY介绍
+  </a>
+  
+    <nav class="md-nav" aria-label="8.3 RI5CY介绍">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#831-ri5cy" class="md-nav__link">
+    8.3.1 RI5CY的结构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#832-buffer" class="md-nav__link">
+    8.3.2 指令预取Buffer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#833" class="md-nav__link">
+    8.3.3 加载存储单元
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#834" class="md-nav__link">
+    8.3.4 控制与状态寄存器
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#835" class="md-nav__link">
+    8.3.5 接口描述
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#836" class="md-nav__link">
+    8.3.6 性能分析
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#837" class="md-nav__link">
+    8.3.7 代码介绍
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#838" class="md-nav__link">
+    8.3.8 启动过程分析
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    参考文献
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>sec3 RI5CY overview</h1>
+
+<h3 id="83-ri5cy">8.3 RI5CY介绍</h3>
+<h4 id="831-ri5cy">8.3.1 RI5CY的结构</h4>
+<p>PULPino支持多种处理器核，RI5CY是其中一种，也是其中最早开源的处理器核。RI5CY是一款四级流水线的32位处理器，采用的是risc-v指令集，并进行了扩展，从而实现低能耗执行某些数据处理指令。其支持的指令如下：</br>
+* RV32I
+* RV32C
+* RV32M
+* 扩展指令：
+    - 算术指令扩展（ALU Extension）
+    - 硬件循环（Hardware Loop）
+    - 地址自增的访存指令（post-incrementing Load &amp; Strore Instruciton）
+    - 乘累加指令（Multiply-Accumulate）
+    - 向量操作（Vectorial）</br></br>
+RI5CY的结构示意图如图8-10所示。典型的四级流水线结构，大部分模块都很好理解，本节重点对其中的指令预取Buffer（Prefetch Buffer）、加载存储单元（LSU）进行介绍，另外，在8.4节会对硬件循环控制器（hwloop control）进行介绍。</br>
+<img alt="" src="../../assets/RI5CY_Arch.png" /></br>
+图8-10 RI5CY的结构示意图[3]</br></p>
+<h4 id="832-buffer">8.3.2 指令预取Buffer</h4>
+<p>参考图8-1可以更加清楚的理解指令预取Buffer的作用，指令预取Buffer位于处理器核与共享的指令缓存之间，共享的指令缓存可能会由于多个处理器核同时访问，而增加延迟，为此，为每个处理器设计了一个容量很小的指令预取Buffer，可以在不影响面积的前提下提高性能。除此之外，还有一个理由，RI5CY支持RV32C，即指令可能是16位的，此时取指的地址可能不是4字节对齐，这种非对齐访问，至少需要两个时钟周期才能取得指令，通过增加指令预取Buffer，能够实现一个时钟周期取得指令。</br></br>
+指令预取Buffer的大小可以有两种配置：</br>
+配置一：可以存放3条32位指令，按照FIFO原则使用</br>
+配置二：是指令缓存line的大小，比如128位。</br></br>
+需要注意一点，对于配置二而言，实际大小并不是128位，而是128+32位，这主要是考虑到有些指令会跨两条指令缓存line。如图8-11所示。在指令缓存中，上一条line的最后32bit的低16bit是一个16位的压缩指令，所以在取下一条指令缓存line的时候，需要暂时保存上一条line的最后32位，其中的高16bit与下一条指令缓存line的低16bit组成一条完整的指令。这也解释了为何通过添加指令预取Buffer可以实现即使指令地址不是4字节对齐的，也可以在一个时钟周期取得指令的原因。</br></br>
+<img alt="" src="../../assets/Cross_ICache_line.png" /></br>
+图8-11 指令跨两条指令缓存line的情况</br></p>
+<h4 id="833">8.3.3 加载存储单元</h4>
+<p>加载存储单元（LSU：Load-Store-Unit）是RI5CY与数据存储器的桥梁，访问的粒度可以是字、半字、字节。并且支持地址非对齐访问，其原理是访问两个连续的对齐地址对应的字，然后拼接成指定的数据，所以对非对齐访问，需要至少两个时钟周期。LSU与数据存储器的接口信号如表8-3所示。</br></br>
+表8-2 LSU的接口信号表</br></p>
+<table>
+<tr>
+    <td>接口名称</td>
+    <td>方向</td>
+    <td>描述</td>
+</tr>
+<tr>
+    <td>data_req_o</td>
+    <td>输出</td>
+    <td>请求有效信号，在一次访问中，该信号保持为1，直到输入信号data_gnt_i持续一个时钟周期为1，此时表示本次访问结束</td>
+</tr>
+<tr>
+    <td>data_addr_o[31:0]</td>
+    <td>输出</td>
+    <td>访问地址</td>
+</tr>
+<tr>
+    <td>data_we_o</td>
+    <td>输出</td>
+    <td>为1，表示是写操作，反之，表示是读操作</td>
+</tr>
+<tr>
+    <td>data_be_o[3:0]</td>
+    <td>输出</td>
+    <td>以字节为粒度的使能标志，每一bit对应一个字节</td>
+</tr>
+<tr>
+    <td>data_wdata_o[31:0]</td>
+    <td>输出</td>
+    <td>要写的数据</td>
+</tr>
+<tr>
+    <td>data_rdata_i[31:0]</td>
+    <td>输入</td>
+    <td>从数据存储器返回的数据</td>
+</tr>
+<tr>
+    <td>data_rvalid_i</td>
+    <td>输入</td>
+    <td>为1，表示数据访问请求处理完毕</td>
+</tr>
+<tr>
+    <td>data_gnt_i</td>
+    <td>输入</td>
+    <td>为1，表示数据存储器一侧接收了本次访问请求，此时，不一定给出访问结果，但是LSU侧可以继续访问下一个地址</td>
+</tr>
+</table>
+
+<p>LSU访问时序十分简单，首先设置data_req_o为1，设置data_addr_o为目标地址，同时设置data_we_o、data_be_o、data_wdata_o等信号，数据存储器收到该访问请求后，如果能够处理，那么设置data_gnt_i为高，表示确认。访问请求处理完毕后，设置data_rvalid_i为1，如果是读请求，此时data_rdata_i就是返回的数据。如图8-12、8-13、8-14所示。其中图8-12是正常的访问过程。图8-13是背对背访问过程，当data_gnt_i为高后，不等到返回结果，立即设置data_addr_o、data_wdata_o、data_be_o、data_we_o为下次访问的值，从而提高访问效率。图8-14是延迟响应的访问过程，数据存储器确认访问请求后（即data_gnt_i为高），等待一段时间，才返回有效数据。</br></br>
+<img alt="" src="../../assets/Base_LSU_Timing.png" /></br>
+图8-12 基本的LSU访问时序</br></p>
+<p><img alt="" src="../../assets/Back_Back_LSU_Timing.png" /></br>
+图8-13 背对背的LSU访问时序</br></p>
+<p><img alt="" src="../../assets/Delay_Resp_LSU_Timing.png" /></br>
+图8-14 延迟响应的LSU访问时序</br></p>
+<h4 id="834">8.3.4 控制与状态寄存器</h4>
+<p>RI5CY并没有实现RISC-V privileged specification中定义的所有控制与状态寄存器（CSR：Control and Status Register），只实现了需要的一些CSR，如表8-4所示。大体可以分为四类：
+* 处理器属性寄存器：MCPUID、MIMPID、MHARTID，这些都是只读寄存器。
+* 异常相关寄存器：MSTATUS、MEPC、MCAUSE、MESTATUS。
+* 性能计数相关寄存器：PCCRs、PCER、PCMR。
+* 硬件循环相关寄存器：HWLP
+除了HWLP外，其余寄存器在RISC-V privileged specification中均有说明，此处不再赘述，HWLP将在8.4节介绍硬件循环的时候一并介绍。</br></br>
+表8-4 RI5CY实现的CSR</br>
+<img alt="" src="../../assets/RI5CY_CSR.png" /></br></p>
+<h4 id="835">8.3.5 接口描述</h4>
+<p>可以从https://github.com/pulp-platform/riscv 下载RI5CY的源码，其顶层模块位于riscv_core.sv，依据该模块，得到RI5CY的接口示意图如图8-15所示。对于大多数接口都可以通过接口名称最后的_i还是_o区分出是输入接口还是输出接口。</br>
+<img alt="" src="../../assets/RI5CY_Interface.png" /></br>
+图8-15RI5CY的接口示意图</br></p>
+<p>从图8-15可以发现，RI5CY的接口主要包括：指令存储器接口、数据存储器接口、调试接口、中断输入、控制信号输入，以及一些全局信号输入。此处仅对boot_addr_i接口作进一步解释，该信号来自PULPino中的SoC Controller模块（参考图8-3，源代码位于https://github.com/pulp-platform/apb_pulpino ），后者内部有一个寄存器Boot Address，该寄存器定义了系统运行的起始地址，该寄存器的值通过boot_addr_i接口传入RI5CY，RI5CY的if_stage.sv中的如下代码，给出第一条指令的地址。
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="c1">// fetch address selection</span>
+<span class="w">  </span><span class="k">always_comb</span>
+<span class="w">  </span><span class="k">begin</span>
+<span class="w">    </span><span class="n">fetch_addr_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">&#39;x</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">unique</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">pc_mux_i</span><span class="p">)</span>
+<span class="w">      </span><span class="nl">PC_BOOT:</span><span class="w">      </span><span class="n">fetch_addr_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">boot_addr_i</span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">8</span><span class="p">],</span><span class="w"> </span><span class="n">EXC_OFF_RST</span><span class="p">};</span>
+<span class="w">      </span><span class="nl">PC_JUMP:</span><span class="w">      </span><span class="n">fetch_addr_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jump_target_id_i</span><span class="p">;</span>
+<span class="w">      </span><span class="nl">PC_BRANCH:</span><span class="w">    </span><span class="n">fetch_addr_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jump_target_ex_i</span><span class="p">;</span>
+<span class="w">      </span><span class="nl">PC_EXCEPTION:</span><span class="w"> </span><span class="n">fetch_addr_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exc_pc</span><span class="p">;</span><span class="w">             </span><span class="c1">// set PC to exception handler</span>
+<span class="w">      </span><span class="nl">PC_ERET:</span><span class="w">      </span><span class="n">fetch_addr_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exception_pc_reg_i</span><span class="p">;</span><span class="w"> </span><span class="c1">// PC is restored when returning from IRQ/exception</span>
+<span class="w">      </span><span class="nl">PC_DBG_NPC:</span><span class="w">   </span><span class="n">fetch_addr_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dbg_jump_addr_i</span><span class="p">;</span><span class="w">    </span><span class="c1">// PC is taken from debug unit</span>
+
+<span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="p">;</span>
+<span class="w">    </span><span class="k">endcase</span>
+<span class="w">  </span><span class="n">End</span>
+</code></pre></div>
+从代码可知，起始地址实际是将boot_addr_i的最后一个字节替换为复位异常处理例程的入口地址EXC_OFF_RST得到的，比如：默认的boot_addr_i是0x00008000，从图8-9可知复位异常处理例程的入口地址为0x80，所以系统默认的第一条指令地址是0x00008080。</p>
+<h4 id="836">8.3.6 性能分析</h4>
+<p>在参考文献[7]中对RI5CY的性能，与ARM Cortex-M4进行了对比分析，主要是从两个方面进行分析，首先是从面积、功耗方面比较，如图8-16所示，从中可以发现RI5CY在面积、功耗方面均优于ARM Cortex-M4.</br></br>
+<img alt="" src="../../assets/RI5CY_M4.png" /></br>
+图8-16 RI5CY与ARM Cortex-M4的面积、功耗对比</br></br>
+其次是从运算速度上进行了比较，如图8-17所示，对五种处理器的运算速度进行了对比，这五种处理器分别是：ARM Cortex-M4、没有实现扩展指令的OR10N、没有实现扩展指令的RI5CY、实现扩展指令的OR10N、实现扩展指令的RI5CY。此处的扩展指令指的就是在8.3.1节中列出的硬件循环指令、算数扩展指令、向量操作指令等。从图8-17可以发现实现了扩展指令的OR10N、RI5CY明显优于没有实现扩展指令的OR10N、RI5CY，并且优于ARM Cortex_m4。</br></br>
+<img alt="" src="../../assets/RI5CY_M4_1.png" /></br>
+图8-17 RI5CY的运算速度比较</br></p>
+<h4 id="837">8.3.7 代码介绍</h4>
+<p>RI5CY的代码也是采用System Verilog写的，从https://github.com/pulp-platform/riscv 下载得到代码，可以发现RI5CY的代码结构很简单，也很模块化，主要文件及其作用如表8-5所示。</br></p>
+<p>表8-5 RI5CY源代码中主要文件及其作用</br></p>
+<table>
+<tr>
+    <td>文件名</td>
+    <td>作用</td>
+</tr>
+<tr>
+    <td>alu.sv</td>
+    <td>算术逻辑运算单元，实现了大部分算术逻辑运算</td>
+</tr>
+<tr>
+    <td>alu_div.sv</td>
+    <td>实现了除法运算</td>
+</tr>
+<tr>
+    <td>compressed_decoder.sv</td>
+    <td>将16bit的压缩指令扩展为等价的32bit指令</td>
+</tr>
+<tr>
+    <td>controller.sv</td>
+    <td>实现了流水线的控制通路</td>
+</tr>
+<tr>
+    <td>cs_registers.sv</td>
+    <td>实现了CSR</td>
+</tr>
+<tr>
+    <td>debug_unit.sv</td>
+    <td>调试单元</td>
+</tr>
+<tr>
+    <td>decoder.sv</td>
+    <td>实现对指令的译码</td>
+</tr>
+<tr>
+    <td>ex_stage.sv</td>
+    <td>对应流水线的执行阶段</td>
+</tr>
+<tr>
+    <td>exc_controller.sv</td>
+    <td>异常控制器</td>
+</tr>
+<tr>
+    <td>hwloop_controller.sv</td>
+    <td>硬件循环控制器</td>
+</tr>
+<tr>
+    <td>hwloop_regs.sv</td>
+    <td>硬件循环对应的寄存器</td>
+</tr>
+<tr>
+    <td>id_stage.sv</td>
+    <td>对应流水线的译码阶段</td>
+</tr>
+<tr>
+    <td>if_stage.sv</td>
+    <td>对应流水线的取指阶段</td>
+</tr>
+<tr>
+    <td>load_store_unit.sv</td>
+    <td>实现了对数据存储器的访问</td>
+</tr>
+<tr>
+    <td>mult.sv</td>
+    <td>实现了整数乘法、点积运算</td>
+</tr>
+<tr>
+    <td>prefetch_buffer.sv</td>
+    <td>实现了指令预取单元，并且是配置一：可以存放3条32位指令，按照FIFO原则使用</td>
+</tr>
+<tr>
+    <td>prefetch_L0_buffer.sv</td>
+    <td>实现了指令预取单元，并且是配置二：大小等于指令缓存line，即128位</td>
+</tr>
+<tr>
+    <td>register_file.sv</td>
+    <td>实现了寄存器文件，32个32位寄存器，具有3个读端口，2个写端口，并且采用的锁存器实现的，目标是针对ASIC应用</td>
+</tr>
+<tr>
+    <td>register_file_ff.sv</td>
+    <td>也实现了寄存器文件，32个32位寄存器，具有3个读端口，2个写端口，但是采用的触发器实现的，目标是针对FPGA应用</td>
+</tr>
+<tr>
+    <td>riscv_core.sv</td>
+    <td>RI5CY的顶层模块</td>
+</tr>
+<tr>
+    <td>riscv_simchecker.sv</td>
+    <td>仿真过程检验</td>
+</tr>
+<tr>
+    <td>riscv_tracer.sv</td>
+    <td>记录执行过的指令</td>
+</tr>
+</table>
+
+<h4 id="838">8.3.8 启动过程分析</h4>
+<p>在8.3.5节中，分析出系统的默认启动地址是0x00008080，参考图8-8可知，该地址位于Boot ROM中，Boot ROM的源代码位于PULPino源代码的rtl\boot_code.sv中，该文件很好理解，主体就是一个ROM，采用数组实现，数组的每个元素都是32bit，如下：</br>
+<div class="highlight"><pre><span></span><code><span class="k">module</span><span class="w"> </span><span class="n">boot_code</span>
+<span class="p">(</span>
+<span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">        </span><span class="n">CLK</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">        </span><span class="n">RSTN</span><span class="p">,</span>
+
+<span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">        </span><span class="n">CSN</span><span class="p">,</span>
+<span class="w">    </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">9</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">  </span><span class="n">A</span><span class="p">,</span>
+<span class="w">    </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">Q</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">0</span><span class="o">:</span><span class="mh">547</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="mh">32&#39;h00000013</span><span class="p">,</span>
+<span class="p">......</span>
+<span class="w">    </span><span class="mh">32&#39;h00000000</span><span class="p">,</span>
+<span class="w">    </span><span class="mh">32&#39;h00000000</span><span class="p">};</span>
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">9</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">A_Q</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">CLK</span><span class="p">)</span>
+<span class="w">  </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">~</span><span class="n">RSTN</span><span class="p">)</span>
+<span class="w">      </span><span class="n">A_Q</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">~</span><span class="n">CSN</span><span class="p">)</span>
+<span class="w">        </span><span class="n">A_Q</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">A</span><span class="p">;</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mem</span><span class="p">[</span><span class="n">A_Q</span><span class="p">];</span>
+
+<span class="n">Endmodule</span>
+</code></pre></div></p>
+<p>PULPino提供了一种简单地方法得到boot_code.sv只需输入以下命令即可：</br>
+<code>make boot_code.install</code>
+</br>
+实际过程是，编译sw\ref目录下的crt0.boot.S，与sw\apps\boot_code目录下的boot_code.c然后使用sw\ref目录下的link.boot.ld文件进行链接，最后使用sw\utils目录下的s19toboot.py将目标文件转化为boot_code.sv。具体过程如图8-18所示。</br></br>
+<img alt="" src="../../assets/make_boot_file.png" /></br>
+图8-18 得到启动文件的过程</br></p>
+<p>所以默认的启动过程实际就是由crt0.boot.S、boot_code.c决定的，需要分析这两个文件。首先分析crt0.boot.S，该文件十分简单，从地址0开始定义中断处理例程，如下：</br>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="p">.</span><span class="n">org</span><span class="w"> </span><span class="mh">0</span><span class="n">x00</span>
+<span class="w">  </span><span class="p">.</span><span class="n">rept</span><span class="w"> </span><span class="mh">31</span>
+<span class="w">  </span><span class="n">nop</span>
+<span class="w">  </span><span class="p">.</span><span class="n">endr</span>
+<span class="w">  </span><span class="n">jal</span><span class="w"> </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="n">default_exc_handler</span>
+
+<span class="w">  </span><span class="c1">// reset vector</span>
+<span class="w">  </span><span class="p">.</span><span class="n">org</span><span class="w"> </span><span class="mh">0</span><span class="n">x80</span>
+<span class="w">  </span><span class="n">jal</span><span class="w"> </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="n">reset_handler</span>
+
+<span class="w">  </span><span class="c1">// illegal instruction exception</span>
+<span class="w">  </span><span class="p">.</span><span class="n">org</span><span class="w"> </span><span class="mh">0</span><span class="n">x84</span>
+<span class="w">  </span><span class="n">jal</span><span class="w"> </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="n">default_exc_handler</span>
+
+<span class="w">  </span><span class="c1">// ecall handler</span>
+<span class="w">  </span><span class="p">.</span><span class="n">org</span><span class="w"> </span><span class="mh">0</span><span class="n">x88</span>
+<span class="w">  </span><span class="n">jal</span><span class="w"> </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="n">default_exc_handler</span>
+</code></pre></div>
+其中0x80处的复位异常处理例程是跳转到reset_handler，所以系统复位后会转移到reset_handler执行，后者的定义如下：</br>
+<div class="highlight"><pre><span></span><code><span class="nl">reset_handler:</span>
+<span class="w">  </span><span class="cm">/* set all registers to zero */</span>
+<span class="w">  </span><span class="n">mv</span><span class="w">  </span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">x0</span>
+<span class="w">  </span><span class="n">mv</span><span class="w">  </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w">  </span><span class="n">x3</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w">  </span><span class="n">x4</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w">  </span><span class="n">x5</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w">  </span><span class="n">x6</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w">  </span><span class="n">x7</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w">  </span><span class="n">x8</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w">  </span><span class="n">x9</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x10</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x11</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x12</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x13</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x14</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x15</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x16</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x17</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x18</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x19</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x20</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x21</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x22</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x23</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x24</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x25</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x26</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x27</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x28</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x29</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x30</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x31</span><span class="p">,</span><span class="w"> </span><span class="n">x1</span>
+
+<span class="w">  </span><span class="cm">/* stack initilization */</span>
+<span class="w">  </span><span class="n">la</span><span class="w">   </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">_stack_start</span>
+
+<span class="nl">_start:</span>
+<span class="w">  </span><span class="p">.</span><span class="n">global</span><span class="w"> </span><span class="n">_start</span>
+
+<span class="w">  </span><span class="cm">/* clear BSS */</span>
+<span class="w">  </span><span class="n">la</span><span class="w"> </span><span class="n">x26</span><span class="p">,</span><span class="w"> </span><span class="n">_bss_start</span>
+<span class="w">  </span><span class="n">la</span><span class="w"> </span><span class="n">x27</span><span class="p">,</span><span class="w"> </span><span class="n">_bss_end</span>
+
+<span class="w">  </span><span class="n">bge</span><span class="w"> </span><span class="n">x26</span><span class="p">,</span><span class="w"> </span><span class="n">x27</span><span class="p">,</span><span class="w"> </span><span class="n">zero_loop_end</span>
+
+<span class="nl">zero_loop:</span>
+<span class="w">  </span><span class="n">sw</span><span class="w"> </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="mh">0</span><span class="p">(</span><span class="n">x26</span><span class="p">)</span>
+<span class="w">  </span><span class="n">addi</span><span class="w"> </span><span class="n">x26</span><span class="p">,</span><span class="w"> </span><span class="n">x26</span><span class="p">,</span><span class="w"> </span><span class="mh">4</span>
+<span class="w">  </span><span class="n">ble</span><span class="w"> </span><span class="n">x26</span><span class="p">,</span><span class="w"> </span><span class="n">x27</span><span class="p">,</span><span class="w"> </span><span class="n">zero_loop</span>
+<span class="nl">zero_loop_end:</span>
+
+
+<span class="nl">main_entry:</span>
+<span class="w">  </span><span class="cm">/* jump to main program entry point (argc = argv = 0) */</span>
+<span class="w">  </span><span class="n">addi</span><span class="w"> </span><span class="n">x10</span><span class="p">,</span><span class="w"> </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="mh">0</span>
+<span class="w">  </span><span class="n">addi</span><span class="w"> </span><span class="n">x11</span><span class="p">,</span><span class="w"> </span><span class="n">x0</span><span class="p">,</span><span class="w"> </span><span class="mh">0</span>
+<span class="w">  </span><span class="n">jal</span><span class="w"> </span><span class="n">x1</span><span class="p">,</span><span class="w"> </span><span class="n">main</span>
+</code></pre></div></p>
+<p>依次做了这几件事：</br>
+* 初始化寄存器，全部初始化为0
+* 初始化堆栈，全部初始化为0
+* 跳转到main函数执行
+于是就从crt0.boot.S转移到boot_code.c继续执行。后者从SPI flash中加载程序到指令RAM、数据RAM，然后继续执行。存放在SPI flash中的程序格式如图8-19所示。</br></br>
+<img alt="" src="../../assets/program_in_flash.png" /></br>
+图8-19 存放在SPI flash中的程序格式</br></p>
+<p>其中前32个字节是配置信息，后面数据段、程序段。配置信息的32个字节是8个字，含义如表8-6所示。</br></br>
+表8-6 SPI Flash中前32字节配置信息的含义</br></p>
+<table>
+<tr>
+    <td>序号</td>
+    <td>含义</td>
+</tr>
+<tr>
+    <td>字0</td>
+    <td>代码段在Flash中的偏移地址</td>
+</tr>
+<tr>
+    <td>字1</td>
+    <td>程序运行时，代码段在PULPino的起始地址，参考图8-8，可知是0x0</td>
+</tr>
+<tr>
+    <td>字2</td>
+    <td>代码段字节数</td>
+</tr>
+<tr>
+    <td>字3</td>
+    <td>代码段占用的页面数，每页默认为4KB</td>
+</tr>
+<tr>
+    <td>字4</td>
+    <td>数据段在Flash中的偏移地址，默认是0x20</td>
+</tr>
+<tr>
+    <td>字5</td>
+    <td>程序运行时，数据段在PULPino的起始地址，参考图8-8，可知是0x00010000</td>
+</tr>
+<tr>
+    <td>字6</td>
+    <td>数据段字节数</td>
+</tr>
+<tr>
+    <td>字7</td>
+    <td>数据段占用的页面数，每页默认为4KB</td>
+</tr>
+</table>
+
+<p>Boot_code按照这里的配置信息，将数据、代码分别加载到指定的位置，然后转移到代码段开始执行用户程序。</p>
+<h3 id="_1">参考文献</h3>
+<p>[1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8 </br>
+[2]Florian Zaruba, Updates on PULPino, The 5th RISC-V Workshop, 2016.</br>
+[3]Michael Gautschi,etc,Near-Threshold RISC-V Core With DSP Extensions for Scalable IoT Endpoint Devices, IEEE Transactions on Very Large Scale Integration Systems</br>
+[4]Andreas Traber, Michael Gautschi,PULPino: Datasheet,2016.11</br>
+[5]http://www.pulp-platform.org/</br>
+[6]Andreas Traber,Michael Gautschi,Pasquale Davide Schiavone. RI5CY: User Manual version1.3. </br>
+[7]Andreas Traber, etc. PULPino: A small single-core RISC-V SoC. The 4th RISC-V Workshop, 2016.</br></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            回到页面顶部
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 CNRV编辑部
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tabs"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+    
+  </body>
+</html>

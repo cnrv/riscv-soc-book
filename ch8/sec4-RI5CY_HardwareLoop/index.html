@@ -1,0 +1,1471 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="为推广RISC-V尽些薄力">
+      
+      
+        <meta name="author" content="CNRV编辑部">
+      
+      
+      
+      
+      <link rel="icon" href="https://avatars.githubusercontent.com/u/28012588?s=200&v=4">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>sec4 RI5CY HardwareLoop - RISCV-SOC-BOOK</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=hack:300,300i,400,400i,700,700i%7Chack:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"hack";--md-code-font:"hack"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#84" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="RISCV-SOC-BOOK" class="md-header__button md-logo" aria-label="RISCV-SOC-BOOK" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/28012588?s=200&v=4" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RISCV-SOC-BOOK
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              sec4 RI5CY HardwareLoop
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_3" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="deep-orange" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_3">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/cnrv/riscv-soc-book" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cnrv/riscv-soc-book
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        简介
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch1/sec1-comparch/" class="md-tabs__link">
+        第一章 RISC-V产生的时代背景
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch2/sec1-history/" class="md-tabs__link">
+        第二章 RISC-V
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch3/sec1-chisel/" class="md-tabs__link">
+        第三章 Rocket-Chip概述
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch4/sec1-overview/" class="md-tabs__link">
+        第四章 Rocket处理器
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../ch5/sec1-overview/" class="md-tabs__link">
+        第五章 BOOM处理器
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="RISCV-SOC-BOOK" class="md-nav__button md-logo" aria-label="RISCV-SOC-BOOK" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/28012588?s=200&v=4" alt="logo">
+
+    </a>
+    RISCV-SOC-BOOK
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/cnrv/riscv-soc-book" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cnrv/riscv-soc-book
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+          简介
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          简介
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        关于本书
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../outline/" class="md-nav__link">
+        待讨论大纲
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          第一章 RISC-V产生的时代背景
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          第一章 RISC-V产生的时代背景
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch1/sec1-comparch/" class="md-nav__link">
+        1.1 计算机体系结构和处理器微结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch1/sec2-isa/" class="md-nav__link">
+        1.2 现有指令集 (leishangwen)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch1/sec3-hardware/" class="md-nav__link">
+        1.3 硬件开发的变迁 (wsong83)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch1/sec4-opensource/" class="md-nav__link">
+        1.4 开源运动
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          第二章 RISC-V
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          第二章 RISC-V
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec1-history/" class="md-nav__link">
+        2.1 RISC-V的历史
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec2-isa-design/" class="md-nav__link">
+        2.2 RISC-V的基本设计原理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec3-privilege/" class="md-nav__link">
+        2.3 RISC-V特权指令设计
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec4-memory-model/" class="md-nav__link">
+        2.4 内存模型
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec5-rvc/" class="md-nav__link">
+        2.5 RISC-V的压缩指令
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec6-extension/" class="md-nav__link">
+        2.6 RISC-V的扩展指令集
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec7-spike/" class="md-nav__link">
+        2.7 Spike模拟器
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec8-ecosystem/" class="md-nav__link">
+        2.8 RISC-V的软件生态
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch2/sec9-status/" class="md-nav__link">
+        2.9 RISC-V在产业界与学术界的现状(leishangwen)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          第三章 Rocket-Chip概述
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          第三章 Rocket-Chip概述
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec1-chisel/" class="md-nav__link">
+        3.1 Chisel和FIRRTL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec2-overview/" class="md-nav__link">
+        3.2 Rocket-Chip的基本结构
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec3-tilelink/" class="md-nav__link">
+        3.3 TileLink片上总线
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec4-soc/" class="md-nav__link">
+        3.4 缓存一致性与片上互联总线
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch3/sec5-verification/" class="md-nav__link">
+        3.5 Rocket-chip的仿真和测试
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          第四章 Rocket处理器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          第四章 Rocket处理器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec1-overview/" class="md-nav__link">
+        4.1 Rocket处理器介绍
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec2-pipeline/" class="md-nav__link">
+        4.2 Rocket的基本流水线
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec3-icache/" class="md-nav__link">
+        4.3 指令缓存以及分支预测
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec4-dcache/" class="md-nav__link">
+        4.4 数据缓存
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec5-vm/" class="md-nav__link">
+        4.5 虚拟内存支持
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch4/sec6-rocc/" class="md-nav__link">
+        4.6 Rocket处理器RoCC设计分析
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          第五章 BOOM处理器
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          第五章 BOOM处理器
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ch5/sec1-overview/" class="md-nav__link">
+        5.1 BOOM处理器介绍
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#84" class="md-nav__link">
+    8.4 硬件循环机制分析
+  </a>
+  
+    <nav class="md-nav" aria-label="8.4 硬件循环机制分析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#841" class="md-nav__link">
+    8.4.1 硬件循环介绍
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#842-csr" class="md-nav__link">
+    8.4.2 硬件循环相关的CSR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#843" class="md-nav__link">
+    8.4.3 硬件循环相关的指令
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#844" class="md-nav__link">
+    8.4.4 硬件循环实现过程
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    参考文献
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>sec4 RI5CY HardwareLoop</h1>
+
+<h3 id="84">8.4 硬件循环机制分析</h3>
+<h4 id="841">8.4.1 硬件循环介绍</h4>
+<p>硬件循环是RI5CY引入的一项特殊机制，目的是提高包含有循环操作的代码的执行效率，如下是一段包含有循环操作的C代码。</br>
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">100</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">   </span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+如果没有使用硬件循环，其对应的汇编代码如下。</br>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x4</span><span class="p">,</span><span class="w"> </span><span class="mh">0</span>
+<span class="w">  </span><span class="n">mv</span><span class="w"> </span><span class="n">x5</span><span class="p">,</span><span class="w"> </span><span class="mh">100</span>
+<span class="nl">Lstart:</span><span class="w"> </span><span class="n">lw</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="mh">0</span><span class="p">(</span><span class="n">x10</span><span class="p">)</span>
+<span class="w">  </span><span class="n">addi</span><span class="w"> </span><span class="n">x10</span><span class="p">,</span><span class="w"> </span><span class="n">x10</span><span class="p">,</span><span class="w"> </span><span class="mh">4</span>
+<span class="w">  </span><span class="n">addi</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="mh">1</span>
+<span class="w">  </span><span class="n">sw</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="mh">0</span><span class="p">(</span><span class="n">x11</span><span class="p">)</span>
+<span class="w">  </span><span class="n">addi</span><span class="w"> </span><span class="n">x11</span><span class="p">,</span><span class="w"> </span><span class="n">x11</span><span class="p">,</span><span class="w"> </span><span class="mh">4</span>
+<span class="w">  </span><span class="n">addi</span><span class="w"> </span><span class="n">x4</span><span class="p">,</span><span class="w"> </span><span class="n">x4</span><span class="p">,</span><span class="w"> </span><span class="mh">1</span>
+<span class="w">  </span><span class="n">bne</span><span class="w"> </span><span class="n">x4</span><span class="p">,</span><span class="w"> </span><span class="n">x5</span><span class="p">,</span><span class="w"> </span><span class="n">Lstart</span>
+</code></pre></div>
+寄存器x4存放的是已执行的循环次数，寄存器x5存放的是需要执行的总循环次数，在每一次循环操作最后，要将寄存器x4加1，然后与寄存器x5比较，如果不相等，那么转移到循环起始位置继续执行。这样的一个过程有两个地方影响效率：</br>
+（1）每次循环，要将x4加1。</br>
+（2）每次循环，要做一个分支转移，如果分支预测做的不好，那么会浪费至少一个周期。</br>
+RI5CY引入硬件循环以改进循环效率，引入硬件循环后的汇编代码如下。</br>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="n">lp</span><span class="p">.</span><span class="n">setupi</span><span class="w"> </span><span class="mh">100</span><span class="p">,</span><span class="w"> </span><span class="n">Lend</span>
+<span class="w">  </span><span class="n">lw</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="mh">0</span><span class="p">(</span><span class="n">x10</span><span class="p">)</span>
+<span class="w">  </span><span class="n">addi</span><span class="w"> </span><span class="n">x10</span><span class="p">,</span><span class="w"> </span><span class="n">x10</span><span class="p">,</span><span class="w"> </span><span class="mh">4</span>
+<span class="w">  </span><span class="n">addi</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="mh">1</span>
+<span class="w">  </span><span class="n">sw</span><span class="w"> </span><span class="n">x2</span><span class="p">,</span><span class="w"> </span><span class="mh">0</span><span class="p">(</span><span class="n">x11</span><span class="p">)</span>
+<span class="nl">Lend:</span><span class="w"> </span><span class="n">addi</span><span class="w"> </span><span class="n">x11</span><span class="p">,</span><span class="w"> </span><span class="n">x11</span><span class="p">,</span><span class="w"> </span><span class="mh">4</span>
+</code></pre></div>
+上述代码中涉及到RI5CY定制的硬件循环相关指令，在后续章节中将有介绍，此处，读者只需要理解第一条指令lp.setupi设置了循环次数，设置了循环段的终止地址，随后就是循环段代码，与没有使用硬件循环的汇编代码相比，此处减少了判断是否循环次数达到的代码，同时减少了分支转移指令，效率因此提高。</p>
+<h4 id="842-csr">8.4.2 硬件循环相关的CSR</h4>
+<p>为了实现硬件循环，在RI5CY中定义了一些CSR寄存器，用来保存硬件循环代码段的一些属性，上一节中使用的指令lp.setupi就是用来设置这些寄存器的。每一个硬件循环代码段对应三个CSR，分别保存硬件循环代码段的起始地址、终止地址、循环次数，RI5CY支持嵌套硬件循环，相应的CSR分为两组，对应loop0、loop1，如表8-7所示。</br></br>
+表8-7 硬件循环相关的CSR</br></p>
+<table>
+<tr>
+    <td>地址</td>
+    <td>名称</td>
+    <td>访问属性</td>
+    <td>描述</td>
+</tr>
+<tr>
+    <td>0x7B0</td>
+    <td>lpstart[0]</td>
+    <td>可读可写</td>
+    <td>硬件loop0的起始地址</td>
+</tr>
+<tr>
+    <td>0x7B1</td>
+    <td>lpendt[0]</td>
+    <td>可读可写</td>
+    <td>硬件loop0的终止地址</td>
+</tr>
+<tr>
+    <td>0x7B2</td>
+    <td>lpcount[0]</td>
+    <td>可读可写</td>
+    <td>硬件loop0的循环次数</td>
+</tr>
+<tr>
+    <td>0x7B4</td>
+    <td>lpstart[1]</td>
+    <td>可读可写</td>
+    <td>硬件loop1的起始地址</td>
+</tr>
+<tr>
+    <td>0x7B5</td>
+    <td>lpend[1]</td>
+    <td>可读可写</td>
+    <td>硬件loop1的终止地址</td>
+</tr>
+<tr>
+    <td>0x7B6</td>
+    <td>lpcount[1]</td>
+    <td>可读可写</td>
+    <td>硬件loop1的循环次数</td>
+</tr>
+</table>
+
+<h4 id="843">8.4.3 硬件循环相关的指令</h4>
+<p>除了8.4.1节中用到的指令lp.setupi外，还有很多指令用来设置硬件循环，这些指令可以分两类，一类是长指令，一类是短指令，其区别如下。</br>
+* 长指令：每条指令只能设置硬件循环属性中的一条，比如只能设置硬件循环起始地址，但是该类指令不需要紧跟着硬件循环代码段。
+* 短指令：每条指令可以设置硬件循环的全部属性，包括硬件循环的起始地址、终止地址、循环次数等，但是该类指令需要紧跟着就是硬件循环代码段。</br>
+硬件循环相关指令如表8-8所示，其编码如图8-20所示。</br></br>
+表8-8 硬件循环相关指令[6]</br>
+<img alt="" src="../../assets/HardwareLoopInst.png" /></br></p>
+<p><img alt="" src="../../assets/HardwareLoopInstEncode.png" /></br>
+图8-20 硬件循环相关指令的编码[6]</br></p>
+<h4 id="844">8.4.4 硬件循环实现过程</h4>
+<p>RI5CY中与硬件循环实现有关的模块，如图8-21所示，包括如下：</br>
+* 流水线取指阶段模块riscv_if_stage，其中例化了riscv_hwloop_controller、riscv_prefetch_buffer两个与硬件循环实现有关的模块
+* 流水线译码阶段模块riscv_id_stage，其中例化了riscv_decoder、riscv_hwloop_regs两个与硬件循环实现有关的模块
+* 控制与状态寄存器模块rscv_sc_registers
+<img alt="" src="../../assets/HardwareLoopModule.png" /></br>
+图8-21 RI5CY中与硬件循环实现有关的模块</br></br>
+图8-21中对部分模块只给出了与硬件循环实现有关的输入输出接口，并简单绘制了其接口连接关系。下面结合图8-21，以及硬件循环指令执行过程，分析硬件循环实现原理。</br></br>
+硬件循环相关指令在进入流水线的译码阶段时，才被识别出来，具体是在riscv_decoder模块中，相关代码如下，其中instr_rdata_i是从取指阶段传递过来的指令，OPCODE_HWLOOP是一个宏定义，其值是7'h7b，参考图8-20可知，正是硬件循环指令的opcode。随后，依据指令第12-14bit的值，进一步判断是哪一条硬件循环指令，并给出输出信号hwloop_we_o，以及一些复用选择信号的值，其中hwloop_we_o共有3bit，第0bit表示是否是设置循环段起始地址，第1bit表示是否是设置循环段结束地址，第2bit表示是否是设置循环次数。</br>
+<div class="highlight"><pre><span></span><code><span class="k">module</span><span class="w"> </span><span class="n">riscv_decoder</span>
+<span class="p">(</span>
+<span class="w">  </span><span class="p">......</span>
+
+<span class="w">  </span><span class="c1">// from IF/ID pipeline</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">instr_rdata_i</span><span class="p">,</span><span class="w">           </span><span class="c1">// instruction read from instr memory/cache</span>
+
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">2</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">  </span><span class="n">hwloop_we_o</span><span class="p">,</span><span class="w">             </span><span class="c1">// write enable for hwloop regs</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w">        </span><span class="n">hwloop_target_mux_sel_o</span><span class="p">,</span><span class="w"> </span><span class="c1">// selects immediate for hwloop target</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w">        </span><span class="n">hwloop_start_mux_sel_o</span><span class="p">,</span><span class="w">  </span><span class="c1">// selects hwloop start address input</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w">        </span><span class="n">hwloop_cnt_mux_sel_o</span><span class="p">,</span><span class="w">    </span><span class="c1">// selects hwloop counter input</span>
+<span class="w">  </span><span class="p">......</span>
+<span class="p">);</span>
+<span class="w">  </span><span class="k">always_comb</span>
+<span class="w">  </span><span class="k">begin</span>
+<span class="w">    </span><span class="p">......</span>
+
+<span class="w">    </span><span class="n">hwloop_we</span><span class="w">                   </span><span class="o">=</span><span class="w"> </span><span class="mh">3</span><span class="mb">&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">hwloop_target_mux_sel_o</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">hwloop_start_mux_sel_o</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">hwloop_cnt_mux_sel_o</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="p">.......</span>
+
+<span class="w">    </span><span class="n">unique</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">instr_rdata_i</span><span class="p">[</span><span class="mh">6</span><span class="o">:</span><span class="mh">0</span><span class="p">])</span>
+<span class="w">      </span><span class="nl">OPCODE_HWLOOP:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">hwloop_target_mux_sel_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">unique</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">instr_rdata_i</span><span class="p">[</span><span class="mh">14</span><span class="o">:</span><span class="mh">12</span><span class="p">])</span>
+<span class="w">          </span><span class="mh">3</span><span class="mb">&#39;b000</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="c1">// 是lp.starti指令:设置循环段起始地址</span>
+<span class="w">            </span><span class="n">hwloop_we</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">hwloop_start_mux_sel_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span>
+
+<span class="w">          </span><span class="mh">3</span><span class="mb">&#39;b001</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="c1">// 是lp.endi指令:设置循环段结束地址</span>
+<span class="w">            </span><span class="n">hwloop_we</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span>
+
+<span class="w">          </span><span class="mh">3</span><span class="mb">&#39;b010</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="c1">// 是lp.count指令:设置循环次数，其值就在读出的寄存器rega中</span>
+<span class="w">            </span><span class="n">hwloop_we</span><span class="p">[</span><span class="mh">2</span><span class="p">]</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">hwloop_cnt_mux_sel_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">rega_used_o</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span>
+
+<span class="w">          </span><span class="mh">3</span><span class="mb">&#39;b011</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="c1">// 是lp.counti指令:设置循环次数，其值是指令中立即数的值</span>
+<span class="w">            </span><span class="n">hwloop_we</span><span class="p">[</span><span class="mh">2</span><span class="p">]</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">hwloop_cnt_mux_sel_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span>
+
+<span class="w">          </span><span class="mh">3</span><span class="mb">&#39;b100</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="c1">// 是lp.setup指令:需要设置循环段起始地址、结束地址、循环次数，其中循环次数读出的寄存器rega的值</span>
+<span class="w">            </span><span class="n">hwloop_we</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mh">3</span><span class="mb">&#39;b111</span><span class="p">;</span>
+<span class="w">            </span><span class="n">hwloop_start_mux_sel_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">hwloop_cnt_mux_sel_o</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">rega_used_o</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span>
+
+<span class="w">          </span><span class="mh">3</span><span class="mb">&#39;b101</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="c1">// 是lp.setupi指令:需要设置循环段起始地址、结束地址、循环次数，其中循环次数是指令中立即数的值</span>
+<span class="w">            </span><span class="n">hwloop_we</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="mh">3</span><span class="mb">&#39;b111</span><span class="p">;</span>
+<span class="w">            </span><span class="n">hwloop_target_mux_sel_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">hwloop_start_mux_sel_o</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">hwloop_cnt_mux_sel_o</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span>
+
+<span class="w">          </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="n">illegal_insn_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span>
+<span class="w">        </span><span class="k">endcase</span>
+<span class="w">      </span><span class="n">End</span>
+<span class="p">......</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwloop_we_o</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">deassert_we_i</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">3</span><span class="mb">&#39;b0</span><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">hwloop_we</span><span class="p">;</span>
+</code></pre></div>
+上述信号送入流水线译码阶段，进一步处理，代码如下，其中最终确定了要写的硬件循环相关寄存器的情况。</br>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="c1">// 硬件循环有两组寄存器，指令的第7bit表示是要操作哪一组寄存器</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwloop_regid_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">instr</span><span class="p">[</span><span class="mh">7</span><span class="p">];</span><span class="w">   </span>
+
+<span class="w">  </span><span class="c1">// hwloop target mux</span>
+<span class="w">  </span><span class="k">always_comb</span>
+<span class="w">  </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">hwloop_target_mux_sel</span><span class="p">)</span>
+<span class="w">      </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="o">:</span><span class="w"> </span><span class="n">hwloop_target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pc_id_i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">{</span><span class="n">imm_iz_type</span><span class="p">[</span><span class="mh">30</span><span class="o">:</span><span class="mh">0</span><span class="p">],</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">};</span>
+<span class="w">      </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="o">:</span><span class="w"> </span><span class="n">hwloop_target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pc_id_i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">{</span><span class="n">imm_z_type</span><span class="p">[</span><span class="mh">30</span><span class="o">:</span><span class="mh">0</span><span class="p">],</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">};</span>
+<span class="w">    </span><span class="k">endcase</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// 硬件循环起始地址的两种情况，一种是当前指令地址加一个立即数的值，另一种是下一条指令地址的值</span>
+<span class="w">  </span><span class="k">always_comb</span>
+<span class="w">  </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">hwloop_start_mux_sel</span><span class="p">)</span>
+<span class="w">      </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="o">:</span><span class="w"> </span><span class="n">hwloop_start_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hwloop_target</span><span class="p">;</span><span class="w">   </span><span class="c1">// for PC + I imm</span>
+<span class="w">      </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="o">:</span><span class="w"> </span><span class="n">hwloop_start_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pc_if_i</span><span class="p">;</span><span class="w">         </span><span class="c1">// for next PC</span>
+<span class="w">    </span><span class="k">endcase</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// 硬件循环次数的两种情况，一种是立即数，另一种是读出的寄存器的值</span>
+<span class="w">  </span><span class="k">always_comb</span>
+<span class="w">  </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">hwloop_cnt_mux</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">hwloop_cnt_mux_sel</span><span class="p">)</span>
+<span class="w">      </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="o">:</span><span class="w"> </span><span class="n">hwloop_cnt_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">imm_iz_type</span><span class="p">;</span>
+<span class="w">      </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="o">:</span><span class="w"> </span><span class="n">hwloop_cnt_int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">operand_a_fw_id</span><span class="p">;</span>
+<span class="w">    </span><span class="k">endcase</span><span class="p">;</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// 最终确定要写的硬件循环相关寄存器的情况</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwloop_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hwloop_we_int</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">hwloop_start_int</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">csr_hwlp_data_i</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwloop_end</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">hwloop_we_int</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">hwloop_target</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">csr_hwlp_data_i</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwloop_cnt</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">hwloop_we_int</span><span class="p">[</span><span class="mh">2</span><span class="p">]</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">hwloop_cnt_int</span><span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="n">csr_hwlp_data_i</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwloop_regid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">|</span><span class="n">hwloop_we_int</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">hwloop_regid_int</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">csr_hwlp_regid_i</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwloop_we</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">|</span><span class="n">hwloop_we_int</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">hwloop_we_int</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">csr_hwlp_we_i</span><span class="p">;</span>
+</code></pre></div>
+参考图8-21可知，上述代码确定的信号，会送入到riscv_hwloop_regs模块对应端口，做进一步处理。riscv_hwloop_regs模块实际实现了两组硬件循环相关寄存器，所以上述信号，会修改这些硬件循环相关寄存器的值，代码如下。</br>
+<div class="highlight"><pre><span></span><code><span class="k">module</span><span class="w"> </span><span class="n">riscv_hwloop_regs</span>
+<span class="p">#(</span>
+<span class="w">  </span><span class="k">parameter</span><span class="w"> </span><span class="n">N_REGS</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="p">,</span>
+<span class="w">  </span><span class="k">parameter</span><span class="w"> </span><span class="n">N_REG_BITS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">$clog2</span><span class="p">(</span><span class="n">N_REGS</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="p">(</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">                     </span><span class="n">clk</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">                     </span><span class="n">rst_n</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// from ex stage</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">           </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">hwlp_start_data_i</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">           </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">hwlp_end_data_i</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">           </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">hwlp_cnt_data_i</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">            </span><span class="p">[</span><span class="mh">2</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">hwlp_we_i</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REG_BITS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">    </span><span class="n">hwlp_regid_i</span><span class="p">,</span><span class="w">         </span><span class="c1">// selects the register set</span>
+
+<span class="w">  </span><span class="c1">// from controller</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w">                     </span><span class="n">valid_i</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// from hwloop controller</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">        </span><span class="n">hwlp_dec_cnt_i</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// to hwloop controller</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">hwlp_start_addr_o</span><span class="p">,</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">hwlp_end_addr_o</span><span class="p">,</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">hwlp_counter_o</span>
+<span class="p">);</span>
+
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">hwlp_start_q</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">hwlp_end_q</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">hwlp_counter_q</span><span class="p">,</span><span class="w"> </span><span class="n">hwlp_counter_n</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="k">unsigned</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+
+
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwlp_start_addr_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hwlp_start_q</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwlp_end_addr_o</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">hwlp_end_q</span><span class="p">;</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwlp_counter_o</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">hwlp_counter_q</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 设置硬件循环的起始地址</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span><span class="w"> </span><span class="k">negedge</span><span class="w"> </span><span class="n">rst_n</span><span class="p">)</span>
+<span class="w">  </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">HWLOOP_REGS_START</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rst_n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">hwlp_start_q</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="mh">32</span><span class="mb">&#39;b0</span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hwlp_we_i</span><span class="p">[</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">)</span>
+<span class="w">    </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">hwlp_start_q</span><span class="p">[</span><span class="n">hwlp_regid_i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">hwlp_start_data_i</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="c1">// 设置硬件循环的结束地址</span>
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span><span class="w"> </span><span class="k">negedge</span><span class="w"> </span><span class="n">rst_n</span><span class="p">)</span>
+<span class="w">  </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">HWLOOP_REGS_END</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rst_n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">hwlp_end_q</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="mh">32</span><span class="mb">&#39;b0</span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hwlp_we_i</span><span class="p">[</span><span class="mh">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">)</span>
+<span class="w">    </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">hwlp_end_q</span><span class="p">[</span><span class="n">hwlp_regid_i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">hwlp_end_data_i</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w"> </span><span class="c1">// 设置硬件循环的执行次数，并且在每次执行一遍后，将执行次数减一</span>
+<span class="w">  </span><span class="k">genvar</span><span class="w"> </span><span class="n">k</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N_REGS</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">assign</span><span class="w"> </span><span class="n">hwlp_counter_n</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hwlp_counter_q</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mh">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="k">always_ff</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">,</span><span class="w"> </span><span class="k">negedge</span><span class="w"> </span><span class="n">rst_n</span><span class="p">)</span>
+<span class="w">  </span><span class="k">begin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">HWLOOP_REGS_COUNTER</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rst_n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">)</span>
+<span class="w">    </span><span class="k">begin</span>
+<span class="w">      </span><span class="n">hwlp_counter_q</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="p">&#39;{</span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="mh">32</span><span class="mb">&#39;b0</span><span class="p">};</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">    </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N_REGS</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">      </span><span class="k">begin</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">hwlp_we_i</span><span class="p">[</span><span class="mh">2</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">hwlp_regid_i</span><span class="p">))</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">          </span><span class="n">hwlp_counter_q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">hwlp_cnt_data_i</span><span class="p">;</span>
+<span class="w">        </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hwlp_dec_cnt_i</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">valid_i</span><span class="p">)</span>
+<span class="w">            </span><span class="n">hwlp_counter_q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">hwlp_counter_n</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// do not decrement more than one counter at once</span>
+<span class="w">  </span><span class="n">assert</span><span class="w"> </span><span class="n">property</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">clk</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">valid_i</span><span class="p">)</span><span class="w"> </span><span class="o">|-&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">$countones</span><span class="p">(</span><span class="n">hwlp_dec_cnt_i</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">1</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+
+<span class="n">Endmodule</span>
+</code></pre></div>
+至此，硬件循环相关寄存器设置完毕，参考图8-21，这些寄存器的值通过接口hwlp_start_o、hwlp_end_o、hwlp_cnt_o送入流水线取指阶段的模块if_stage。后者例化了riscv_hwloop_controller、riscv_prefetch_buffer两个与硬件循环实现有关的模块。</br></br>
+参考图8-21，hwlp_start_o、hwlp_end_o、hwlp_cnt_o实际是直接送入riscv_hwloop_controller模块，同时送入riscv_hwloop_controller模块的，还有当前正在读取的指令的地址current_pc_i。riscv_hwloop_controller模块判断current_pc_i是否等于hwlp_end_o中的一个值，如果相等，并且对应的hwlp_cnt_o不等于1（<font  color=#660000>实际在代码中跳转的条件比较复杂，笔者也没有看懂为何当hwlp_cnt_o等于2的时候，跳转条件是~hwlp_dec_cnt_id_i[i]</font>），那么就跳转到循环代码的起始地址，主要代码如下：</br>
+<div class="highlight"><pre><span></span><code><span class="k">module</span><span class="w"> </span><span class="n">riscv_hwloop_controller</span>
+<span class="p">#(</span>
+<span class="w">  </span><span class="k">parameter</span><span class="w"> </span><span class="n">N_REGS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span>
+<span class="p">)</span>
+<span class="p">(</span>
+<span class="w">  </span><span class="c1">// from id stage</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">              </span><span class="n">current_pc_i</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// from hwloop_regs</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">hwlp_start_addr_i</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">hwlp_end_addr_i</span><span class="p">,</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">hwlp_counter_i</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// to hwloop_regs</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">        </span><span class="n">hwlp_dec_cnt_o</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// from pipeline stages</span>
+<span class="w">  </span><span class="k">input</span><span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">        </span><span class="n">hwlp_dec_cnt_id_i</span><span class="p">,</span>
+
+<span class="w">  </span><span class="c1">// to id stage</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w">                     </span><span class="n">hwlp_jump_o</span><span class="p">,</span>
+<span class="w">  </span><span class="k">output</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">31</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">              </span><span class="n">hwlp_targ_addr_o</span>
+<span class="p">);</span>
+
+
+<span class="w">  </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="n">N_REGS</span><span class="o">-</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="n">pc_is_end_addr</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// end address detection</span>
+<span class="w">  </span><span class="k">integer</span><span class="w"> </span><span class="n">j</span><span class="p">;</span>
+
+
+<span class="w">  </span><span class="c1">// 下面的代码判断当前正在取的指令地址current_pc_i是否等于任一硬件循环段的结束地址</span>
+<span class="w">  </span><span class="c1">// 如果当前正在取的指令地址current_pc_i等于任一硬件循环段的结束地址，并且对应的hwlp_cnt_o不等于1</span>
+<span class="w">  </span><span class="c1">// 那么设置pc_is_end_addr为1</span>
+<span class="w">  </span><span class="k">genvar</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">  </span><span class="k">generate</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N_REGS</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="o">*</span><span class="p">)</span>
+<span class="w">      </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">pc_is_end_addr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">current_pc_i</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">hwlp_end_addr_i</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hwlp_counter_i</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mh">31</span><span class="o">:</span><span class="mh">2</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mh">30&#39;h0</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="n">pc_is_end_addr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">          </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">hwlp_counter_i</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">])</span>
+<span class="w">              </span><span class="mh">2</span><span class="mb">&#39;b11</span><span class="o">:</span><span class="w">        </span><span class="n">pc_is_end_addr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">              </span><span class="mh">2</span><span class="mb">&#39;b10</span><span class="o">:</span><span class="w">        </span><span class="n">pc_is_end_addr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">hwlp_dec_cnt_id_i</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"> </span><span class="c1">// only when there is nothing in flight</span>
+<span class="w">              </span><span class="mh">2</span><span class="mb">&#39;b01</span><span class="p">,</span><span class="w"> </span><span class="mh">2</span><span class="mb">&#39;b00</span><span class="o">:</span><span class="w"> </span><span class="n">pc_is_end_addr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b0</span><span class="p">;</span>
+<span class="w">            </span><span class="k">endcase</span>
+<span class="w">          </span><span class="k">end</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">endgenerate</span>
+
+<span class="w">  </span><span class="c1">// 如果pc_is_end_addr是1，那么表示跳转到硬件循环段的起始地址继续执行</span>
+<span class="w">  </span><span class="k">always_comb</span>
+<span class="w">  </span><span class="k">begin</span>
+<span class="w">    </span><span class="n">hwlp_targ_addr_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">&#39;x</span><span class="p">;</span>
+<span class="w">    </span><span class="n">hwlp_dec_cnt_o</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="m">&#39;0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N_REGS</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pc_is_end_addr</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="w"> </span><span class="k">begin</span>
+<span class="w">        </span><span class="n">hwlp_targ_addr_o</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">hwlp_start_addr_i</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+<span class="w">        </span><span class="n">hwlp_dec_cnt_o</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="mb">&#39;b1</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">      </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="c1">// output signal for ID stage</span>
+<span class="w">  </span><span class="k">assign</span><span class="w"> </span><span class="n">hwlp_jump_o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">|</span><span class="n">pc_is_end_addr</span><span class="p">);</span>
+
+<span class="n">Endmodule</span>
+</code></pre></div>
+上述代码中的输出信号hwlp_jump_o、hwlp_targ_addr_o送入图8-21中的riscv_prefetch_buffer模块（参考8.3.2节，如果采用的是配置二，即指令预取Buffer等于指令缓存line的大小，比如128位，那么hwlp_jump_o、hwlp_targ_addr_o实际将送入riscv_prefetch_L0_buffer模块），后者将清除其内部FIFO中的内容，然后从硬件循环段起始地址重新取指填充FIFO。</br></p>
+<h3 id="_1">参考文献</h3>
+<p>[1]PULP - An Open Parallel Ultra-Low-Power Processing-Platform, http://iis-projects.ee.ethz.ch/index.php/PULP,2017-8 </br>
+[2]Florian Zaruba, Updates on PULPino, The 5th RISC-V Workshop, 2016.</br>
+[3]Michael Gautschi,etc,Near-Threshold RISC-V Core With DSP Extensions for Scalable IoT Endpoint Devices, IEEE Transactions on Very Large Scale Integration Systems</br>
+[4]Andreas Traber, Michael Gautschi,PULPino: Datasheet,2016.11</br>
+[5]http://www.pulp-platform.org/</br>
+[6]Andreas Traber,Michael Gautschi,Pasquale Davide Schiavone. RI5CY: User Manual version1.3. </br>
+[7]Andreas Traber, etc. PULPino: A small single-core RISC-V SoC. The 4th RISC-V Workshop, 2016.</br></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            回到页面顶部
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 CNRV编辑部
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top", "navigation.tabs"], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+    
+  </body>
+</html>
