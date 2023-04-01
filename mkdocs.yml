@@ -9,8 +9,8 @@ repo_url: 'https://github.com/cnrv/riscv-soc-book'
 
 nav:
   - 简介:
-    - 待讨论大纲: index.md
-    - 关于我们: about.md
+    - 关于本书: index.md
+    - 待讨论大纲: outline.md
   - 第一章 RISC-V产生的时代背景:
     - 1.1 计算机体系结构和处理器微结构: ch1/sec1-comparch.md
     - 1.2 现有指令集 (leishangwen): ch1/sec2-isa.md
@@ -32,6 +32,47 @@ nav:
     - 3.3 TileLink片上总线: ch3/sec3-tilelink.md
     - 3.4 缓存一致性与片上互联总线: ch3/sec4-soc.md
     - 3.5 Rocket-chip的仿真和测试: ch3/sec5-verification.md
+  - 第四章 Rocket处理器:
+    - 4.1 Rocket处理器介绍: ch4/sec1-overview.md
+    - 4.2 Rocket的基本流水线: ch4/sec2-pipeline.md
+    - 4.3 指令缓存以及分支预测: ch4/sec3-icache.md
+    - 4.4 数据缓存: ch4/sec4-dcache.md
+    - 4.5 虚拟内存支持: ch4/sec5-vm.md
+    - 4.6 Rocket处理器RoCC设计分析: ch4/sec6-rocc.md
+  - 第五章 BOOM处理器:
+    - 5.1 BOOM处理器介绍: ch5/sec1-overview.md
+  #   - 5.2 推测发射机制: 
+  #   - 5.3 寄存器重命名:
+  #   - 5.4 数据存储:
+  #   - 5.5 指令提交:
+  # - 第六章 SiFive公司的Freedom系列:
+  #   - 6.1 Freedom系列简介:
+  #   - 6.2 Freedom E310介绍:
+  #   - 6.3 仿真实验:
+  #   - 6.4 调试过程及原理分析:
+  #   - 6.5 移植运行FreeRTOS:
+  # - 第七章 LowRISC:
+  #   - 7.1 LowRISC介绍:
+  #   - 7.2 tagged memory:
+  #   - 7.3 trace debugger:
+  # - 第八章 PULPino:
+  #   - 8.1 PULPino介绍:
+  #   - 8.2 向量算术指令:
+  #   - 8.3 硬件循环:
+  #   - 8.4 post increment load/store指令:
+  #   - 8.5 扩展算术指令:
+  #   - 8.6 基于Arty平台的移植试验:
+  # - 第九章 浮点运算:
+  #   - 9.1 浮点标准:
+  #   - 9.2 RISC-V的浮点指令扩展:
+  #   - 9.3 Rocket-Chip中的FPU:
+  #     - 9.3.1 基本情况:
+  #     - 9.3.2 浮点加法模块设计:
+  #     - 9.3.3 浮点乘法模块设计:
+  #     - 9.3.4 浮点除法、平方根模块设计:
+  #   - 9.4 FPU验证:
+  #     - 9.4.1 基于组合随机激励测试的验证:
+  #     - 9.4.2 基于形式化工具的验证:
 
 
 theme:
